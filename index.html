@@ -325,6 +325,29 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
   </div>
   <div class="cv-status" id="cvStatus">Ready — click Start Camera to begin</div>
 
+  <!-- Detection mode selector -->
+  <div id="detectModePanel" style="display:none;margin:10px 0">
+    <div style="font-family:var(--condensed);font-size:11px;font-weight:700;color:#5a6580;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">// Detection Mode</div>
+    <div class="pills" id="detectPills">
+      <button class="pill active" onclick="setDetectMode('auto',this)">AUTO DETECT</button>
+      <button class="pill" onclick="setDetectMode('lock',this)">LOCK LINES</button>
+      <button class="pill" onclick="setDetectMode('manual',this)">MANUAL</button>
+    </div>
+    <div id="detectModeHint" style="font-family:var(--mono);font-size:10px;color:#5a6580;margin-bottom:8px">Auto-detect with smoothing — lines track the crest and water automatically</div>
+
+    <!-- Manual / Lock line sliders (shared) -->
+    <div id="lineSliders" style="display:none;background:#0a0c10;border:1px solid #2a2f3a;padding:10px 14px;margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <span style="font-family:var(--mono);font-size:10px;color:#ef4444;width:50px;flex-shrink:0">CREST</span>
+        <input type="range" min="2" max="98" value="25" id="lineSliderCrest" oninput="updateManualLines()" style="flex:1;accent-color:#ef4444;height:28px;cursor:pointer">
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-family:var(--mono);font-size:10px;color:#22d3ee;width:50px;flex-shrink:0">WATER</span>
+        <input type="range" min="2" max="98" value="55" id="lineSliderWater" oninput="updateManualLines()" style="flex:1;accent-color:#22d3ee;height:28px;cursor:pointer">
+      </div>
+    </div>
+  </div>
+
   <!-- Calibration settings (distance + accuracy guide) -->
   <div id="calibFields" style="display:none;margin:12px 0">
     <div class="field-row">
@@ -815,6 +838,8 @@ let calibMode = false, calibLine1Y = 120, calibLine2Y = 240;
 let hBuffer = [], snapReadings = [];
 let frameCount = 0; // throttle counter
 let grayBuf = null, gradBuf = null; // reusable buffers
+let detectMode = 'auto'; // 'auto', 'lock', 'manual'
+let manualCrestY = -1, manualWaterY = -1; // for lock/manual modes
 
 const video = document.getElementById('cvVideo');
 const canvas = document.getElementById('cvCanvas');
@@ -841,7 +866,8 @@ async function startCamera() {
     document.getElementById('btnSnap').disabled = false;
     document.getElementById('btnStart').disabled = true;
     document.getElementById('cvHud').style.display = 'grid';
-    setStatus('[CAM] Active — calibrate first for accurate readings');
+    document.getElementById('detectModePanel').style.display = 'block';
+    setStatus('[CAM] Active — calibrate first, then choose detection mode');
     cvRunning = true;
     frameCount = 0;
 
@@ -882,7 +908,12 @@ function stopCamera() {
   cleanupCalibration();
   lastCrestY = -1;
   lastWaterY = -1;
+  manualCrestY = -1;
+  manualWaterY = -1;
   hBuffer = [];
+  detectMode = 'auto';
+  document.getElementById('detectModePanel').style.display = 'none';
+  document.getElementById('lineSliders').style.display = 'none';
   // Clear canvases
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   octx.clearRect(0, 0, overlay.width, overlay.height);
@@ -907,6 +938,8 @@ function resetCV() {
   gradBuf = null;
   lastCrestY = -1;
   lastWaterY = -1;
+  manualCrestY = -1;
+  manualWaterY = -1;
   document.getElementById('cvHistory').style.display = 'none';
   document.getElementById('snapBody').innerHTML = '';
   document.getElementById('cvHud').style.display = 'none';
@@ -914,6 +947,11 @@ function resetCV() {
   document.getElementById('hudH').innerHTML = '—<span class="hud-unit">in</span>';
   document.getElementById('hudQ').innerHTML = '—<span class="hud-unit">GPM</span>';
   document.getElementById('hudChart').innerHTML = '—<span class="hud-unit">GPM</span>';
+  // Reset mode pills to AUTO
+  document.querySelectorAll('#detectPills .pill').forEach((p,i) => {
+    p.classList.toggle('active', i === 0);
+  });
+  document.getElementById('detectModeHint').textContent = 'Auto-detect with smoothing — lines track the crest and water automatically';
   setStatus('Ready — click Start Camera');
 }
 
@@ -960,34 +998,75 @@ function setScale() {
   setStatus('[OK] Calibrated: ' + pxPerInch.toFixed(1) + ' px/inch (' + dist + '" = ' + pxDist.toFixed(0) + 'px) — detection active');
 }
 
+// ─── Detection mode switching ───
+function setDetectMode(mode, el) {
+  detectMode = mode;
+  document.querySelectorAll('#detectPills .pill').forEach(p => p.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const sliders = document.getElementById('lineSliders');
+  const hint = document.getElementById('detectModeHint');
+
+  if (mode === 'auto') {
+    sliders.style.display = 'none';
+    hint.textContent = 'Auto-detect with smoothing — lines track the crest and water automatically';
+    setStatus('[AUTO] Lines tracking automatically');
+  } else if (mode === 'lock') {
+    // Freeze current detected positions into manual sliders
+    if (lastCrestY > 0) manualCrestY = lastCrestY;
+    if (lastWaterY > 0) manualWaterY = lastWaterY;
+    if (canvas.height > 0) {
+      document.getElementById('lineSliderCrest').value = Math.round((manualCrestY / canvas.height) * 100) || 25;
+      document.getElementById('lineSliderWater').value = Math.round((manualWaterY / canvas.height) * 100) || 55;
+    }
+    sliders.style.display = 'block';
+    hint.textContent = 'Lines locked at current position — fine-tune with sliders';
+    setStatus('[LOCK] Lines frozen — use sliders to adjust');
+  } else if (mode === 'manual') {
+    sliders.style.display = 'block';
+    hint.textContent = 'Full manual control — position both lines yourself with sliders';
+    setStatus('[MANUAL] Position the CREST and WATER lines with the sliders');
+  }
+}
+
+function updateManualLines() {
+  if (!cvRunning || !canvas.height) return;
+  const s1 = parseInt(document.getElementById('lineSliderCrest').value);
+  const s2 = parseInt(document.getElementById('lineSliderWater').value);
+  manualCrestY = Math.round((s1 / 100) * canvas.height);
+  manualWaterY = Math.round((s2 / 100) * canvas.height);
+  // Also update the smoothed positions so drawing is instant
+  lastCrestY = manualCrestY;
+  lastWaterY = manualWaterY;
+  // Clear and rebuild the H buffer with new position
+  hBuffer = [];
+}
+
 // ─── Frame processing ───
-let lastCrestY = -1, lastWaterY = -1; // persist last detection for smooth drawing
+let lastCrestY = -1, lastWaterY = -1;
 
 function processFrame() {
   if (!cvRunning) return;
 
   try {
-    // Check video is actually producing frames
     if (video.readyState < 2 || video.paused || video.ended) {
       cvAnimId = requestAnimationFrame(processFrame);
       return;
     }
 
-    // Draw video to canvas every frame (keeps video smooth)
+    // Draw video every frame
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     const w = canvas.width, h = canvas.height;
-
-    // Throttle heavy processing to every 3rd frame
     frameCount++;
-    const doDetection = (frameCount % 3 === 0);
 
-    if (doDetection && !calibMode) {
+    // ─── DETECTION (only in AUTO mode, throttled) ───
+    const doDetection = (detectMode === 'auto') && (frameCount % 3 === 0) && !calibMode;
+
+    if (doDetection) {
       const imgData = ctx.getImageData(0, 0, w, h);
       const data = imgData.data;
       const totalPx = w * h;
 
-      // Reuse buffers (reallocate only if size changed)
       if (!grayBuf || grayBuf.length !== totalPx) {
         grayBuf = new Float32Array(totalPx);
         gradBuf = new Float32Array(totalPx);
@@ -998,7 +1077,7 @@ function processFrame() {
         grayBuf[i] = data[i*4] * 0.299 + data[i*4+1] * 0.587 + data[i*4+2] * 0.114;
       }
 
-      // Sobel vertical gradient (detects horizontal edges)
+      // Sobel vertical gradient
       gradBuf.fill(0);
       for (let y = 1; y < h - 1; y++) {
         for (let x = 1; x < w - 1; x++) {
@@ -1008,34 +1087,30 @@ function processFrame() {
         }
       }
 
-      // Accumulate edge strength per row (center 60%)
+      // Accumulate per row
       const centerX = Math.round(w * 0.2);
       const centerW = Math.round(w * 0.6);
       const rowStrength = new Float32Array(h);
       for (let y = 5; y < h - 5; y++) {
         let sum = 0;
-        for (let x = centerX; x < centerX + centerW; x++) {
-          sum += gradBuf[y * w + x];
-        }
+        for (let x = centerX; x < centerX + centerW; x++) sum += gradBuf[y * w + x];
         rowStrength[y] = sum / centerW;
       }
 
-      // Find crest (first strong edge from top)
+      // Find crest
       const threshold = 15;
       let crestY = -1, waterY = -1;
-
       for (let y = 10; y < h * 0.6; y++) {
         if (rowStrength[y] > threshold) {
           let peakY = y, peakVal = rowStrength[y];
           for (let dy = 1; dy < 15 && y + dy < h; dy++) {
             if (rowStrength[y+dy] > peakVal) { peakVal = rowStrength[y+dy]; peakY = y + dy; }
           }
-          crestY = peakY;
-          break;
+          crestY = peakY; break;
         }
       }
 
-      // Find water surface below crest
+      // Find water
       if (crestY > 0) {
         const searchStart = crestY + 15;
         for (let y = searchStart; y < Math.min(h - 10, crestY + h * 0.5); y++) {
@@ -1044,18 +1119,23 @@ function processFrame() {
             for (let dy = 1; dy < 10 && y + dy < h; dy++) {
               if (rowStrength[y+dy] > peakVal) { peakVal = rowStrength[y+dy]; peakY = y + dy; }
             }
-            waterY = peakY;
-            break;
+            waterY = peakY; break;
           }
         }
       }
 
-      // Smooth detection with previous frame (reduce jitter)
-      if (crestY > 0) lastCrestY = lastCrestY > 0 ? lastCrestY * 0.7 + crestY * 0.3 : crestY;
-      if (waterY > 0) lastWaterY = lastWaterY > 0 ? lastWaterY * 0.7 + waterY * 0.3 : waterY;
+      // Heavy smoothing (0.92/0.08) to reduce jitter
+      if (crestY > 0) lastCrestY = lastCrestY > 0 ? lastCrestY * 0.92 + crestY * 0.08 : crestY;
+      if (waterY > 0) lastWaterY = lastWaterY > 0 ? lastWaterY * 0.92 + waterY * 0.08 : waterY;
     }
 
-    // ─── Draw overlay (every frame for smooth visuals) ───
+    // In LOCK and MANUAL modes, use manual positions directly
+    if (detectMode === 'lock' || detectMode === 'manual') {
+      lastCrestY = manualCrestY;
+      lastWaterY = manualWaterY;
+    }
+
+    // ─── Draw overlay ───
     octx.clearRect(0, 0, w, h);
 
     if (calibMode) {
@@ -1067,13 +1147,11 @@ function processFrame() {
       octx.beginPath(); octx.moveTo(0, calibLine2Y); octx.lineTo(w, calibLine2Y); octx.stroke();
       octx.setLineDash([]);
 
-      // Small labels at line edges
       octx.fillStyle = '#ff8c00';
       octx.font = 'bold 11px ' + CV_MONO;
       octx.fillText('L1', 6, calibLine1Y - 5);
       octx.fillText('L2', 6, calibLine2Y - 5);
 
-      // Distance readout in center
       const pxDist = Math.abs(calibLine2Y - calibLine1Y);
       octx.fillStyle = 'rgba(0,0,0,0.6)';
       const midY = (calibLine1Y + calibLine2Y) / 2;
@@ -1084,21 +1162,19 @@ function processFrame() {
       octx.fillText(pxDist.toFixed(0) + ' px', w/2, midY + 5);
       octx.textAlign = 'left';
 
-      // Top bar
       octx.fillStyle = 'rgba(0,0,0,0.6)';
       octx.fillRect(0, 0, w, 24);
       octx.fillStyle = '#ff8c00';
       octx.font = 'bold 11px ' + CV_MONO;
       octx.fillText('[CAL] Use sliders below to position lines', 8, 16);
     } else {
-      // Draw detected lines using smoothed positions
       const cY = Math.round(lastCrestY);
       const wY = Math.round(lastWaterY);
 
       if (cY > 0) {
         octx.strokeStyle = '#ef4444';
         octx.lineWidth = 2;
-        octx.setLineDash([6, 3]);
+        octx.setLineDash(detectMode === 'auto' ? [6, 3] : []);
         octx.beginPath(); octx.moveTo(0, cY); octx.lineTo(w, cY); octx.stroke();
         octx.setLineDash([]);
         octx.fillStyle = '#ef4444';
@@ -1109,7 +1185,7 @@ function processFrame() {
       if (wY > 0) {
         octx.strokeStyle = '#22d3ee';
         octx.lineWidth = 2;
-        octx.setLineDash([6, 3]);
+        octx.setLineDash(detectMode === 'auto' ? [6, 3] : []);
         octx.beginPath(); octx.moveTo(0, wY); octx.lineTo(w, wY); octx.stroke();
         octx.setLineDash([]);
         octx.fillStyle = '#22d3ee';
@@ -1122,7 +1198,7 @@ function processFrame() {
         const pxH = wY - cY;
         const hInches = pxH / pxPerInch;
 
-        // Only push to buffer on detection frames
+        // Push to buffer on detection frames (auto) or every 3rd frame (lock/manual)
         if (frameCount % 3 === 0 && hInches > 0 && hInches < 20) {
           hBuffer.push(hInches);
           if (hBuffer.length > 30) hBuffer.shift();
@@ -1142,7 +1218,7 @@ function processFrame() {
         octx.font = 'bold 16px ' + CV_MONO;
         octx.fillText('H=' + hInches.toFixed(2) + '"', w - 130, (cY + wY) / 2 + 5);
 
-        // Update HUD with averaged values
+        // Update HUD
         if (hBuffer.length > 0) {
           const hAvg = hBuffer.reduce((a,b)=>a+b,0) / hBuffer.length;
           const diam = document.getElementById('cv-diam').value;
@@ -1150,9 +1226,7 @@ function processFrame() {
           const L = parseFloat(document.getElementById('cv-L').value) || 0;
           const hFt = hAvg / 12;
           let qGpm = 0;
-          if (L > 0 && hFt > 0) {
-            qGpm = Cw * L * Math.pow(hFt, 1.5) * 448.831;
-          }
+          if (L > 0 && hFt > 0) qGpm = Cw * L * Math.pow(hFt, 1.5) * 448.831;
           const chartGpm = chartLookup(hAvg, diam);
 
           document.getElementById('hudH').innerHTML = hAvg.toFixed(2) + '<span class="hud-unit">in</span>';
@@ -1161,23 +1235,23 @@ function processFrame() {
         }
       }
 
-      // Status bar overlay
+      // Status bar
+      const modeLabel = detectMode === 'auto' ? 'AUTO' : detectMode === 'lock' ? 'LOCK' : 'MANUAL';
       if (!calibrated) {
         octx.fillStyle = 'rgba(0,0,0,0.6)';
         octx.fillRect(0, 0, w, 26);
         octx.fillStyle = '#fbbf24';
         octx.font = 'bold 11px ' + CV_MONO;
-        octx.fillText('[!] NOT CALIBRATED — click Calibrate for accurate readings', 8, 17);
+        octx.fillText('[!] NOT CALIBRATED | Mode: ' + modeLabel, 8, 17);
       } else {
         octx.fillStyle = 'rgba(0,0,0,0.5)';
         octx.fillRect(0, 0, w, 22);
-        octx.fillStyle = '#4ade80';
+        octx.fillStyle = detectMode === 'auto' ? '#4ade80' : '#ff8c00';
         octx.font = '10px ' + CV_MONO;
-        octx.fillText('[OK] ' + pxPerInch.toFixed(1) + ' px/in | buf: ' + hBuffer.length + '/30', 8, 15);
+        octx.fillText('[' + modeLabel + '] ' + pxPerInch.toFixed(1) + ' px/in | buf: ' + hBuffer.length + '/30', 8, 15);
       }
     }
   } catch (err) {
-    // Don't let a single frame error kill the loop
     console.warn('Frame error:', err);
   }
 
