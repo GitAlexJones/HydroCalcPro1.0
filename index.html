@@ -8,12 +8,12 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --blue:#3b9eff;--blue-dark:#2680d6;--blue-light:rgba(59,158,255,0.08);--blue-glow:rgba(59,158,255,0.15);
-  --teal:#00e5a0;--teal-light:rgba(0,229,160,0.07);--teal-glow:rgba(0,229,160,0.12);
-  --orange:#ff8c00;--orange-light:rgba(255,140,0,0.08);
+  --amber:#ff8c00;--amber-dark:#cc7000;--amber-light:rgba(255,140,0,0.08);--amber-glow:rgba(255,140,0,0.15);
+  --gold:#e5b800;--gold-light:rgba(229,184,0,0.08);
+  --orange:#ff6d00;--orange-light:rgba(255,109,0,0.08);
   --red:#ff3b3b;--red-light:rgba(255,59,59,0.08);
-  --green:#00e676;--green-light:rgba(0,230,118,0.08);
-  --purple:#b388ff;--purple-light:rgba(179,136,255,0.08);
+  --green:#8ab648;--green-light:rgba(138,182,72,0.08);
+  --rose:#c97070;--rose-light:rgba(201,112,112,0.08);
   --gray-50:#1a1d23;--gray-100:#21252d;--gray-200:#2a2f3a;--gray-300:#3a4050;
   --gray-400:#5a6580;--gray-500:#7a8599;--gray-600:#99a3b3;--gray-700:#bcc3d0;
   --gray-800:#dde1e8;--gray-900:#eef0f4;
@@ -88,8 +88,7 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
   font-family:var(--mono);font-size:14px;color:#dde1e8;
   outline:none;transition:border-color 0.15s;
 }
-.field input:focus,.field select:focus{border-color:#ff8c00;box-shadow:0 0 0 1px rgba(255,140,0,0.2),inset 0 0 8px rgba(255,140,0,0.03)}
-.field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%235a6580' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+.field input:focus,.field select:focus{border-color:#ff8c00;box-shadow:0 0 0 1px rgba(255,140,0,0.2),inset 0 0 8px rgba(255,140,0,0.03)}.field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%235a6580' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
 .field select option{background:#13161c;color:#dde1e8}
 .field .hint{font-family:var(--mono);font-size:10px;color:#3a4050;margin-top:3px;letter-spacing:0.3px}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -111,29 +110,32 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
 @media(max-width:600px){.results.c2,.results.c3{grid-template-columns:1fr}}
 .result{background:#0d0f13;border:1px solid #2a2f3a;padding:12px 14px}
 .result.primary{border-color:#ff8c00;border-left:3px solid #ff8c00;background:rgba(255,140,0,0.04)}
-.result.green{border-color:#00e676;border-left:3px solid #00e676;background:rgba(0,230,118,0.04)}
+.result.green{border-color:#8ab648;border-left:3px solid #8ab648;background:rgba(138,182,72,0.04)}
 .result .rl{font-family:var(--mono);font-size:9.5px;color:#5a6580;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
 .result .rv{font-family:var(--mono);font-size:22px;font-weight:700;color:#dde1e8}
 .result.primary .rv{color:#ff8c00}
-.result.green .rv{color:#00e676}
+.result.green .rv{color:#8ab648}
 .result .ru{font-size:11px;color:#3a4050;font-weight:500;margin-left:4px}
 
 /* ─── SAVE BTN ─── */
 .save-btn{
   width:100%;padding:11px;margin-top:14px;
-  border:1px dashed #00e5a0;background:rgba(0,229,160,0.04);
-  color:#00e5a0;font-family:var(--condensed);font-weight:700;font-size:13px;
+  border:1px dashed #8ab648;background:rgba(138,182,72,0.04);
+  color:#8ab648;font-family:var(--condensed);font-weight:700;font-size:13px;
   cursor:pointer;text-transform:uppercase;letter-spacing:1px;
 }
-.save-btn:hover{background:rgba(0,229,160,0.1);border-style:solid}
+.save-btn:hover{background:rgba(138,182,72,0.1);border-style:solid}
 
 /* ─── TIP BOXES ─── */
 .tip{padding:12px 14px;margin:12px 0;display:flex;gap:10px;align-items:flex-start;font-size:12.5px;line-height:1.6;border-left:3px solid}
-.tip.blue{background:rgba(59,158,255,0.05);border-color:#3b9eff;color:#99c4f0}
-.tip.green{background:rgba(0,230,118,0.04);border-color:#00e676;color:#80f0b4}
-.tip.orange{background:rgba(255,140,0,0.05);border-color:#ff8c00;color:#e0a050}
+.tip.info{background:rgba(229,184,0,0.05);border-color:#e5b800;color:#d4a850}
+.tip.ok{background:rgba(138,182,72,0.05);border-color:#8ab648;color:#a0c070}
+.tip.orange{background:rgba(255,109,0,0.05);border-color:#ff6d00;color:#e09050}
 .tip.red{background:rgba(255,59,59,0.05);border-color:#ff3b3b;color:#e07070}
-.tip.purple{background:rgba(179,136,255,0.05);border-color:#b388ff;color:#c0a8ff}
+.tip.warn{background:rgba(201,112,112,0.05);border-color:#c97070;color:#d09090}
+.tip.green{background:rgba(138,182,72,0.05);border-color:#8ab648;color:#a0c070}
+.tip.blue{background:rgba(229,184,0,0.05);border-color:#e5b800;color:#d4a850}
+.tip.purple{background:rgba(201,112,112,0.05);border-color:#c97070;color:#d09090}
 .tip strong{font-weight:700;color:#dde1e8}
 .ti{font-size:16px;flex-shrink:0;margin-top:1px}
 
@@ -144,14 +146,13 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
   color:#7a8599;font-family:var(--condensed);font-size:12.5px;font-weight:600;
   cursor:pointer;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;
 }
-.cbtn:hover{border-color:#ff8c00;color:#ff8c00}
-.cbtn .ar{transition:transform 0.2s;font-size:11px}.cbtn.open .ar{transform:rotate(180deg)}
+.cbtn:hover{border-color:#ff8c00;color:#ff8c00}.cbtn .ar{transition:transform 0.2s;font-size:11px}.cbtn.open .ar{transform:rotate(180deg)}
 .cbody{
   display:none;padding:14px;font-size:12.5px;line-height:1.7;color:#7a8599;
   background:#0d0f13;border:1px solid #2a2f3a;border-top:none;margin-bottom:14px;
 }
 .cbody.open{display:block}
-.fm{font-family:var(--mono);font-size:13px;background:#0a0c10;color:#00e5a0;padding:10px 14px;margin:8px 0;display:block;border-left:2px solid #00e5a0}
+.fm{font-family:var(--mono);font-size:13px;background:#0a0c10;color:#e5b800;padding:10px 14px;margin:8px 0;display:block;border-left:2px solid #e5b800}
 
 /* ─── DIAGRAM ─── */
 .diagram{background:#0a0c10;border:1px solid #2a2f3a;padding:16px;margin:14px 0;text-align:center}
@@ -176,10 +177,10 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
   font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:1px;
   background:transparent;transition:all 0.15s;
 }
-.cv-btn.start{border-color:#00e676;color:#00e676}.cv-btn.start:hover{background:rgba(0,230,118,0.1)}
+.cv-btn.start{border-color:#8ab648;color:#8ab648}.cv-btn.start:hover{background:rgba(138,182,72,0.1)}
 .cv-btn.stop{border-color:#ff3b3b;color:#ff3b3b}.cv-btn.stop:hover{background:rgba(255,59,59,0.1)}
 .cv-btn.calib{border-color:#ff8c00;color:#ff8c00}.cv-btn.calib:hover{background:rgba(255,140,0,0.1)}
-.cv-btn.snap{border-color:#3b9eff;color:#3b9eff}.cv-btn.snap:hover{background:rgba(59,158,255,0.1)}
+.cv-btn.snap{border-color:#e5b800;color:#e5b800}.cv-btn.snap:hover{background:rgba(229,184,0,0.1)}
 .cv-btn.reset{border-color:#3a4050;color:#5a6580}.cv-btn.reset:hover{border-color:#5a6580;color:#7a8599}
 .cv-btn:disabled{opacity:0.25;cursor:not-allowed}
 .cv-status{text-align:center;font-family:var(--mono);font-size:11px;color:#5a6580;padding:6px;letter-spacing:0.3px}
@@ -188,8 +189,8 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
 .cv-hud .hud-label{font-family:var(--mono);font-size:9px;color:#3a4050;font-weight:600;text-transform:uppercase;letter-spacing:1px}
 .cv-hud .hud-val{font-family:var(--mono);font-size:22px;font-weight:700;margin-top:2px}
 .cv-hud .hud-val.h-color{color:#ff8c00}
-.cv-hud .hud-val.q-color{color:#00e5ff}
-.cv-hud .hud-val.f-color{color:#b388ff}
+.cv-hud .hud-val.q-color{color:#e5b800}
+.cv-hud .hud-val.f-color{color:#c97070}
 .cv-hud .hud-unit{font-size:10px;color:#3a4050;margin-left:2px}
 .cv-history{margin-top:14px}
 .cv-history table{width:100%;font-size:11px;border-collapse:collapse}
@@ -200,11 +201,11 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
 
 /* ─── THEORY ─── */
 .theory h2{font-family:var(--condensed);font-size:20px;font-weight:700;color:#ff8c00;margin:24px 0 6px;text-transform:uppercase;letter-spacing:1px}
-.theory h3{font-family:var(--condensed);font-size:16px;font-weight:700;color:#3b9eff;margin:18px 0 6px;text-transform:uppercase;letter-spacing:0.5px}
+.theory h3{font-family:var(--condensed);font-size:16px;font-weight:700;color:#e5b800;margin:18px 0 6px;text-transform:uppercase;letter-spacing:0.5px}
 .theory p{font-size:13px;line-height:1.7;color:#7a8599;margin-bottom:8px}
 .theory p strong{color:#dde1e8}
-.ex{background:#0d0f13;border:1px solid #2a2f3a;border-left:3px solid #00e5a0;padding:16px 18px;margin:14px 0}
-.ex h4{font-family:var(--condensed);font-size:12px;font-weight:700;color:#00e5a0;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.ex{background:#0d0f13;border:1px solid #2a2f3a;border-left:3px solid #ff8c00;padding:16px 18px;margin:14px 0}
+.ex h4{font-family:var(--condensed);font-size:12px;font-weight:700;color:#ff8c00;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
 .ex p{font-size:12.5px;line-height:1.7;color:#7a8599;margin-bottom:4px}
 .sl{counter-reset:step;margin:10px 0;padding:0}
 .sl li{list-style:none;padding:7px 0 7px 40px;position:relative;font-size:12.5px;color:#7a8599;border-bottom:1px solid #1a1d23}
@@ -213,7 +214,7 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
 
 /* ─── TERMS ─── */
 .terms h2{font-family:var(--condensed);font-size:20px;font-weight:700;color:#ff8c00;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px}
-.terms h3{font-family:var(--condensed);font-size:14px;font-weight:700;color:#3b9eff;margin:18px 0 4px;text-transform:uppercase;letter-spacing:0.5px}
+.terms h3{font-family:var(--condensed);font-size:14px;font-weight:700;color:#e5b800;margin:18px 0 4px;text-transform:uppercase;letter-spacing:0.5px}
 .terms p,.terms li{font-size:12.5px;line-height:1.8;color:#7a8599}
 .terms ul{margin:4px 0 12px 18px}.terms li{margin-bottom:2px}
 
@@ -261,7 +262,7 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
 <div class="container">
 
 <!-- ================================================================ -->
-<!--              📷 CAMERA VISION PAGE                               -->
+<!-- CAMERA VISION PAGE -->
 <!-- ================================================================ -->
 <div class="page active" id="p-cam">
 <div class="card">
@@ -284,10 +285,10 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
     <p style="margin-top:10px;font-weight:600;color:var(--gray-800)">The Live HUD shows three values:</p>
     <div style="margin:6px 0 6px 10px;font-size:12.5px;line-height:1.8">
       <strong style="color:#ff8c00">// H (orange)</strong> — averaged crest height in inches (from 30-frame buffer)<br>
-      <strong style="color:#00e5ff">// Flow Equation (cyan)</strong> — GPM calculated from Q = Cw x L x H^1.5<br>
-      <strong style="color:#b388ff">// Flow Chart (purple)</strong> — GPM interpolated from the class reference chart
+      <strong style="color:#e5b800">// Flow Equation (gold)</strong> — GPM calculated from Q = Cw x L x H^1.5<br>
+      <strong style="color:#c97070">// Flow Chart (rose)</strong> — GPM interpolated from the class reference chart
     </div>
-    <div class="tip green"><span class="ti"><span class="ti">💡</span>gt;</span><div><strong>TIP:</strong> Works best with consistent lighting. Avoid direct glare on the water surface. A small piece of colored tape on the sump rim helps the detector find the crest. See the full "[THEORY]" page for a deep dive into how each step works!</div></div>
+    <div class="tip green"><span class="ti">&gt;</span><div><strong>TIP:</strong> Works best with consistent lighting. Avoid direct glare on the water surface. A small piece of colored tape on the sump rim helps the detector find the crest. See the full [THEORY] page for a deep dive into how each step works!</div></div>
   </div>
 
   <!-- Camera viewport -->
@@ -312,11 +313,11 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
 
   <!-- Controls -->
   <div class="cv-controls">
-    <button class="cv-btn start" id="btnStart" onclick="startCamera()">▶ Start Camera</button>
-    <button class="cv-btn stop" id="btnStop" onclick="stopCamera()" disabled>■ Stop</button>
-    <button class="cv-btn calib" id="btnCalib" onclick="startCalibration()" disabled>📏 Calibrate</button>
+    <button class="cv-btn start" id="btnStart" onclick="startCamera()">> START CAMERA</button>
+    <button class="cv-btn stop" id="btnStop" onclick="stopCamera()" disabled>X STOP</button>
+    <button class="cv-btn calib" id="btnCalib" onclick="startCalibration()" disabled>// CALIBRATE</button>
     <button class="cv-btn snap" id="btnSnap" onclick="snapReading()" disabled>[SNAP] Capture</button>
-    <button class="cv-btn reset" onclick="resetCV()">↺ Reset</button>
+    <button class="cv-btn reset" onclick="resetCV()">// RESET</button>
   </div>
   <div class="cv-status" id="cvStatus">Ready — click Start Camera to begin</div>
 
@@ -329,7 +330,7 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
         <input type="number" step="any" id="calibDist" value="2" style="max-width:200px">
       </div>
       <div class="field" style="display:flex;align-items:flex-end">
-        <button class="cv-btn start" onclick="setScale()" style="padding:10px 24px">✓ Set Scale</button>
+        <button class="cv-btn start" onclick="setScale()" style="padding:10px 24px">[OK] Set Scale</button>
       </div>
     </div>
     <div class="cv-status" id="calibStatus"></div>
@@ -399,9 +400,9 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
       <line x1="180" y1="60" x2="320" y2="60" stroke="#ff8c00" stroke-width="3"/>
       <text x="330" y="64" font-size="11" fill="#ff8c00" font-weight="700" font-family="Chakra Petch">← CREST</text>
       <!-- water -->
-      <rect x="200" y="100" width="100" height="120" fill="#00e5ff" opacity="0.15"/>
-      <line x1="195" y1="100" x2="305" y2="100" stroke="#00e5ff" stroke-width="2" stroke-dasharray="5,3"/>
-      <text x="330" y="104" font-size="11" fill="#00e5ff" font-weight="600" font-family="Chakra Petch">← WATER</text>
+      <rect x="200" y="100" width="100" height="120" fill="#6b8ca0" opacity="0.12"/>
+      <line x1="195" y1="100" x2="305" y2="100" stroke="#6b8ca0" stroke-width="2" stroke-dasharray="5,3"/>
+      <text x="330" y="104" font-size="11" fill="#6b8ca0" font-weight="600" font-family="Chakra Petch">← WATER</text>
       <!-- H arrow -->
       <line x1="165" y1="60" x2="165" y2="100" stroke="#ff8c00" stroke-width="2.5"/>
       <polygon points="165,64 161,72 169,72" fill="#ff8c00"/>
@@ -420,7 +421,7 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
       <rect x="155" y="50" width="6" height="80" fill="#ff8c00" opacity="0.5"/>
       <text x="115" y="48" font-size="9" fill="#ff8c00" font-weight="600" font-family="JetBrains Mono">SCALE</text>
       <!-- overflow -->
-      <path d="M200 100 Q195 120 185 130 L185 220" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.4"/>
+      <path d="M200 100 Q195 120 185 130 L185 220" fill="none" stroke="#6b8ca0" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.3"/>
       <text x="140" y="200" font-size="9" fill="#3a4050" font-family="JetBrains Mono">overflow</text>
     </svg>
   </div>
@@ -435,7 +436,7 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
 </div><!-- end cam page -->
 
 <!-- ================================================================ -->
-<!--                   🧮 CALCULATORS PAGE                            -->
+<!-- CALCULATORS PAGE -->
 <!-- ================================================================ -->
 <div class="page" id="p-calc">
 
@@ -452,13 +453,29 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
   </div>
   <div class="results" id="crest-res" style="display:none"><div class="result primary"><div class="rl">Flow Rate</div><div class="rv"><span id="crest-gpm">—</span><span class="ru">GPM</span></div></div></div>
   <table class="crest-table"><thead><tr><th>Crest</th><th>12"</th><th>10"</th><th>8"</th><th>6"</th></tr></thead><tbody id="crestBody"></tbody></table>
-  <button class="save-btn" onclick="logCrest()">＋ Save to Log</button>
+  <button class="save-btn" onclick="logCrest()">+ Save to Log</button>
 </div>
 
-<!-- EXCHANGE TIME -->
+<!-- VOLUME (Step 2: calculate volume BEFORE exchange time) -->
+<div class="card">
+  <div class="card-title">[VOL] Volume Calculator</div>
+  <div class="card-sub">// Step 2: Calculate your tank/pond/raceway volume first</div>
+  <div class="pills" id="shP"><button class="pill active" onclick="setS('rect',this)">Rectangle</button><button class="pill" onclick="setS('cyl',this)">Cylinder</button><button class="pill" onclick="setS('cone',this)">Cone</button><button class="pill" onclick="setS('cpond',this)">Cone-Bottom Pond *</button></div>
+  <div id="s-rect"><div class="field-row"><div class="field"><label>L <span class="unit">(ft)</span></label><input type="number" step="any" id="rl" oninput="calcV()"></div><div class="field"><label>W <span class="unit">(ft)</span></label><input type="number" step="any" id="rw" oninput="calcV()"></div></div><div class="field"><label>H <span class="unit">(ft)</span></label><input type="number" step="any" id="rh" oninput="calcV()"></div></div>
+  <div id="s-cyl" style="display:none"><div class="field-row"><div class="field"><label>Diameter <span class="unit">(ft)</span></label><input type="number" step="any" id="cd" oninput="calcV()"></div><div class="field"><label>Height <span class="unit">(ft)</span></label><input type="number" step="any" id="ch" oninput="calcV()"></div></div></div>
+  <div id="s-cone" style="display:none"><div class="field-row"><div class="field"><label>Diameter <span class="unit">(ft)</span></label><input type="number" step="any" id="cod" oninput="calcV()"></div><div class="field"><label>Height <span class="unit">(ft)</span></label><input type="number" step="any" id="coh" oninput="calcV()"></div></div></div>
+  <div id="s-cpond" style="display:none"><div class="tip warn"><span class="ti">[*]</span><div><strong>Cone-Bottom Pond:</strong> h3 = h1 (sump depth) - h2 (wall depth)</div></div><div class="field"><label>Full Diameter <span class="unit">(ft)</span></label><input type="number" step="any" id="cpd" oninput="calcV()"></div><div class="field-row"><div class="field"><label>h1 Sump Depth <span class="unit">(ft)</span></label><input type="number" step="any" id="cph1" oninput="calcV()"></div><div class="field"><label>h2 Wall Depth <span class="unit">(ft)</span></label><input type="number" step="any" id="cph2" oninput="calcV()"></div></div></div>
+  <div class="results c2">
+    <div class="result primary"><div class="rl">Volume</div><div class="rv"><span id="vg">—</span><span class="ru">gal</span></div></div>
+    <div class="result"><div class="rl">Volume</div><div class="rv"><span id="vf">—</span><span class="ru">ft3</span></div></div>
+  </div>
+  <button class="save-btn" onclick="logV()">+ Save to Log</button>
+</div>
+
+<!-- EXCHANGE TIME (Step 3: now you have volume + flow, calculate exchange) -->
 <div class="card">
   <div class="card-title">[EXCHANGE] Exchange Time</div>
-  <div class="card-sub">// Exchange Time = Volume ÷ Flow Rate</div>
+  <div class="card-sub">// Step 3: Volume / Flow = Exchange Time (use values from above)</div>
   <div class="field-row">
     <div class="field"><label>Volume <span class="unit">(gallons)</span></label><input type="number" step="any" id="ex-vol" oninput="calcEx()"></div>
     <div class="field"><label>Flow <span class="unit">(GPM)</span></label><input type="number" step="any" id="ex-flow" oninput="calcEx()"></div>
@@ -467,23 +484,7 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
     <div class="result primary"><div class="rl">Exchange Time</div><div class="rv"><span id="ex-min">—</span><span class="ru">min</span></div></div>
     <div class="result green"><div class="rl">Exchanges/Hour</div><div class="rv"><span id="ex-ph">—</span><span class="ru">turns/hr</span></div></div>
   </div>
-  <button class="save-btn" onclick="logEx()">＋ Save to Log</button>
-</div>
-
-<!-- VOLUME -->
-<div class="card">
-  <div class="card-title">[VOL] Volume Calculator</div>
-  <div class="card-sub">// Rectangle, Cylinder, Cone, or Cone-Bottom Pond</div>
-  <div class="pills" id="shP"><button class="pill active" onclick="setS('rect',this)">Rectangle</button><button class="pill" onclick="setS('cyl',this)">Cylinder</button><button class="pill" onclick="setS('cone',this)">Cone</button><button class="pill" onclick="setS('cpond',this)">Cone-Bottom Pond ⭐</button></div>
-  <div id="s-rect"><div class="field-row"><div class="field"><label>L <span class="unit">(ft)</span></label><input type="number" step="any" id="rl" oninput="calcV()"></div><div class="field"><label>W <span class="unit">(ft)</span></label><input type="number" step="any" id="rw" oninput="calcV()"></div></div><div class="field"><label>H <span class="unit">(ft)</span></label><input type="number" step="any" id="rh" oninput="calcV()"></div></div>
-  <div id="s-cyl" style="display:none"><div class="field-row"><div class="field"><label>Diameter <span class="unit">(ft)</span></label><input type="number" step="any" id="cd" oninput="calcV()"></div><div class="field"><label>Height <span class="unit">(ft)</span></label><input type="number" step="any" id="ch" oninput="calcV()"></div></div></div>
-  <div id="s-cone" style="display:none"><div class="field-row"><div class="field"><label>Diameter <span class="unit">(ft)</span></label><input type="number" step="any" id="cod" oninput="calcV()"></div><div class="field"><label>Height <span class="unit">(ft)</span></label><input type="number" step="any" id="coh" oninput="calcV()"></div></div></div>
-  <div id="s-cpond" style="display:none"><div class="tip purple"><span class="ti">[*]</span><div><strong>Cone-Bottom Pond:</strong> h₃ = h₁ (sump depth) − h₂ (wall depth)</div></div><div class="field"><label>Full Diameter <span class="unit">(ft)</span></label><input type="number" step="any" id="cpd" oninput="calcV()"></div><div class="field-row"><div class="field"><label>h₁ Sump Depth <span class="unit">(ft)</span></label><input type="number" step="any" id="cph1" oninput="calcV()"></div><div class="field"><label>h₂ Wall Depth <span class="unit">(ft)</span></label><input type="number" step="any" id="cph2" oninput="calcV()"></div></div></div>
-  <div class="results c2">
-    <div class="result primary"><div class="rl">Volume</div><div class="rv"><span id="vg">—</span><span class="ru">gal</span></div></div>
-    <div class="result"><div class="rl">Volume</div><div class="rv"><span id="vf">—</span><span class="ru">ft³</span></div></div>
-  </div>
-  <button class="save-btn" onclick="logV()">＋ Save to Log</button>
+  <button class="save-btn" onclick="logEx()">+ Save to Log</button>
 </div>
 
 <!-- UNIT CONVERTER -->
@@ -496,7 +497,7 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
 </div><!-- end calc page -->
 
 <!-- ================================================================ -->
-<!--                   📚 THEORY PAGE                                 -->
+<!-- THEORY PAGE -->
 <!-- ================================================================ -->
 <div class="page" id="p-theory">
 <div class="theory">
@@ -531,7 +532,7 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
   <div class="ex"><h4>Example 1 — Raceway Volume</h4><p>100 ft × 5 ft × 2.5 ft raceway:</p><span class="fm">V = 100 × 5 × 2.5 = 1,250 ft³ × 7.48 = 9,350 gallons</span></div>
   <div class="ex"><h4>Example 2 — Exchange Time</h4><p>9,350 gal raceway, 113 GPM flow (12" sump, 1" crest):</p><span class="fm">Time = 9,350 ÷ 113 = 82.7 min ≈ 1.4 hours</span></div>
   <div class="ex"><h4>Example 3 — Round Tank</h4><p>12 ft diameter, 4 ft deep:</p><span class="fm">r = 6, V = π × 36 × 4 = 452.4 ft³ = 3,384 gallons</span></div>
-  <div class="ex" style="border-left-color:var(--purple)"><h4 style="color:var(--purple)">Example 4 — Cone-Bottom Pond</h4><p>20 ft diameter, h₁=6 ft, h₂=3 ft:</p><span class="fm">h₃ = 6−3 = 3 ft, r = 10 ft</span><span class="fm">Cyl: π×100×3 = 942.5 ft³</span><span class="fm">Cone: ⅓×π×100×3 = 314.2 ft³</span><span class="fm">Total = 1,256.6 ft³ = 9,400 gallons</span></div>
+  <div class="ex" style="border-left-color:var(--rose)"><h4 style="color:var(--rose)">Example 4 — Cone-Bottom Pond</h4><p>20 ft diameter, h₁=6 ft, h₂=3 ft:</p><span class="fm">h₃ = 6−3 = 3 ft, r = 10 ft</span><span class="fm">Cyl: π×100×3 = 942.5 ft³</span><span class="fm">Cone: ⅓×π×100×3 = 314.2 ft³</span><span class="fm">Total = 1,256.6 ft³ = 9,400 gallons</span></div>
   <div class="ex"><h4>Example 5 — Using the Crest Chart</h4><p>10" sump, crest readings: 1.5", 1.25", 1.5"</p><span class="fm">Average = 1.42" → chart lookup ≈ 153–176 GPM → ~165 GPM</span></div>
 </div>
 
@@ -546,7 +547,7 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
 
 <!-- ═══════════════ CAMERA PIPELINE DEEP DIVE ═══════════════ -->
 <div class="card">
-  <h2>📷 How the Camera Vision System Works</h2>
+  <h2>[CAM] How the Camera Vision System Works</h2>
   <p>The Vision tab in this app uses <strong>computer vision</strong> — a branch of artificial intelligence where software "sees" through a camera and extracts measurements from the image. In hatcheries, the setup is perfect for this because the sump is fixed, the crest doesn't move, and the only thing changing is the water level.</p>
   <p>Instead of manually reading a ruler against the sump every time, the camera does it <strong>automatically, continuously, and more consistently</strong> than a human eye.</p>
 
@@ -557,8 +558,8 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
   <h3>The 7-Step Camera Pipeline</h3>
   <p>Here is exactly what happens, step by step, every time the camera runs:</p>
 
-  <div class="ex" style="border-left-color:#16a34a">
-    <h4 style="color:#16a34a">Step 1 — Start Camera</h4>
+  <div class="ex" style="border-left-color:#8ab648">
+    <h4 style="color:#8ab648">Step 1 — Start Camera</h4>
     <p>The app requests access to your device camera (rear-facing preferred). The live video feed is drawn onto an HTML <strong>canvas</strong> element — this is like a digital drawing board that updates 30 times per second. The canvas is what lets us analyze each frame as raw pixel data.</p>
     <div class="tip green"><span class="ti">[+]</span><div><strong>Works with:</strong> Any smartphone, tablet, laptop webcam, Raspberry Pi camera, or GoPro. No special equipment needed.</div></div>
   </div>
@@ -602,8 +603,8 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
     <p>This is displayed on the video as a live <strong>orange arrow</strong> with the measurement label, updating every frame.</p>
   </div>
 
-  <div class="ex" style="border-left-color:#7c3aed">
-    <h4 style="color:#7c3aed">Step 5 — 30-Frame Averaging (Eliminating Wave Noise)</h4>
+  <div class="ex" style="border-left-color:#c97070">
+    <h4 style="color:#c97070">Step 5 — 30-Frame Averaging (Eliminating Wave Noise)</h4>
     <p>Water surfaces ripple and wave. A single frame might catch a ripple peak or trough, giving a wrong reading. The solution: <strong>average over 30 frames.</strong></p>
     <span class="fm">H_buffer = [1.48, 1.52, 1.50, 1.49, 1.53, 1.51, ...] (last 30 readings)</span>
     <span class="fm">H_averaged = sum(H_buffer) ÷ 30 = 1.505 inches</span>
@@ -611,8 +612,8 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
     <div class="tip purple"><span class="ti">[#]</span><div><strong>Why 30 frames?</strong> At 30 fps (frames per second), this averages over exactly 1 second of video — enough to smooth out typical water surface ripples without being so slow that it misses real level changes.</div></div>
   </div>
 
-  <div class="ex" style="border-left-color:#0ea5e9">
-    <h4 style="color:#0ea5e9">Step 6 — Dual Flow Calculation</h4>
+  <div class="ex" style="border-left-color:#e5b800">
+    <h4 style="color:#e5b800">Step 6 — Dual Flow Calculation</h4>
     <p>With the averaged H value, the app calculates flow <strong>two independent ways</strong> simultaneously:</p>
     <p><strong>Method A — Weir Equation:</strong></p>
     <span class="fm">H_feet = H_inches ÷ 12 = 1.505 ÷ 12 = 0.1254 ft</span>
@@ -648,14 +649,14 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
       <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:#ff8c00;margin-top:4px">1.50<span style="font-size:12px;color:#3a4050;margin-left:2px">in</span></div>
       <div style="font-family:var(--mono);font-size:9px;color:#3a4050;margin-top:4px">Averaged over 30 frames</div>
     </div>
-    <div style="background:#0a0c10;padding:14px;text-align:center;border:2px solid #00e5ff">
+    <div style="background:#0a0c10;padding:14px;text-align:center;border:2px solid #e5b800">
       <div style="font-family:var(--mono);font-size:9px;color:#3a4050;font-weight:600;text-transform:uppercase;letter-spacing:1px">Flow (Equation)</div>
-      <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:#00e5ff;margin-top:4px">208<span style="font-size:12px;color:#3a4050;margin-left:2px">GPM</span></div>
+      <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:#e5b800;margin-top:4px">208<span style="font-size:12px;color:#3a4050;margin-left:2px">GPM</span></div>
       <div style="font-family:var(--mono);font-size:9px;color:#3a4050;margin-top:4px">Q = Cw x L x H^1.5</div>
     </div>
-    <div style="background:#0a0c10;padding:14px;text-align:center;border:2px solid #b388ff">
+    <div style="background:#0a0c10;padding:14px;text-align:center;border:2px solid #c97070">
       <div style="font-family:var(--mono);font-size:9px;color:#3a4050;font-weight:600;text-transform:uppercase;letter-spacing:1px">Flow (Chart)</div>
-      <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:#b388ff;margin-top:4px">211<span style="font-size:12px;color:#3a4050;margin-left:2px">GPM</span></div>
+      <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:#c97070;margin-top:4px">211<span style="font-size:12px;color:#3a4050;margin-left:2px">GPM</span></div>
       <div style="font-family:var(--mono);font-size:9px;color:#3a4050;margin-top:4px">Interpolated from class chart</div>
     </div>
   </div>
@@ -699,7 +700,7 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
 </div><!-- end theory page -->
 
 <!-- ================================================================ -->
-<!--                   📋 DATA LOG PAGE                               -->
+<!-- DATA LOG PAGE -->
 <!-- ================================================================ -->
 <div class="page" id="p-log">
 <div class="card">
@@ -712,7 +713,7 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
 </div>
 
 <!-- ================================================================ -->
-<!--                   📜 TERMS PAGE                                  -->
+<!-- TERMS PAGE -->
 <!-- ================================================================ -->
 <div class="page" id="p-terms">
 <div class="card terms">
@@ -782,10 +783,12 @@ function chartLookup(hInches, diam) {
 //                 COMPUTER VISION
 // ═══════════════════════════════════════════════════
 let cvStream = null, cvRunning = false, cvAnimId = null;
-let calibrated = false, pxPerInch = 50; // default guess
+let calibrated = false, pxPerInch = 50;
 let calibMode = false, calibLine1Y = 120, calibLine2Y = 240;
 let dragging = null;
 let hBuffer = [], snapReadings = [];
+let frameCount = 0; // throttle counter
+let grayBuf = null, gradBuf = null; // reusable buffers
 
 const video = document.getElementById('cvVideo');
 const canvas = document.getElementById('cvCanvas');
@@ -793,12 +796,16 @@ const overlay = document.getElementById('cvOverlay');
 const ctx = canvas.getContext('2d', {willReadFrequently: true});
 const octx = overlay.getContext('2d');
 
+const CV_FONT = "'Chakra Petch', sans-serif";
+const CV_MONO = "'JetBrains Mono', monospace";
+
 async function startCamera() {
   try {
     cvStream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: 'environment', width: {ideal:640}, height: {ideal:480} }
     });
     video.srcObject = cvStream;
+    await video.play(); // ensure video starts playing
     video.style.display = 'none';
     document.getElementById('cvPlaceholder').style.display = 'none';
     canvas.style.display = 'block';
@@ -810,24 +817,54 @@ async function startCamera() {
     document.getElementById('cvHud').style.display = 'grid';
     setStatus('[CAM] Active — calibrate first for accurate readings');
     cvRunning = true;
-    video.onloadedmetadata = () => {
-      canvas.width = video.videoWidth || 640;
-      canvas.height = video.videoHeight || 480;
-      overlay.width = canvas.width;
-      overlay.height = canvas.height;
-      calibLine1Y = Math.round(canvas.height * 0.25);
-      calibLine2Y = Math.round(canvas.height * 0.65);
-      processFrame();
+    frameCount = 0;
+
+    // Wait for video dimensions to be available
+    const waitForVideo = () => {
+      if (video.videoWidth > 0 && video.videoHeight > 0) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        overlay.width = canvas.width;
+        overlay.height = canvas.height;
+        calibLine1Y = Math.round(canvas.height * 0.25);
+        calibLine2Y = Math.round(canvas.height * 0.65);
+        // Allocate reusable buffers
+        const totalPx = canvas.width * canvas.height;
+        grayBuf = new Float32Array(totalPx);
+        gradBuf = new Float32Array(totalPx);
+        processFrame();
+      } else {
+        requestAnimationFrame(waitForVideo);
+      }
     };
+    waitForVideo();
   } catch(e) {
     setStatus('[ERR] Camera access denied or not available: ' + e.message);
   }
 }
 
+function cleanupCalibration() {
+  calibMode = false;
+  dragging = null;
+  document.getElementById('calibOverlay').style.display = 'none';
+  document.getElementById('calibFields').style.display = 'none';
+  overlay.style.pointerEvents = 'none';
+  overlay.onmousedown = overlay.onmousemove = overlay.onmouseup = null;
+  overlay.ontouchstart = overlay.ontouchmove = overlay.ontouchend = null;
+}
+
 function stopCamera() {
   cvRunning = false;
-  if (cvAnimId) cancelAnimationFrame(cvAnimId);
-  if (cvStream) cvStream.getTracks().forEach(t => t.stop());
+  if (cvAnimId) { cancelAnimationFrame(cvAnimId); cvAnimId = null; }
+  if (cvStream) { cvStream.getTracks().forEach(t => t.stop()); cvStream = null; }
+  cleanupCalibration();
+  lastCrestY = -1;
+  lastWaterY = -1;
+  hBuffer = [];
+  // Clear canvases
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  octx.clearRect(0, 0, overlay.width, overlay.height);
+  video.srcObject = null;
   video.style.display = 'none';
   canvas.style.display = 'none';
   overlay.style.display = 'none';
@@ -844,9 +881,17 @@ function resetCV() {
   calibrated = false;
   hBuffer = [];
   snapReadings = [];
+  grayBuf = null;
+  gradBuf = null;
+  lastCrestY = -1;
+  lastWaterY = -1;
   document.getElementById('cvHistory').style.display = 'none';
+  document.getElementById('snapBody').innerHTML = '';
   document.getElementById('cvHud').style.display = 'none';
-  document.getElementById('calibFields').style.display = 'none';
+  document.getElementById('calibStatus').textContent = '';
+  document.getElementById('hudH').innerHTML = '—<span class="hud-unit">in</span>';
+  document.getElementById('hudQ').innerHTML = '—<span class="hud-unit">GPM</span>';
+  document.getElementById('hudChart').innerHTML = '—<span class="hud-unit">GPM</span>';
   setStatus('Ready — click Start Camera');
 }
 
@@ -854,31 +899,31 @@ function setStatus(msg) { document.getElementById('cvStatus').textContent = msg;
 
 // ─── Calibration ───
 function startCalibration() {
+  if (!cvRunning) return;
   calibMode = true;
   document.getElementById('calibOverlay').style.display = 'flex';
   document.getElementById('calibFields').style.display = 'block';
   setStatus('[CAL] Calibration mode — drag the orange lines, then click Set Scale');
 
-  // Make overlay interactive for dragging
   overlay.style.pointerEvents = 'auto';
   overlay.style.cursor = 'default';
 
   overlay.onmousedown = overlay.ontouchstart = function(e) {
     e.preventDefault();
     const rect = overlay.getBoundingClientRect();
-    const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+    const rawY = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
     const scaleY = canvas.height / rect.height;
-    const canvasY = y * scaleY;
-    if (Math.abs(canvasY - calibLine1Y) < 20) dragging = 1;
-    else if (Math.abs(canvasY - calibLine2Y) < 20) dragging = 2;
+    const canvasY = rawY * scaleY;
+    if (Math.abs(canvasY - calibLine1Y) < 25) dragging = 1;
+    else if (Math.abs(canvasY - calibLine2Y) < 25) dragging = 2;
   };
   overlay.onmousemove = overlay.ontouchmove = function(e) {
     if (!dragging) return;
     e.preventDefault();
     const rect = overlay.getBoundingClientRect();
-    const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+    const rawY = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
     const scaleY = canvas.height / rect.height;
-    const canvasY = Math.max(10, Math.min(canvas.height - 10, y * scaleY));
+    const canvasY = Math.max(10, Math.min(canvas.height - 10, rawY * scaleY));
     if (dragging === 1) calibLine1Y = canvasY;
     else calibLine2Y = canvasY;
   };
@@ -889,191 +934,222 @@ function setScale() {
   const dist = parseFloat(document.getElementById('calibDist').value);
   if (!dist || dist <= 0) { document.getElementById('calibStatus').textContent = '[WARN] Enter a valid distance'; return; }
   const pxDist = Math.abs(calibLine2Y - calibLine1Y);
+  if (pxDist < 5) { document.getElementById('calibStatus').textContent = '[WARN] Lines are too close — spread them apart'; return; }
   pxPerInch = pxDist / dist;
   calibrated = true;
-  calibMode = false;
-  document.getElementById('calibOverlay').style.display = 'none';
-  overlay.style.pointerEvents = 'none';
-  overlay.onmousedown = overlay.onmousemove = overlay.onmouseup = null;
-  overlay.ontouchstart = overlay.ontouchmove = overlay.ontouchend = null;
-  document.getElementById('calibStatus').textContent = `✅ Scale set: ${pxPerInch.toFixed(1)} pixels/inch (${dist}" = ${pxDist.toFixed(0)}px)`;
-  setStatus(`✅ Calibrated: ${pxPerInch.toFixed(1)} px/inch — detection active`);
+  cleanupCalibration();
+  document.getElementById('calibFields').style.display = 'block'; // keep fields visible for reference
+  document.getElementById('calibStatus').textContent = '[OK] Scale set: ' + pxPerInch.toFixed(1) + ' pixels/inch (' + dist + '" = ' + pxDist.toFixed(0) + 'px)';
+  setStatus('[OK] Calibrated: ' + pxPerInch.toFixed(1) + ' px/inch — detection active');
 }
 
 // ─── Frame processing ───
+let lastCrestY = -1, lastWaterY = -1; // persist last detection for smooth drawing
+
 function processFrame() {
   if (!cvRunning) return;
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  // Get image data for analysis
-  const w = canvas.width, h = canvas.height;
-  const imgData = ctx.getImageData(0, 0, w, h);
-  const data = imgData.data;
-
-  // ─── Edge detection (simplified Sobel for horizontal edges) ───
-  const gray = new Float32Array(w * h);
-  for (let i = 0; i < w * h; i++) {
-    gray[i] = data[i*4] * 0.299 + data[i*4+1] * 0.587 + data[i*4+2] * 0.114;
-  }
-
-  // Vertical gradient (detects horizontal edges)
-  const gradY = new Float32Array(w * h);
-  for (let y = 1; y < h - 1; y++) {
-    for (let x = 1; x < w - 1; x++) {
-      const gy = -gray[(y-1)*w+x-1] - 2*gray[(y-1)*w+x] - gray[(y-1)*w+x+1]
-                 +gray[(y+1)*w+x-1] + 2*gray[(y+1)*w+x] + gray[(y+1)*w+x+1];
-      gradY[y*w+x] = Math.abs(gy);
+  try {
+    // Check video is actually producing frames
+    if (video.readyState < 2 || video.paused || video.ended) {
+      cvAnimId = requestAnimationFrame(processFrame);
+      return;
     }
-  }
 
-  // Find strongest horizontal edge rows (accumulate gradient per row)
-  const rowStrength = new Float32Array(h);
-  const centerX = Math.round(w * 0.2);
-  const centerW = Math.round(w * 0.6);
-  for (let y = 5; y < h - 5; y++) {
-    let sum = 0;
-    for (let x = centerX; x < centerX + centerW; x++) {
-      sum += gradY[y * w + x];
-    }
-    rowStrength[y] = sum / centerW;
-  }
+    // Draw video to canvas every frame (keeps video smooth)
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  // Find top two strongest edges (crest = upper strong edge, water = next)
-  const threshold = 15;
-  let crestY = -1, waterY = -1;
+    const w = canvas.width, h = canvas.height;
 
-  // Scan top-down for first strong edge (crest)
-  for (let y = 10; y < h * 0.6; y++) {
-    if (rowStrength[y] > threshold) {
-      // Find the peak in this region
-      let peakY = y, peakVal = rowStrength[y];
-      for (let dy = 1; dy < 15 && y + dy < h; dy++) {
-        if (rowStrength[y+dy] > peakVal) { peakVal = rowStrength[y+dy]; peakY = y + dy; }
+    // Throttle heavy processing to every 3rd frame
+    frameCount++;
+    const doDetection = (frameCount % 3 === 0);
+
+    if (doDetection && !calibMode) {
+      const imgData = ctx.getImageData(0, 0, w, h);
+      const data = imgData.data;
+      const totalPx = w * h;
+
+      // Reuse buffers (reallocate only if size changed)
+      if (!grayBuf || grayBuf.length !== totalPx) {
+        grayBuf = new Float32Array(totalPx);
+        gradBuf = new Float32Array(totalPx);
       }
-      crestY = peakY;
-      break;
-    }
-  }
 
-  // Scan below crest for water surface
-  if (crestY > 0) {
-    const searchStart = crestY + 15; // skip some pixels below crest
-    for (let y = searchStart; y < Math.min(h - 10, crestY + h * 0.5); y++) {
-      if (rowStrength[y] > threshold * 0.6) {
-        let peakY = y, peakVal = rowStrength[y];
-        for (let dy = 1; dy < 10 && y + dy < h; dy++) {
-          if (rowStrength[y+dy] > peakVal) { peakVal = rowStrength[y+dy]; peakY = y + dy; }
+      // Grayscale
+      for (let i = 0; i < totalPx; i++) {
+        grayBuf[i] = data[i*4] * 0.299 + data[i*4+1] * 0.587 + data[i*4+2] * 0.114;
+      }
+
+      // Sobel vertical gradient (detects horizontal edges)
+      gradBuf.fill(0);
+      for (let y = 1; y < h - 1; y++) {
+        for (let x = 1; x < w - 1; x++) {
+          const gy = -grayBuf[(y-1)*w+x-1] - 2*grayBuf[(y-1)*w+x] - grayBuf[(y-1)*w+x+1]
+                     +grayBuf[(y+1)*w+x-1] + 2*grayBuf[(y+1)*w+x] + grayBuf[(y+1)*w+x+1];
+          gradBuf[y*w+x] = Math.abs(gy);
         }
-        waterY = peakY;
-        break;
       }
-    }
-  }
 
-  // ─── Draw overlay ───
-  octx.clearRect(0, 0, w, h);
-
-  if (calibMode) {
-    // Draw calibration lines
-    octx.strokeStyle = '#f97316';
-    octx.lineWidth = 2;
-    octx.setLineDash([8, 4]);
-    octx.beginPath(); octx.moveTo(0, calibLine1Y); octx.lineTo(w, calibLine1Y); octx.stroke();
-    octx.beginPath(); octx.moveTo(0, calibLine2Y); octx.lineTo(w, calibLine2Y); octx.stroke();
-    octx.setLineDash([]);
-
-    // Labels
-    octx.fillStyle = '#f97316';
-    octx.font = '13px Outfit';
-    octx.fillText('⬆ Line 1 (drag me)', 10, calibLine1Y - 6);
-    octx.fillText('⬇ Line 2 (drag me)', 10, calibLine2Y + 18);
-
-    // Distance label
-    const pxDist = Math.abs(calibLine2Y - calibLine1Y);
-    octx.fillStyle = '#fff';
-    octx.font = 'bold 14px JetBrains Mono';
-    octx.fillText(`${pxDist.toFixed(0)} px`, w/2 - 25, (calibLine1Y + calibLine2Y)/2 + 5);
-  } else {
-    // Draw detected lines
-    if (crestY > 0) {
-      octx.strokeStyle = '#ef4444';
-      octx.lineWidth = 2;
-      octx.setLineDash([6, 3]);
-      octx.beginPath(); octx.moveTo(0, crestY); octx.lineTo(w, crestY); octx.stroke();
-      octx.setLineDash([]);
-      octx.fillStyle = '#ef4444';
-      octx.font = 'bold 12px Outfit';
-      octx.fillText('CREST', 8, crestY - 6);
-    }
-
-    if (waterY > 0) {
-      octx.strokeStyle = '#22d3ee';
-      octx.lineWidth = 2;
-      octx.setLineDash([6, 3]);
-      octx.beginPath(); octx.moveTo(0, waterY); octx.lineTo(w, waterY); octx.stroke();
-      octx.setLineDash([]);
-      octx.fillStyle = '#22d3ee';
-      octx.font = 'bold 12px Outfit';
-      octx.fillText('WATER', 8, waterY + 16);
-    }
-
-    // Draw H measurement
-    if (crestY > 0 && waterY > 0) {
-      const pxH = waterY - crestY;
-      const hInches = pxH / pxPerInch;
-
-      // H arrow
-      octx.strokeStyle = '#f97316';
-      octx.lineWidth = 2.5;
-      octx.setLineDash([]);
-      octx.beginPath(); octx.moveTo(w - 40, crestY + 4); octx.lineTo(w - 40, waterY - 4); octx.stroke();
-      // Arrowheads
-      octx.fillStyle = '#f97316';
-      octx.beginPath(); octx.moveTo(w-40, crestY+4); octx.lineTo(w-44, crestY+12); octx.lineTo(w-36, crestY+12); octx.fill();
-      octx.beginPath(); octx.moveTo(w-40, waterY-4); octx.lineTo(w-44, waterY-12); octx.lineTo(w-36, waterY-12); octx.fill();
-
-      // H label
-      octx.fillStyle = '#f97316';
-      octx.font = 'bold 16px JetBrains Mono';
-      octx.fillText(`H=${hInches.toFixed(2)}"`, w - 120, (crestY + waterY) / 2 + 5);
-
-      // Buffer for averaging
-      hBuffer.push(hInches);
-      if (hBuffer.length > 30) hBuffer.shift();
-      const hAvg = hBuffer.reduce((a,b)=>a+b,0) / hBuffer.length;
-
-      // Calculate flow
-      const diam = document.getElementById('cv-diam').value;
-      const Cw = parseFloat(document.getElementById('cv-cw').value) || 3.33;
-      const L = parseFloat(document.getElementById('cv-L').value) || 0;
-      const hFt = hAvg / 12;
-      let qGpm = 0;
-      if (L > 0 && hFt > 0) {
-        const qCfs = Cw * L * Math.pow(hFt, 1.5);
-        qGpm = qCfs * 448.831;
+      // Accumulate edge strength per row (center 60%)
+      const centerX = Math.round(w * 0.2);
+      const centerW = Math.round(w * 0.6);
+      const rowStrength = new Float32Array(h);
+      for (let y = 5; y < h - 5; y++) {
+        let sum = 0;
+        for (let x = centerX; x < centerX + centerW; x++) {
+          sum += gradBuf[y * w + x];
+        }
+        rowStrength[y] = sum / centerW;
       }
-      const chartGpm = chartLookup(hAvg, diam);
 
-      // Update HUD
-      document.getElementById('hudH').innerHTML = hAvg.toFixed(2) + '<span class="hud-unit">in</span>';
-      document.getElementById('hudQ').innerHTML = (qGpm > 0 ? Math.round(qGpm) : '—') + '<span class="hud-unit">GPM</span>';
-      document.getElementById('hudChart').innerHTML = (chartGpm !== null ? chartGpm : '—') + '<span class="hud-unit">GPM</span>';
+      // Find crest (first strong edge from top)
+      const threshold = 15;
+      let crestY = -1, waterY = -1;
 
-      // Calibration status indicator
+      for (let y = 10; y < h * 0.6; y++) {
+        if (rowStrength[y] > threshold) {
+          let peakY = y, peakVal = rowStrength[y];
+          for (let dy = 1; dy < 15 && y + dy < h; dy++) {
+            if (rowStrength[y+dy] > peakVal) { peakVal = rowStrength[y+dy]; peakY = y + dy; }
+          }
+          crestY = peakY;
+          break;
+        }
+      }
+
+      // Find water surface below crest
+      if (crestY > 0) {
+        const searchStart = crestY + 15;
+        for (let y = searchStart; y < Math.min(h - 10, crestY + h * 0.5); y++) {
+          if (rowStrength[y] > threshold * 0.6) {
+            let peakY = y, peakVal = rowStrength[y];
+            for (let dy = 1; dy < 10 && y + dy < h; dy++) {
+              if (rowStrength[y+dy] > peakVal) { peakVal = rowStrength[y+dy]; peakY = y + dy; }
+            }
+            waterY = peakY;
+            break;
+          }
+        }
+      }
+
+      // Smooth detection with previous frame (reduce jitter)
+      if (crestY > 0) lastCrestY = lastCrestY > 0 ? lastCrestY * 0.7 + crestY * 0.3 : crestY;
+      if (waterY > 0) lastWaterY = lastWaterY > 0 ? lastWaterY * 0.7 + waterY * 0.3 : waterY;
+    }
+
+    // ─── Draw overlay (every frame for smooth visuals) ───
+    octx.clearRect(0, 0, w, h);
+
+    if (calibMode) {
+      // Draw calibration lines
+      octx.strokeStyle = '#ff8c00';
+      octx.lineWidth = 2;
+      octx.setLineDash([8, 4]);
+      octx.beginPath(); octx.moveTo(0, calibLine1Y); octx.lineTo(w, calibLine1Y); octx.stroke();
+      octx.beginPath(); octx.moveTo(0, calibLine2Y); octx.lineTo(w, calibLine2Y); octx.stroke();
+      octx.setLineDash([]);
+
+      // Labels
+      octx.fillStyle = '#ff8c00';
+      octx.font = '13px ' + CV_FONT;
+      octx.fillText('LINE 1 (drag)', 10, calibLine1Y - 8);
+      octx.fillText('LINE 2 (drag)', 10, calibLine2Y + 20);
+
+      // Distance label
+      const pxDist = Math.abs(calibLine2Y - calibLine1Y);
+      octx.fillStyle = '#fff';
+      octx.font = 'bold 14px ' + CV_MONO;
+      octx.fillText(pxDist.toFixed(0) + ' px', w/2 - 30, (calibLine1Y + calibLine2Y)/2 + 5);
+    } else {
+      // Draw detected lines using smoothed positions
+      const cY = Math.round(lastCrestY);
+      const wY = Math.round(lastWaterY);
+
+      if (cY > 0) {
+        octx.strokeStyle = '#ef4444';
+        octx.lineWidth = 2;
+        octx.setLineDash([6, 3]);
+        octx.beginPath(); octx.moveTo(0, cY); octx.lineTo(w, cY); octx.stroke();
+        octx.setLineDash([]);
+        octx.fillStyle = '#ef4444';
+        octx.font = 'bold 12px ' + CV_FONT;
+        octx.fillText('CREST', 8, cY - 6);
+      }
+
+      if (wY > 0) {
+        octx.strokeStyle = '#22d3ee';
+        octx.lineWidth = 2;
+        octx.setLineDash([6, 3]);
+        octx.beginPath(); octx.moveTo(0, wY); octx.lineTo(w, wY); octx.stroke();
+        octx.setLineDash([]);
+        octx.fillStyle = '#22d3ee';
+        octx.font = 'bold 12px ' + CV_FONT;
+        octx.fillText('WATER', 8, wY + 16);
+      }
+
+      // Draw H measurement
+      if (cY > 0 && wY > 0 && wY > cY) {
+        const pxH = wY - cY;
+        const hInches = pxH / pxPerInch;
+
+        // Only push to buffer on detection frames
+        if (frameCount % 3 === 0 && hInches > 0 && hInches < 20) {
+          hBuffer.push(hInches);
+          if (hBuffer.length > 30) hBuffer.shift();
+        }
+
+        // H arrow
+        octx.strokeStyle = '#ff8c00';
+        octx.lineWidth = 2.5;
+        octx.setLineDash([]);
+        octx.beginPath(); octx.moveTo(w - 40, cY + 4); octx.lineTo(w - 40, wY - 4); octx.stroke();
+        octx.fillStyle = '#ff8c00';
+        octx.beginPath(); octx.moveTo(w-40, cY+4); octx.lineTo(w-44, cY+12); octx.lineTo(w-36, cY+12); octx.fill();
+        octx.beginPath(); octx.moveTo(w-40, wY-4); octx.lineTo(w-44, wY-12); octx.lineTo(w-36, wY-12); octx.fill();
+
+        // H label
+        octx.fillStyle = '#ff8c00';
+        octx.font = 'bold 16px ' + CV_MONO;
+        octx.fillText('H=' + hInches.toFixed(2) + '"', w - 130, (cY + wY) / 2 + 5);
+
+        // Update HUD with averaged values
+        if (hBuffer.length > 0) {
+          const hAvg = hBuffer.reduce((a,b)=>a+b,0) / hBuffer.length;
+          const diam = document.getElementById('cv-diam').value;
+          const Cw = parseFloat(document.getElementById('cv-cw').value) || 3.33;
+          const L = parseFloat(document.getElementById('cv-L').value) || 0;
+          const hFt = hAvg / 12;
+          let qGpm = 0;
+          if (L > 0 && hFt > 0) {
+            qGpm = Cw * L * Math.pow(hFt, 1.5) * 448.831;
+          }
+          const chartGpm = chartLookup(hAvg, diam);
+
+          document.getElementById('hudH').innerHTML = hAvg.toFixed(2) + '<span class="hud-unit">in</span>';
+          document.getElementById('hudQ').innerHTML = (qGpm > 0 ? Math.round(qGpm) : '—') + '<span class="hud-unit">GPM</span>';
+          document.getElementById('hudChart').innerHTML = (chartGpm !== null ? chartGpm : '—') + '<span class="hud-unit">GPM</span>';
+        }
+      }
+
+      // Status bar overlay
       if (!calibrated) {
         octx.fillStyle = 'rgba(0,0,0,0.6)';
-        octx.fillRect(0, 0, w, 28);
+        octx.fillRect(0, 0, w, 26);
         octx.fillStyle = '#fbbf24';
-        octx.font = 'bold 12px Outfit';
-        octx.fillText('⚠ NOT CALIBRATED — click Calibrate for accurate readings', 10, 18);
+        octx.font = 'bold 11px ' + CV_MONO;
+        octx.fillText('[!] NOT CALIBRATED — click Calibrate for accurate readings', 8, 17);
       } else {
         octx.fillStyle = 'rgba(0,0,0,0.5)';
-        octx.fillRect(0, 0, w, 24);
+        octx.fillRect(0, 0, w, 22);
         octx.fillStyle = '#4ade80';
-        octx.font = '11px Outfit';
-        octx.fillText(`✓ Calibrated: ${pxPerInch.toFixed(1)} px/in | Frames avg: ${hBuffer.length}`, 8, 16);
+        octx.font = '10px ' + CV_MONO;
+        octx.fillText('[OK] ' + pxPerInch.toFixed(1) + ' px/in | buf: ' + hBuffer.length + '/30', 8, 15);
       }
     }
+  } catch (err) {
+    // Don't let a single frame error kill the loop
+    console.warn('Frame error:', err);
   }
 
   cvAnimId = requestAnimationFrame(processFrame);
@@ -1108,7 +1184,7 @@ function snapReading() {
   document.getElementById('snapBody').appendChild(row);
 
   // Flash effect
-  setStatus(`📸 Reading #${reading.n}: H=${reading.h}" → ${reading.qChart} GPM (chart) / ${reading.qEq} GPM (eq)`);
+  setStatus('[SNAP] Reading #' + reading.n + ': H=' + reading.h + '" > ' + reading.qChart + ' GPM (chart) / ' + reading.qEq + ' GPM (eq)');
   hBuffer = []; // reset buffer for next reading
 }
 
