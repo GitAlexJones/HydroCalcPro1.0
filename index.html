@@ -3,239 +3,243 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flow Like a Pro — Hatchery Measurements & Calculations</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Flow Rate Calculator 1.0 — Hatchery Measurements & Calculations</title>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --blue:#1a6fb5;--blue-dark:#134d80;--blue-light:#e8f2fb;--blue-glow:rgba(26,111,181,0.1);
-  --teal:#0d8a72;--teal-light:#e6f5f1;--teal-glow:rgba(13,138,114,0.08);
-  --orange:#d97706;--orange-light:#fef3c7;
-  --red:#dc3545;--red-light:#fde8ea;
-  --green:#16a34a;--green-light:#dcfce7;
-  --purple:#7c3aed;--purple-light:#ede9fe;
-  --gray-50:#f8fafc;--gray-100:#f1f5f9;--gray-200:#e2e8f0;--gray-300:#cbd5e1;
-  --gray-400:#94a3b8;--gray-500:#64748b;--gray-600:#475569;--gray-700:#334155;
-  --gray-800:#1e293b;--gray-900:#0f172a;
-  --white:#ffffff;--body-bg:#f0f4f8;
-  --radius:12px;--radius-sm:8px;--radius-xs:6px;
-  --shadow:0 1px 3px rgba(0,0,0,0.08),0 4px 12px rgba(0,0,0,0.05);
-  --shadow-lg:0 4px 20px rgba(0,0,0,0.1);
-  --font:'Outfit',system-ui,sans-serif;
+  --blue:#3b9eff;--blue-dark:#2680d6;--blue-light:rgba(59,158,255,0.08);--blue-glow:rgba(59,158,255,0.15);
+  --teal:#00e5a0;--teal-light:rgba(0,229,160,0.07);--teal-glow:rgba(0,229,160,0.12);
+  --orange:#ff8c00;--orange-light:rgba(255,140,0,0.08);
+  --red:#ff3b3b;--red-light:rgba(255,59,59,0.08);
+  --green:#00e676;--green-light:rgba(0,230,118,0.08);
+  --purple:#b388ff;--purple-light:rgba(179,136,255,0.08);
+  --gray-50:#1a1d23;--gray-100:#21252d;--gray-200:#2a2f3a;--gray-300:#3a4050;
+  --gray-400:#5a6580;--gray-500:#7a8599;--gray-600:#99a3b3;--gray-700:#bcc3d0;
+  --gray-800:#dde1e8;--gray-900:#eef0f4;
+  --white:#13161c;--body-bg:#0d0f13;
+  --radius:3px;--radius-sm:2px;--radius-xs:1px;
+  --shadow:0 1px 4px rgba(0,0,0,0.4),0 0 1px rgba(255,140,0,0.05);
+  --font:'Chakra Petch',system-ui,sans-serif;
   --mono:'JetBrains Mono',monospace;
+  --condensed:'Barlow Condensed',system-ui,sans-serif;
+  --hazard:repeating-linear-gradient(135deg,#ff8c00 0,#ff8c00 10px,#1a1d23 10px,#1a1d23 20px);
 }
 html{font-size:15px;scroll-behavior:smooth}
 body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min-height:100vh;-webkit-font-smoothing:antialiased}
-::-webkit-scrollbar{width:7px}
-::-webkit-scrollbar-track{background:var(--gray-100)}
-::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:4px}
+::-webkit-scrollbar{width:5px;background:#0d0f13}
+::-webkit-scrollbar-thumb{background:#3a4050;border-radius:0}
 
 /* ─── HEADER ─── */
 .header{
-  background:linear-gradient(135deg,#0c4a6e 0%,var(--blue) 50%,var(--teal) 100%);
+  background:#0a0c10;
+  border-bottom:2px solid #ff8c00;
   color:#fff;padding:0 20px;position:sticky;top:0;z-index:100;
-  box-shadow:0 2px 12px rgba(0,0,0,0.15);
 }
-.header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px}
-.logo{display:flex;align-items:center;gap:10px}
+.header::before{content:'';display:block;height:3px;background:var(--hazard);opacity:0.7}
+.header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.logo{display:flex;align-items:center;gap:12px}
 .logo-icon{
-  width:38px;height:38px;border-radius:10px;
-  background:rgba(255,255,255,0.2);backdrop-filter:blur(8px);
-  display:flex;align-items:center;justify-content:center;font-size:20px;
+  width:38px;height:38px;border:2px solid #ff8c00;
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  background:rgba(255,140,0,0.1);clip-path:polygon(10% 0%,100% 0%,90% 100%,0% 100%);
 }
-.logo h1{font-size:18px;font-weight:700;letter-spacing:-0.3px}
-.logo span{font-size:10.5px;font-weight:400;opacity:0.7;display:block;letter-spacing:0.5px}
+.logo h1{font-family:var(--condensed);font-size:20px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#ff8c00}
+.logo span{font-family:var(--mono);font-size:9.5px;font-weight:400;color:#5a6580;display:block;letter-spacing:1px;text-transform:uppercase}
 
 /* ─── NAV ─── */
-.nav{display:flex;gap:2px;height:60px;align-items:stretch;overflow-x:auto}
+.nav{display:flex;gap:0;height:56px;align-items:stretch;overflow-x:auto}
 .nav button{
-  background:none;border:none;color:rgba(255,255,255,0.7);
-  font-family:var(--font);font-size:13px;font-weight:600;
-  padding:0 14px;cursor:pointer;position:relative;white-space:nowrap;transition:color 0.2s;
+  background:none;border:none;border-left:1px solid #1a1d23;
+  color:#5a6580;font-family:var(--condensed);font-size:13px;font-weight:600;
+  padding:0 16px;cursor:pointer;position:relative;white-space:nowrap;
+  transition:all 0.15s;text-transform:uppercase;letter-spacing:1px;
 }
-.nav button:hover{color:#fff}
-.nav button.active{color:#fff}
-.nav button.active::after{
-  content:'';position:absolute;bottom:0;left:8px;right:8px;
-  height:3px;background:#fff;border-radius:3px 3px 0 0;
-}
-.badge{
-  background:rgba(255,255,255,0.25);font-size:10px;font-weight:700;
-  padding:1px 6px;border-radius:10px;margin-left:4px;
-}
+.nav button:hover{color:#ff8c00;background:rgba(255,140,0,0.04)}
+.nav button.active{color:#ff8c00;background:rgba(255,140,0,0.06)}
+.nav button.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:#ff8c00}
+.badge{background:#ff8c00;color:#0a0c10;font-family:var(--mono);font-size:10px;font-weight:700;padding:1px 5px;margin-left:4px}
 
 /* ─── LAYOUT ─── */
 .container{max-width:1100px;margin:0 auto;padding:20px}
-.page{display:none;animation:fadeIn 0.3s ease}
-.page.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.page{display:none;animation:fadeIn 0.25s ease}.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 /* ─── CARDS ─── */
-.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-bottom:20px;border:1px solid var(--gray-200)}
-.card-title{font-size:20px;font-weight:700;color:var(--gray-900);margin-bottom:2px}
-.card-sub{font-size:13px;color:var(--gray-500);margin-bottom:18px}
-.section-label{
-  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
-  color:var(--blue);margin-bottom:12px;padding-bottom:6px;border-bottom:2px solid var(--blue-light);
+.card{
+  background:#13161c;border:1px solid #2a2f3a;
+  padding:24px;margin-bottom:16px;position:relative;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
 }
+.card::after{
+  content:'';position:absolute;top:0;right:0;width:12px;height:12px;
+  background:linear-gradient(135deg,transparent 50%,#2a2f3a 50%);
+}
+.card-title{font-family:var(--condensed);font-size:19px;font-weight:700;color:#ff8c00;margin-bottom:2px;text-transform:uppercase;letter-spacing:1px}
+.card-sub{font-family:var(--mono);font-size:11px;color:#5a6580;margin-bottom:16px;letter-spacing:0.3px}
 
 /* ─── INPUTS ─── */
 .field{margin-bottom:14px}
-.field label{display:block;font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:4px}
-.field label .unit{font-weight:400;color:var(--gray-400)}
+.field label{display:block;font-family:var(--condensed);font-size:12px;font-weight:600;color:#7a8599;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
+.field label .unit{font-weight:400;color:#5a6580;text-transform:none}
 .field input,.field select{
-  width:100%;padding:10px 12px;border:1.5px solid var(--gray-300);
-  border-radius:var(--radius-sm);font-family:var(--mono);font-size:14px;
-  color:var(--gray-800);background:var(--white);outline:none;transition:border-color 0.2s;
+  width:100%;padding:10px 12px;
+  border:1px solid #2a2f3a;background:#0d0f13;
+  font-family:var(--mono);font-size:14px;color:#dde1e8;
+  outline:none;transition:border-color 0.15s;
 }
-.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-glow)}
-.field .hint{font-size:11px;color:var(--gray-400);margin-top:2px}
+.field input:focus,.field select:focus{border-color:#ff8c00;box-shadow:0 0 0 1px rgba(255,140,0,0.2),inset 0 0 8px rgba(255,140,0,0.03)}
+.field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%235a6580' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+.field select option{background:#13161c;color:#dde1e8}
+.field .hint{font-family:var(--mono);font-size:10px;color:#3a4050;margin-top:3px;letter-spacing:0.3px}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:600px){.field-row{grid-template-columns:1fr}}
 
 /* ─── PILLS ─── */
-.pills{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.pills{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap}
 .pill{
-  padding:6px 14px;border-radius:20px;border:1.5px solid var(--gray-300);
-  background:var(--white);color:var(--gray-600);font-size:12.5px;font-weight:600;
-  cursor:pointer;transition:all 0.2s;font-family:var(--font);
+  padding:6px 14px;border:1px solid #2a2f3a;
+  background:#13161c;color:#5a6580;font-family:var(--condensed);font-size:12px;
+  font-weight:600;cursor:pointer;transition:all 0.15s;text-transform:uppercase;letter-spacing:0.5px;
 }
-.pill:hover{border-color:var(--blue);color:var(--blue)}
-.pill.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.pill:hover{border-color:#ff8c00;color:#ff8c00}
+.pill.active{background:rgba(255,140,0,0.12);border-color:#ff8c00;color:#ff8c00}
 
 /* ─── RESULTS ─── */
-.results{display:grid;gap:10px;margin-top:18px}
-.results.cols-2{grid-template-columns:1fr 1fr}
-.results.cols-3{grid-template-columns:1fr 1fr 1fr}
-@media(max-width:600px){.results.cols-2,.results.cols-3{grid-template-columns:1fr}}
-.result{
-  background:var(--gray-50);border:1.5px solid var(--gray-200);
-  border-radius:var(--radius-sm);padding:12px 14px;
-}
-.result.primary{background:var(--blue-light);border-color:var(--blue)}
-.result.green{background:var(--green-light);border-color:var(--green)}
-.result .rlabel{font-size:10.5px;color:var(--gray-500);font-weight:600;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:2px}
-.result .rval{font-family:var(--mono);font-size:20px;font-weight:600;color:var(--gray-800)}
-.result.primary .rval{color:var(--blue-dark)}
-.result.green .rval{color:var(--green)}
-.result .runit{font-size:11.5px;color:var(--gray-400);font-weight:400;margin-left:3px}
+.results{display:grid;gap:8px;margin-top:16px}
+.results.c2{grid-template-columns:1fr 1fr}.results.c3{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:600px){.results.c2,.results.c3{grid-template-columns:1fr}}
+.result{background:#0d0f13;border:1px solid #2a2f3a;padding:12px 14px}
+.result.primary{border-color:#ff8c00;border-left:3px solid #ff8c00;background:rgba(255,140,0,0.04)}
+.result.green{border-color:#00e676;border-left:3px solid #00e676;background:rgba(0,230,118,0.04)}
+.result .rl{font-family:var(--mono);font-size:9.5px;color:#5a6580;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.result .rv{font-family:var(--mono);font-size:22px;font-weight:700;color:#dde1e8}
+.result.primary .rv{color:#ff8c00}
+.result.green .rv{color:#00e676}
+.result .ru{font-size:11px;color:#3a4050;font-weight:500;margin-left:4px}
 
 /* ─── SAVE BTN ─── */
 .save-btn{
-  width:100%;padding:11px;margin-top:14px;border-radius:var(--radius-sm);
-  border:1.5px dashed var(--teal);background:var(--teal-light);
-  color:var(--teal);font-weight:700;font-size:13px;cursor:pointer;font-family:var(--font);
+  width:100%;padding:11px;margin-top:14px;
+  border:1px dashed #00e5a0;background:rgba(0,229,160,0.04);
+  color:#00e5a0;font-family:var(--condensed);font-weight:700;font-size:13px;
+  cursor:pointer;text-transform:uppercase;letter-spacing:1px;
 }
-.save-btn:hover{background:rgba(13,138,114,0.15)}
+.save-btn:hover{background:rgba(0,229,160,0.1);border-style:solid}
 
-/* ─── VISUAL DIAGRAMS ─── */
-.diagram{
-  background:var(--gray-50);border:1px solid var(--gray-200);border-radius:var(--radius);
-  padding:20px;margin:16px 0;text-align:center;
+/* ─── TIP BOXES ─── */
+.tip{padding:12px 14px;margin:12px 0;display:flex;gap:10px;align-items:flex-start;font-size:12.5px;line-height:1.6;border-left:3px solid}
+.tip.blue{background:rgba(59,158,255,0.05);border-color:#3b9eff;color:#99c4f0}
+.tip.green{background:rgba(0,230,118,0.04);border-color:#00e676;color:#80f0b4}
+.tip.orange{background:rgba(255,140,0,0.05);border-color:#ff8c00;color:#e0a050}
+.tip.red{background:rgba(255,59,59,0.05);border-color:#ff3b3b;color:#e07070}
+.tip.purple{background:rgba(179,136,255,0.05);border-color:#b388ff;color:#c0a8ff}
+.tip strong{font-weight:700;color:#dde1e8}
+.ti{font-size:16px;flex-shrink:0;margin-top:1px}
+
+/* ─── COLLAPSIBLE ─── */
+.cbtn{
+  width:100%;display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;background:#0d0f13;border:1px solid #2a2f3a;
+  color:#7a8599;font-family:var(--condensed);font-size:12.5px;font-weight:600;
+  cursor:pointer;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;
 }
+.cbtn:hover{border-color:#ff8c00;color:#ff8c00}
+.cbtn .ar{transition:transform 0.2s;font-size:11px}.cbtn.open .ar{transform:rotate(180deg)}
+.cbody{
+  display:none;padding:14px;font-size:12.5px;line-height:1.7;color:#7a8599;
+  background:#0d0f13;border:1px solid #2a2f3a;border-top:none;margin-bottom:14px;
+}
+.cbody.open{display:block}
+.fm{font-family:var(--mono);font-size:13px;background:#0a0c10;color:#00e5a0;padding:10px 14px;margin:8px 0;display:block;border-left:2px solid #00e5a0}
+
+/* ─── DIAGRAM ─── */
+.diagram{background:#0a0c10;border:1px solid #2a2f3a;padding:16px;margin:14px 0;text-align:center}
 .diagram svg{max-width:100%;height:auto}
 
 /* ─── CREST TABLE ─── */
-.crest-table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin:16px 0;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--gray-200)}
-.crest-table th{background:var(--blue);color:#fff;padding:10px 8px;font-weight:600;font-size:12px;text-align:center}
-.crest-table td{padding:8px;text-align:center;border-bottom:1px solid var(--gray-200);font-family:var(--mono);font-size:12.5px}
-.crest-table tr:nth-child(even){background:var(--gray-50)}
-.crest-table tr:hover{background:var(--blue-light)}
-.crest-table tr.highlight{background:var(--orange-light) !important;font-weight:700}
+.crest-table{width:100%;border-collapse:collapse;font-size:12px;margin:14px 0;border:1px solid #2a2f3a}
+.crest-table th{background:#1a1d23;color:#ff8c00;padding:8px 6px;font-family:var(--condensed);font-weight:600;font-size:11px;text-align:center;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid #ff8c00}
+.crest-table td{padding:7px 5px;text-align:center;border-bottom:1px solid #1a1d23;font-family:var(--mono);font-size:12px;color:#7a8599}
+.crest-table tr:nth-child(even){background:#0d0f13}
+.crest-table tr:hover{background:rgba(255,140,0,0.06)}
+.crest-table tr.hl{background:rgba(255,140,0,0.12)!important;color:#ff8c00}
+.crest-table tr.hl td{color:#ff8c00;font-weight:600}
 
-/* ─── INFO BOXES ─── */
-.tip-box{
-  border-radius:var(--radius-sm);padding:14px 16px;margin:14px 0;
-  display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.6;
+/* ─── CAMERA / CV ─── */
+.cv-wrap{position:relative;width:100%;max-width:640px;margin:0 auto;overflow:hidden;background:#000;border:1px solid #2a2f3a}
+.cv-wrap video,.cv-wrap canvas{display:block;width:100%}
+#cvOverlay{position:absolute;top:0;left:0;pointer-events:none}
+.cv-controls{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0;justify-content:center}
+.cv-btn{
+  padding:9px 18px;border:1px solid;font-family:var(--condensed);font-size:12px;
+  font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:1px;
+  background:transparent;transition:all 0.15s;
 }
-.tip-box.blue{background:var(--blue-light);border-left:4px solid var(--blue);color:var(--blue-dark)}
-.tip-box.green{background:var(--green-light);border-left:4px solid var(--green);color:#166534}
-.tip-box.orange{background:var(--orange-light);border-left:4px solid var(--orange);color:#92400e}
-.tip-box.red{background:var(--red-light);border-left:4px solid var(--red);color:#991b1b}
-.tip-box.purple{background:var(--purple-light);border-left:4px solid var(--purple);color:#5b21b6}
-.tip-icon{font-size:18px;flex-shrink:0;margin-top:1px}
-.tip-box strong{font-weight:700}
-
-/* ─── COLLAPSIBLE ─── */
-.collapse-btn{
-  width:100%;display:flex;justify-content:space-between;align-items:center;
-  padding:12px 16px;background:var(--gray-50);border:1px solid var(--gray-200);
-  border-radius:var(--radius-sm);color:var(--gray-700);
-  font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);margin-bottom:2px;
-}
-.collapse-btn:hover{background:var(--blue-light)}
-.collapse-btn .arr{transition:transform 0.2s;font-size:11px}
-.collapse-btn.open .arr{transform:rotate(180deg)}
-.collapse-body{
-  display:none;padding:16px;font-size:13.5px;line-height:1.7;color:var(--gray-600);
-  background:var(--white);border:1px solid var(--gray-200);border-top:none;
-  border-radius:0 0 var(--radius-sm) var(--radius-sm);margin-bottom:14px;
-}
-.collapse-body.open{display:block}
-.collapse-body .formula{
-  font-family:var(--mono);font-size:14px;background:var(--gray-900);color:var(--teal);
-  padding:10px 16px;border-radius:var(--radius-xs);margin:10px 0;display:block;
-}
+.cv-btn.start{border-color:#00e676;color:#00e676}.cv-btn.start:hover{background:rgba(0,230,118,0.1)}
+.cv-btn.stop{border-color:#ff3b3b;color:#ff3b3b}.cv-btn.stop:hover{background:rgba(255,59,59,0.1)}
+.cv-btn.calib{border-color:#ff8c00;color:#ff8c00}.cv-btn.calib:hover{background:rgba(255,140,0,0.1)}
+.cv-btn.snap{border-color:#3b9eff;color:#3b9eff}.cv-btn.snap:hover{background:rgba(59,158,255,0.1)}
+.cv-btn.reset{border-color:#3a4050;color:#5a6580}.cv-btn.reset:hover{border-color:#5a6580;color:#7a8599}
+.cv-btn:disabled{opacity:0.25;cursor:not-allowed}
+.cv-status{text-align:center;font-family:var(--mono);font-size:11px;color:#5a6580;padding:6px;letter-spacing:0.3px}
+.cv-hud{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:12px}
+.cv-hud .hud-box{background:#0a0c10;border:1px solid #1a1d23;padding:10px 12px;text-align:center}
+.cv-hud .hud-label{font-family:var(--mono);font-size:9px;color:#3a4050;font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.cv-hud .hud-val{font-family:var(--mono);font-size:22px;font-weight:700;margin-top:2px}
+.cv-hud .hud-val.h-color{color:#ff8c00}
+.cv-hud .hud-val.q-color{color:#00e5ff}
+.cv-hud .hud-val.f-color{color:#b388ff}
+.cv-hud .hud-unit{font-size:10px;color:#3a4050;margin-left:2px}
+.cv-history{margin-top:14px}
+.cv-history table{width:100%;font-size:11px;border-collapse:collapse}
+.cv-history th{background:#1a1d23;padding:6px 8px;text-align:left;font-family:var(--condensed);font-size:10px;font-weight:600;color:#5a6580;text-transform:uppercase;letter-spacing:0.5px}
+.cv-history td{padding:6px 8px;border-bottom:1px solid #1a1d23;font-family:var(--mono);font-size:11px;color:#7a8599}
+.calib-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-size:13px;z-index:10}
+.calib-overlay .calib-msg{text-align:center;max-width:300px;line-height:1.6;font-family:var(--font)}
 
 /* ─── THEORY ─── */
-.theory h2{font-size:22px;font-weight:700;color:var(--gray-900);margin:28px 0 8px}
-.theory h3{font-size:17px;font-weight:700;color:var(--blue);margin:20px 0 8px}
-.theory p{font-size:14px;line-height:1.75;color:var(--gray-600);margin-bottom:10px}
-.theory p strong{color:var(--gray-800)}
-.example{
-  background:var(--white);border:1px solid var(--gray-200);
-  border-left:4px solid var(--teal);border-radius:0 var(--radius-sm) var(--radius-sm) 0;
-  padding:18px 20px;margin:16px 0;box-shadow:var(--shadow);
-}
-.example h4{font-size:13px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
-.example p{font-size:13.5px;line-height:1.7;color:var(--gray-600);margin-bottom:6px}
-.example .formula{
-  font-family:var(--mono);font-size:13.5px;background:var(--gray-900);color:#7dd3fc;
-  padding:8px 14px;border-radius:var(--radius-xs);margin:8px 0;display:block;
-}
-.step-list{counter-reset:step;margin:12px 0;padding:0}
-.step-list li{
-  list-style:none;padding:8px 0 8px 42px;position:relative;font-size:13.5px;
-  color:var(--gray-600);border-bottom:1px solid var(--gray-100);
-}
-.step-list li::before{
-  counter-increment:step;content:counter(step);
-  position:absolute;left:0;top:6px;width:28px;height:28px;
-  background:var(--blue);color:#fff;font-size:13px;font-weight:700;
-  border-radius:50%;display:flex;align-items:center;justify-content:center;
-}
-.step-list li strong{color:var(--gray-800)}
-
-/* ─── LOG ─── */
-.log-entry{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:10px}
-.log-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.log-type{font-size:13px;font-weight:700;color:var(--blue)}
-.log-time{font-size:11px;color:var(--gray-400)}
-.log-chips{display:flex;flex-wrap:wrap;gap:5px}
-.log-chip{background:var(--gray-100);border-radius:5px;padding:3px 8px;font-size:11.5px}
-.log-chip .k{color:var(--gray-400)}
-.log-chip .v{font-weight:600;color:var(--gray-700);margin-left:3px}
-.empty{text-align:center;padding:50px 20px;color:var(--gray-400)}
+.theory h2{font-family:var(--condensed);font-size:20px;font-weight:700;color:#ff8c00;margin:24px 0 6px;text-transform:uppercase;letter-spacing:1px}
+.theory h3{font-family:var(--condensed);font-size:16px;font-weight:700;color:#3b9eff;margin:18px 0 6px;text-transform:uppercase;letter-spacing:0.5px}
+.theory p{font-size:13px;line-height:1.7;color:#7a8599;margin-bottom:8px}
+.theory p strong{color:#dde1e8}
+.ex{background:#0d0f13;border:1px solid #2a2f3a;border-left:3px solid #00e5a0;padding:16px 18px;margin:14px 0}
+.ex h4{font-family:var(--condensed);font-size:12px;font-weight:700;color:#00e5a0;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.ex p{font-size:12.5px;line-height:1.7;color:#7a8599;margin-bottom:4px}
+.sl{counter-reset:step;margin:10px 0;padding:0}
+.sl li{list-style:none;padding:7px 0 7px 40px;position:relative;font-size:12.5px;color:#7a8599;border-bottom:1px solid #1a1d23}
+.sl li::before{counter-increment:step;content:counter(step);position:absolute;left:0;top:5px;width:26px;height:26px;background:#ff8c00;color:#0a0c10;font-family:var(--mono);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.sl li strong{color:#dde1e8}
 
 /* ─── TERMS ─── */
-.terms h2{font-size:22px;font-weight:700;color:var(--gray-900);margin-bottom:12px}
-.terms h3{font-size:15px;font-weight:700;color:var(--blue);margin:20px 0 6px}
-.terms p,.terms li{font-size:13.5px;line-height:1.8;color:var(--gray-600)}
-.terms ul{margin:6px 0 14px 20px}
-.terms li{margin-bottom:3px}
+.terms h2{font-family:var(--condensed);font-size:20px;font-weight:700;color:#ff8c00;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px}
+.terms h3{font-family:var(--condensed);font-size:14px;font-weight:700;color:#3b9eff;margin:18px 0 4px;text-transform:uppercase;letter-spacing:0.5px}
+.terms p,.terms li{font-size:12.5px;line-height:1.8;color:#7a8599}
+.terms ul{margin:4px 0 12px 18px}.terms li{margin-bottom:2px}
+
+/* ─── LOG ─── */
+.log-entry{background:#0d0f13;border:1px solid #2a2f3a;padding:12px 14px;margin-bottom:8px}
+.log-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.log-type{font-family:var(--condensed);font-size:12px;font-weight:700;color:#ff8c00;text-transform:uppercase;letter-spacing:0.5px}
+.log-time{font-family:var(--mono);font-size:10px;color:#3a4050}
+.log-chips{display:flex;flex-wrap:wrap;gap:4px}
+.log-chip{background:#1a1d23;padding:2px 7px;font-size:10.5px;font-family:var(--mono)}
+.log-chip .k{color:#3a4050}.log-chip .v{font-weight:600;color:#7a8599;margin-left:3px}
+.empty{text-align:center;padding:40px 20px;color:#3a4050}
 
 /* ─── FOOTER ─── */
-.footer{border-top:1px solid var(--gray-200);padding:20px;text-align:center;font-size:11.5px;color:var(--gray-400);margin-top:40px;background:var(--white)}
+.footer{
+  border-top:2px solid #ff8c00;padding:16px;text-align:center;
+  font-family:var(--mono);font-size:10px;color:#3a4050;
+  margin-top:40px;background:#0a0c10;letter-spacing:0.5px;text-transform:uppercase;
+}
 
-/* ─── RESPONSIVE ─── */
 @media(max-width:700px){
-  .header-inner{flex-direction:column;height:auto;padding:10px 0;gap:6px}
-  .nav{width:100%;overflow-x:auto}
-  .nav button{font-size:12px;padding:0 10px}
-  .container{padding:14px}
-  .card{padding:18px}
-  .crest-table{font-size:11px}
-  .crest-table th,.crest-table td{padding:6px 4px}
+  .header-inner{flex-direction:column;height:auto;padding:8px 0;gap:4px}
+  .nav{width:100%}.nav button{font-size:11px;padding:0 10px}
+  .container{padding:12px}.card{padding:16px}
+  .cv-hud{grid-template-columns:1fr}
+  .results.c2{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -243,15 +247,13 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
 
 <header class="header">
   <div class="header-inner">
-    <div class="logo">
-      <div class="logo-icon">🐟</div>
-      <h1>Flow Like a Pro<span>Hatchery Measurements & Calculations</span></h1>
-    </div>
+    <div class="logo"><div class="logo-icon">//</div><h1>Flow Rate Calculator 1.0<span>Hatchery // Measurements // Calculations</span></h1></div>
     <nav class="nav" id="mainNav">
-      <button class="active" data-p="calc">Calculators</button>
-      <button data-p="theory">Learn the Theory</button>
-      <button data-p="log">Data Log <span class="badge" id="badge" style="display:none">0</span></button>
-      <button data-p="terms">Terms of Use</button>
+      <button class="active" data-p="cam">[VISION]</button>
+      <button data-p="calc">[CALC]</button>
+      <button data-p="theory">[THEORY]</button>
+      <button data-p="log">[LOG] <span class="badge" id="badge" style="display:none">0</span></button>
+      <button data-p="terms">[TERMS]</button>
     </nav>
   </div>
 </header>
@@ -259,68 +261,86 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
 <div class="container">
 
 <!-- ================================================================ -->
-<!--                     CALCULATORS PAGE                             -->
+<!--              📷 CAMERA VISION PAGE                               -->
 <!-- ================================================================ -->
-<div class="page active" id="p-calc">
+<div class="page active" id="p-cam">
+<div class="card">
+  <div class="card-title">[CAM] Camera Flow Detection</div>
+  <div class="card-sub">// Point camera at sump crest — auto-measure water head and calculate flow rate</div>
 
-<!-- ── CREST SUMP FLOW LOOKUP ── -->
-<div class="card" id="sec-crest">
-  <div class="card-title">🔍 Crest Height → Flow Rate (GPM)</div>
-  <div class="card-sub">Measure the crest height in your sump and look up the flow rate using the hatchery reference chart</div>
-
-  <button class="collapse-btn" onclick="tog(this)"><span>ℹ️ How to measure crest height</span><span class="arr">▾</span></button>
-  <div class="collapse-body">
-    <p>The <strong>crest height</strong> is the height of water flowing over the top edge (crest) of a sump pipe. It tells you how much water is flowing.</p>
-    <ol class="step-list">
-      <li><strong>Find the sump.</strong> It's the vertical pipe where water overflows from your raceway or tank.</li>
-      <li><strong>Measure the diameter</strong> of the sump pipe (6", 8", 10", or 12").</li>
-      <li><strong>Measure the crest height</strong> — the distance from the top rim of the sump down to where the water surface is inside the pipe. Use a ruler held across the top.</li>
-      <li><strong>Measure in multiple spots</strong> around the rim and take the average (the water may be uneven).</li>
-      <li><strong>Look up the flow</strong> on the chart below using your sump diameter and crest height.</li>
+  <button class="cbtn" onclick="tog(this)"><span>[?] HOW IT WORKS — PIPELINE OVERVIEW</span><span class="ar">▾</span></button>
+  <div class="cbody">
+    <p><strong>This feature uses your camera + computer vision to auto-detect crest height (H) and calculate flow.</strong></p>
+    <p style="margin:8px 0;font-weight:600;color:var(--gray-800)">The 7-Step Camera Pipeline:</p>
+    <ol class="sl">
+      <li><strong>Start Camera</strong> — accesses your device camera (rear-facing preferred) and draws live video to an HTML canvas — a digital drawing board that updates ~30 times per second so we can analyze each frame as raw pixel data</li>
+      <li><strong>Calibrate</strong> — two draggable orange lines appear on the video feed. You position them over a known distance (like 2 inches on a ruler taped near the sump), enter the distance, and click "Set Scale." This establishes the <strong>pixels-per-inch conversion</strong> — for example, if 100 pixels = 2 inches, then 1 inch = 50 pixels</li>
+      <li><strong>Auto-Detection (Sobel Edge Detector)</strong> — every frame, the app converts the image to grayscale, then runs a <strong>Sobel operator</strong> that detects horizontal edges by comparing brightness above and below each pixel. It accumulates edge strength across the center 60% of each row, then finds the two strongest horizontal edges: the <strong>crest line</strong> (red — top of the pipe rim) and the <strong>water surface</strong> (cyan — where reflections meet the wall)</li>
+      <li><strong>H Measurement</strong> — the pixel distance between the crest and water surface is converted to inches using your calibration: <strong>H_inches = (y_water − y_crest) ÷ pixels_per_inch</strong>. This is displayed as a live orange arrow on the video with the measurement label</li>
+      <li><strong>30-Frame Averaging</strong> — the H buffer holds the last 30 readings and averages them to eliminate wave noise. At 30 fps, this smooths over exactly 1 second of video: <strong>H_avg = sum(last 30 readings) ÷ 30</strong></li>
+      <li><strong>Dual Flow Calculation</strong> — the averaged H feeds into BOTH the weir equation (<strong>Q = Cw × L × H^1.5</strong> → GPM) AND the hatchery chart interpolation. Both values display on the dark HUD below the video so you can cross-check</li>
+      <li><strong>Snap Reading</strong> — captures the current averaged measurement into the history table with reading number, H value, both GPM calculations, frame count, and timestamp. The buffer resets for a fresh next reading</li>
     </ol>
-    <div class="tip-box green"><span class="tip-icon">💡</span><div><strong>Pro Tip:</strong> Measure crest height in multiple locations around the sump and take the average. Water height can vary!</div></div>
+    <p style="margin-top:10px;font-weight:600;color:var(--gray-800)">The Live HUD shows three values:</p>
+    <div style="margin:6px 0 6px 10px;font-size:12.5px;line-height:1.8">
+      <strong style="color:#ff8c00">// H (orange)</strong> — averaged crest height in inches (from 30-frame buffer)<br>
+      <strong style="color:#00e5ff">// Flow Equation (cyan)</strong> — GPM calculated from Q = Cw x L x H^1.5<br>
+      <strong style="color:#b388ff">// Flow Chart (purple)</strong> — GPM interpolated from the class reference chart
+    </div>
+    <div class="tip green"><span class="ti"><span class="ti">💡</span>gt;</span><div><strong>TIP:</strong> Works best with consistent lighting. Avoid direct glare on the water surface. A small piece of colored tape on the sump rim helps the detector find the crest. See the full "[THEORY]" page for a deep dive into how each step works!</div></div>
   </div>
 
-  <!-- VISUAL DIAGRAM: Sump Crest -->
-  <div class="diagram">
-    <svg viewBox="0 0 460 220" xmlns="http://www.w3.org/2000/svg" style="max-width:420px">
-      <!-- Sump pipe -->
-      <rect x="140" y="30" width="100" height="170" rx="4" fill="#e2e8f0" stroke="#475569" stroke-width="2"/>
-      <!-- Water inside -->
-      <rect x="142" y="80" width="96" height="118" rx="2" fill="#7dd3fc" opacity="0.5"/>
-      <!-- Water overflow -->
-      <path d="M140 80 Q130 70 120 85 Q110 100 100 110 L100 200" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="5,3"/>
-      <path d="M240 80 Q250 70 260 85 Q270 100 280 110 L280 200" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="5,3"/>
-      <!-- Crest height arrow -->
-      <line x1="280" y1="30" x2="280" y2="80" stroke="#dc3545" stroke-width="2"/>
-      <line x1="273" y1="30" x2="287" y2="30" stroke="#dc3545" stroke-width="2"/>
-      <line x1="273" y1="80" x2="287" y2="80" stroke="#dc3545" stroke-width="2"/>
-      <polygon points="280,35 276,42 284,42" fill="#dc3545"/>
-      <polygon points="280,75 276,68 284,68" fill="#dc3545"/>
-      <!-- Labels -->
-      <text x="302" y="60" font-size="13" font-weight="700" fill="#dc3545" font-family="Outfit">Crest</text>
-      <text x="302" y="73" font-size="13" font-weight="700" fill="#dc3545" font-family="Outfit">Height</text>
-      <!-- Pipe rim label -->
-      <text x="155" y="24" font-size="11" fill="#475569" font-family="Outfit" font-weight="600">← Sump pipe rim →</text>
-      <!-- Water label -->
-      <text x="158" y="145" font-size="12" fill="#0369a1" font-family="Outfit" font-weight="600">Water</text>
-      <text x="158" y="160" font-size="12" fill="#0369a1" font-family="Outfit" font-weight="600">Level</text>
-      <!-- Diameter arrow -->
-      <line x1="140" y1="210" x2="240" y2="210" stroke="#475569" stroke-width="1.5"/>
-      <polygon points="143,210 149,207 149,213" fill="#475569"/>
-      <polygon points="237,210 231,207 231,213" fill="#475569"/>
-      <text x="160" y="207" font-size="11" fill="#475569" font-family="Outfit" font-weight="600">Diameter</text>
-      <!-- Overflow arrows -->
-      <text x="30" y="140" font-size="11" fill="#0ea5e9" font-family="Outfit">overflow</text>
-      <text x="310" y="140" font-size="11" fill="#0ea5e9" font-family="Outfit">overflow</text>
-    </svg>
+  <!-- Camera viewport -->
+  <div class="cv-wrap" id="cvWrap">
+    <video id="cvVideo" autoplay playsinline muted style="display:none"></video>
+    <canvas id="cvCanvas" width="640" height="480"></canvas>
+    <canvas id="cvOverlay" width="640" height="480"></canvas>
+    <div id="calibOverlay" class="calib-overlay" style="display:none">
+      <div class="calib-msg">
+        <div style="font-family:var(--mono);font-size:20px;margin-bottom:8px;color:#ff8c00">[CALIBRATE]</div>
+        <strong>Calibration Mode</strong><br>
+        Drag the two orange lines to match a known distance on screen.<br>
+        Then enter the real-world distance below and click "Set Scale."
+      </div>
+    </div>
+    <div id="cvPlaceholder" style="display:flex;align-items:center;justify-content:center;height:300px;background:#0a0c10;color:#3a4050;flex-direction:column;gap:8px;border:1px solid #2a2f3a">
+      <div style="font-family:var(--mono);font-size:36px;opacity:0.3">[CAM]</div>
+      <div style="font-family:var(--condensed);font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px">Camera offline</div>
+      <div style="font-family:var(--mono);font-size:11px;color:#2a2f3a">Initialize with START CAMERA below</div>
+    </div>
   </div>
 
+  <!-- Controls -->
+  <div class="cv-controls">
+    <button class="cv-btn start" id="btnStart" onclick="startCamera()">▶ Start Camera</button>
+    <button class="cv-btn stop" id="btnStop" onclick="stopCamera()" disabled>■ Stop</button>
+    <button class="cv-btn calib" id="btnCalib" onclick="startCalibration()" disabled>📏 Calibrate</button>
+    <button class="cv-btn snap" id="btnSnap" onclick="snapReading()" disabled>[SNAP] Capture</button>
+    <button class="cv-btn reset" onclick="resetCV()">↺ Reset</button>
+  </div>
+  <div class="cv-status" id="cvStatus">Ready — click Start Camera to begin</div>
+
+  <!-- Calibration fields -->
+  <div id="calibFields" style="display:none;margin:12px 0">
+    <div class="tip orange"><span class="ti">//</span><div><strong>Calibration:</strong> The two orange lines appear on the video. Drag them to match a known distance (like 2 inches on a ruler). Then enter that distance below.</div></div>
+    <div class="field-row">
+      <div class="field">
+        <label>Known Distance Between Lines <span class="unit">(inches)</span></label>
+        <input type="number" step="any" id="calibDist" value="2" style="max-width:200px">
+      </div>
+      <div class="field" style="display:flex;align-items:flex-end">
+        <button class="cv-btn start" onclick="setScale()" style="padding:10px 24px">✓ Set Scale</button>
+      </div>
+    </div>
+    <div class="cv-status" id="calibStatus"></div>
+  </div>
+
+  <!-- Weir parameters -->
+  <div class="tip orange" style="margin-top:12px"><span class="ti">&gt;</span><div><strong>WEIR PARAMETERS</strong> — configure to match your sump setup</div></div>
   <div class="field-row">
     <div class="field">
-      <label>Sump Diameter</label>
-      <select id="crest-diam" onchange="lookupCrest()">
-        <option value="">— Select —</option>
+      <label>Sump Diameter <span class="unit">(for chart lookup)</span></label>
+      <select id="cv-diam">
         <option value="12">12" Sump</option>
         <option value="10">10" Sump</option>
         <option value="8">8" Sump</option>
@@ -328,726 +348,841 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
       </select>
     </div>
     <div class="field">
-      <label>Crest Height <span class="unit">(inches)</span></label>
-      <select id="crest-height" onchange="lookupCrest()">
-        <option value="">— Select —</option>
-        <option value="0.5">½"</option><option value="0.75">¾"</option>
-        <option value="1">1"</option><option value="1.125">1⅛"</option>
-        <option value="1.25">1¼"</option><option value="1.375">1⅜"</option>
-        <option value="1.5">1½"</option><option value="1.625">1⅝"</option>
-        <option value="1.75">1¾"</option><option value="1.875">1⅞"</option>
-        <option value="2">2"</option><option value="2.125">2⅛"</option>
-        <option value="2.25">2¼"</option><option value="2.375">2⅜"</option>
-        <option value="2.5">2½"</option><option value="2.625">2⅝"</option>
-        <option value="2.75">2¾"</option><option value="2.875">2⅞"</option>
-        <option value="3">3"</option>
-      </select>
+      <label>Weir Coeff (Cw) <span class="unit">(for equation calc)</span></label>
+      <input type="number" step="any" id="cv-cw" value="3.33">
+      <div class="hint">3.33 sharp-crested, 3.09 broad-crested</div>
+    </div>
+  </div>
+  <div class="field">
+    <label>Crest Length (L) <span class="unit">(ft — circumference of sump opening)</span></label>
+    <input type="number" step="any" id="cv-L" value="">
+    <div class="hint">For a 12" sump: π × 1 ft ≈ 3.14 ft. For 10": ≈ 2.62 ft. For 8": ≈ 2.09 ft. For 6": ≈ 1.57 ft</div>
+  </div>
+
+  <!-- HUD -->
+  <div class="cv-hud" id="cvHud" style="display:none">
+    <div class="hud-box">
+      <div class="hud-label">Crest Height (H)</div>
+      <div class="hud-val h-color" id="hudH">—<span class="hud-unit">in</span></div>
+    </div>
+    <div class="hud-box">
+      <div class="hud-label">Flow (Equation)</div>
+      <div class="hud-val q-color" id="hudQ">—<span class="hud-unit">GPM</span></div>
+    </div>
+    <div class="hud-box">
+      <div class="hud-label">Flow (Chart)</div>
+      <div class="hud-val f-color" id="hudChart">—<span class="hud-unit">GPM</span></div>
     </div>
   </div>
 
-  <div class="results" id="crest-result-area" style="display:none">
-    <div class="result primary">
-      <div class="rlabel">Flow Rate from Chart</div>
-      <div class="rval"><span id="crest-gpm">—</span><span class="runit">GPM</span></div>
-    </div>
+  <!-- Snap history -->
+  <div class="cv-history" id="cvHistory" style="display:none">
+    <div style="font-family:var(--condensed);font-size:12px;font-weight:700;color:#ff8c00;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">// Snap Readings</div>
+    <table>
+      <thead><tr><th>#</th><th>H (in)</th><th>GPM (eq)</th><th>GPM (chart)</th><th>Frames</th><th>Time</th></tr></thead>
+      <tbody id="snapBody"></tbody>
+    </table>
   </div>
 
-  <div class="tip-box blue" style="margin-top:14px">
-    <span class="tip-icon">📊</span>
-    <div><strong>Full Reference Chart</strong> (from your class lesson "Flow Like a Pro")</div>
-  </div>
-
-  <table class="crest-table" id="crestTable">
-    <thead>
-      <tr><th>Crest (inch)</th><th>12" Sump</th><th>10" Sump</th><th>8" Sump</th><th>6" Sump</th></tr>
-    </thead>
-    <tbody id="crestBody"></tbody>
-  </table>
-
-  <button class="save-btn" onclick="logCrest()">＋ Save Crest Reading to Log</button>
+  <button class="save-btn" onclick="logCV()" style="margin-top:16px">＋ Save Latest Reading to Data Log</button>
 </div>
 
-<!-- ── EXCHANGE TIME ── -->
-<div class="card" id="sec-exchange">
-  <div class="card-title">⏱️ Exchange Time</div>
-  <div class="card-sub">How long does it take to replace all the water in your tank, pond, or raceway?</div>
-
-  <button class="collapse-btn" onclick="tog(this)"><span>ℹ️ What is exchange time?</span><span class="arr">▾</span></button>
-  <div class="collapse-body">
-    <p><strong>Exchange Time</strong> tells you how many minutes it takes for the full volume of water to be replaced by new incoming water. This is critical for fish health — it determines how quickly waste is flushed and fresh oxygen arrives.</p>
-    <span class="formula">Exchange Time = Volume ÷ Flow Rate</span>
-    <p><strong>Keep units the same!</strong> If flow is in GPM (gallons per minute), make sure volume is in gallons.</p>
-    <div class="tip-box orange"><span class="tip-icon">⚠️</span><div><strong>Common mistake:</strong> Mixing units! If your volume is in cubic feet, convert to gallons first (1 ft³ = 7.48 gallons).</div></div>
-  </div>
-
+<!-- HOW TO MOUNT DIAGRAM -->
+<div class="card">
+  <div class="card-title">[SETUP] Camera Mounting Guide</div>
   <div class="diagram">
-    <svg viewBox="0 0 500 140" xmlns="http://www.w3.org/2000/svg" style="max-width:480px">
-      <!-- Tank -->
-      <rect x="120" y="20" width="260" height="100" rx="6" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
-      <text x="210" y="65" font-size="14" font-weight="700" fill="#0369a1" font-family="Outfit">Tank Volume</text>
-      <text x="215" y="82" font-size="12" fill="#0369a1" font-family="Outfit">(gallons)</text>
-      <!-- Inflow -->
-      <line x1="40" y1="70" x2="120" y2="70" stroke="#16a34a" stroke-width="3"/>
-      <polygon points="115,64 125,70 115,76" fill="#16a34a"/>
-      <text x="42" y="58" font-size="11" font-weight="600" fill="#16a34a" font-family="Outfit">INFLOW</text>
-      <text x="42" y="90" font-size="12" font-weight="700" fill="#16a34a" font-family="Outfit,JetBrains Mono">? GPM</text>
-      <!-- Outflow -->
-      <line x1="380" y1="70" x2="460" y2="70" stroke="#dc3545" stroke-width="3"/>
-      <polygon points="455,64 465,70 455,76" fill="#dc3545"/>
-      <text x="400" y="58" font-size="11" font-weight="600" fill="#dc3545" font-family="Outfit">OUTFLOW</text>
-      <!-- Formula -->
-      <text x="160" y="108" font-size="11" font-weight="600" fill="#475569" font-family="JetBrains Mono">Time = Volume ÷ Flow</text>
+    <svg viewBox="0 0 500 260" xmlns="http://www.w3.org/2000/svg" style="max-width:480px">
+      <!-- wall -->
+      <rect x="180" y="60" width="20" height="160" fill="#3a4050"/>
+      <rect x="300" y="60" width="20" height="160" fill="#3a4050"/>
+      <!-- crest line -->
+      <line x1="180" y1="60" x2="320" y2="60" stroke="#ff8c00" stroke-width="3"/>
+      <text x="330" y="64" font-size="11" fill="#ff8c00" font-weight="700" font-family="Chakra Petch">← CREST</text>
+      <!-- water -->
+      <rect x="200" y="100" width="100" height="120" fill="#00e5ff" opacity="0.15"/>
+      <line x1="195" y1="100" x2="305" y2="100" stroke="#00e5ff" stroke-width="2" stroke-dasharray="5,3"/>
+      <text x="330" y="104" font-size="11" fill="#00e5ff" font-weight="600" font-family="Chakra Petch">← WATER</text>
+      <!-- H arrow -->
+      <line x1="165" y1="60" x2="165" y2="100" stroke="#ff8c00" stroke-width="2.5"/>
+      <polygon points="165,64 161,72 169,72" fill="#ff8c00"/>
+      <polygon points="165,96 161,88 169,88" fill="#ff8c00"/>
+      <text x="130" y="84" font-size="14" fill="#ff8c00" font-weight="800" font-family="JetBrains Mono">H</text>
+      <!-- camera -->
+      <rect x="40" y="55" width="60" height="40" fill="#2a2f3a" stroke="#5a6580" stroke-width="1"/>
+      <circle cx="70" cy="75" r="12" fill="#1a1d23" stroke="#5a6580" stroke-width="2"/>
+      <circle cx="70" cy="75" r="5" fill="#3a4050"/>
+      <text x="43" y="110" font-size="10" fill="#5a6580" font-weight="600" font-family="Chakra Petch">CAMERA</text>
+      <text x="37" y="122" font-size="10" fill="#3a4050" font-weight="600" font-family="JetBrains Mono">(side)</text>
+      <!-- sight lines -->
+      <line x1="100" y1="68" x2="180" y2="60" stroke="#5a6580" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="100" y1="82" x2="195" y2="100" stroke="#5a6580" stroke-width="1" stroke-dasharray="3,3"/>
+      <!-- ruler -->
+      <rect x="155" y="50" width="6" height="80" fill="#ff8c00" opacity="0.5"/>
+      <text x="115" y="48" font-size="9" fill="#ff8c00" font-weight="600" font-family="JetBrains Mono">SCALE</text>
+      <!-- overflow -->
+      <path d="M200 100 Q195 120 185 130 L185 220" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.4"/>
+      <text x="140" y="200" font-size="9" fill="#3a4050" font-family="JetBrains Mono">overflow</text>
     </svg>
   </div>
-
-  <div class="field-row">
-    <div class="field">
-      <label>Tank/Pond Volume <span class="unit">(gallons)</span></label>
-      <input type="number" step="any" id="ex-vol" placeholder="e.g. 5000" oninput="calcExchange()">
-      <div class="hint">Don't know? Use the Volume Calculator below!</div>
-    </div>
-    <div class="field">
-      <label>Flow Rate <span class="unit">(GPM)</span></label>
-      <input type="number" step="any" id="ex-flow" placeholder="e.g. 113" oninput="calcExchange()">
-      <div class="hint">From crest chart above or direct measurement</div>
-    </div>
-  </div>
-
-  <div class="results cols-2">
-    <div class="result primary">
-      <div class="rlabel">Exchange Time</div>
-      <div class="rval"><span id="ex-min">—</span><span class="runit">minutes</span></div>
-    </div>
-    <div class="result">
-      <div class="rlabel">Exchange Time</div>
-      <div class="rval"><span id="ex-hr">—</span><span class="runit">hours</span></div>
-    </div>
-  </div>
-  <div class="results" style="margin-top:10px">
-    <div class="result green">
-      <div class="rlabel">Exchanges per Hour</div>
-      <div class="rval"><span id="ex-perhr">—</span><span class="runit">turns/hr</span></div>
-    </div>
-  </div>
-
-  <button class="save-btn" onclick="logExchange()">＋ Save Exchange Time to Log</button>
+  <div class="tip green"><span class="ti">&gt;</span><div>
+    <strong>OPTIMAL SETUP:</strong><br>
+    // Mount camera at <strong>same height as crest</strong>, looking from the side<br>
+    // Place a <strong>ruler or scale sticker</strong> next to the sump for calibration<br>
+    // Avoid direct sunlight glare on the water surface<br>
+    // Any camera with 480p+ resolution will work
+  </div></div>
 </div>
+</div><!-- end cam page -->
 
-<!-- ── VOLUME CALCULATOR ── -->
-<div class="card" id="sec-volume">
-  <div class="card-title">📐 Volume Calculator</div>
-  <div class="card-sub">Calculate tank, raceway, pond, or pipe volume — includes the special cone-bottom pond from class!</div>
+<!-- ================================================================ -->
+<!--                   🧮 CALCULATORS PAGE                            -->
+<!-- ================================================================ -->
+<div class="page" id="p-calc">
 
-  <button class="collapse-btn" onclick="tog(this)"><span>ℹ️ Volume formulas from class</span><span class="arr">▾</span></button>
-  <div class="collapse-body">
-    <p>From your class lesson "Flow Like a Pro":</p>
-    <span class="formula">Rectangle/Raceway: V = L × W × H</span>
-    <span class="formula">Cylinder (round tank): V = π × r² × h</span>
-    <span class="formula">Cone: V = ⅓ × π × r² × h</span>
-    <span class="formula">Cone-Bottom Pond: V = (π × r² × h₂) + (⅓ × π × r² × h₃)</span>
-    <div class="tip-box orange"><span class="tip-icon">📏</span><div><strong>Remember:</strong> Measure diameter first → divide by 2 for radius. Convert units BEFORE plugging into formulas. Round at the FINAL step only!</div></div>
-  </div>
-
-  <div class="pills" id="shapePills">
-    <button class="pill active" onclick="setShape('rect',this)">Rectangle / Raceway</button>
-    <button class="pill" onclick="setShape('cyl',this)">Cylinder (Round Tank)</button>
-    <button class="pill" onclick="setShape('cone',this)">Cone</button>
-    <button class="pill" onclick="setShape('conepond',this)">Cone-Bottom Pond ⭐</button>
-  </div>
-
-  <!-- RECTANGLE -->
-  <div id="shape-rect">
-    <div class="diagram">
-      <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg" style="max-width:320px">
-        <path d="M60,50 L220,50 L260,20 L100,20 Z" fill="#bfdbfe" stroke="#2563eb" stroke-width="1.5"/>
-        <path d="M220,50 L260,20 L260,130 L220,160 Z" fill="#93c5fd" stroke="#2563eb" stroke-width="1.5"/>
-        <rect x="60" y="50" width="160" height="110" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
-        <text x="115" y="112" font-size="13" font-weight="600" fill="#1e40af" font-family="Outfit">V = L×W×H</text>
-        <!-- Labels -->
-        <text x="110" y="170" font-size="11" fill="#2563eb" font-weight="600" font-family="Outfit">L (length)</text>
-        <text x="15" y="110" font-size="11" fill="#2563eb" font-weight="600" font-family="Outfit" transform="rotate(-90,30,110)">H (height)</text>
-        <text x="245" y="80" font-size="11" fill="#2563eb" font-weight="600" font-family="Outfit" transform="rotate(-70,252,75)">W</text>
-      </svg>
-    </div>
-    <div class="field-row">
-      <div class="field"><label>Length <span class="unit">(ft)</span></label><input type="number" step="any" id="r-l" oninput="calcVol()"></div>
-      <div class="field"><label>Width <span class="unit">(ft)</span></label><input type="number" step="any" id="r-w" oninput="calcVol()"></div>
-    </div>
-    <div class="field"><label>Height / Depth <span class="unit">(ft)</span></label><input type="number" step="any" id="r-h" oninput="calcVol()"></div>
-  </div>
-
-  <!-- CYLINDER -->
-  <div id="shape-cyl" style="display:none">
-    <div class="diagram">
-      <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg" style="max-width:260px">
-        <ellipse cx="140" cy="40" rx="80" ry="20" fill="#bbf7d0" stroke="#16a34a" stroke-width="1.5"/>
-        <rect x="60" y="40" width="160" height="120" fill="#dcfce7" stroke="none"/>
-        <line x1="60" y1="40" x2="60" y2="160" stroke="#16a34a" stroke-width="1.5"/>
-        <line x1="220" y1="40" x2="220" y2="160" stroke="#16a34a" stroke-width="1.5"/>
-        <ellipse cx="140" cy="160" rx="80" ry="20" fill="#86efac" stroke="#16a34a" stroke-width="1.5"/>
-        <text x="95" y="108" font-size="13" font-weight="600" fill="#166534" font-family="Outfit">V = πr²h</text>
-        <!-- Diameter line -->
-        <line x1="60" y1="40" x2="220" y2="40" stroke="#dc3545" stroke-width="1" stroke-dasharray="4,3"/>
-        <text x="110" y="33" font-size="10" fill="#dc3545" font-weight="600" font-family="Outfit">diameter</text>
-        <text x="28" y="105" font-size="10" fill="#16a34a" font-weight="600" font-family="Outfit" transform="rotate(-90,34,105)">h (height)</text>
-      </svg>
-    </div>
-    <div class="field-row">
-      <div class="field"><label>Diameter <span class="unit">(ft)</span></label><input type="number" step="any" id="c-d" oninput="calcVol()"><div class="hint">Measure across the center, divide by 2 = radius</div></div>
-      <div class="field"><label>Height / Depth <span class="unit">(ft)</span></label><input type="number" step="any" id="c-h" oninput="calcVol()"></div>
-    </div>
-  </div>
-
-  <!-- CONE -->
-  <div id="shape-cone" style="display:none">
-    <div class="diagram">
-      <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg" style="max-width:260px">
-        <ellipse cx="140" cy="50" rx="80" ry="20" fill="#fde68a" stroke="#d97706" stroke-width="1.5"/>
-        <line x1="60" y1="50" x2="140" y2="180" stroke="#d97706" stroke-width="1.5"/>
-        <line x1="220" y1="50" x2="140" y2="180" stroke="#d97706" stroke-width="1.5"/>
-        <path d="M60,50 Q140,90 220,50 L140,180 Z" fill="#fef3c7" stroke="none"/>
-        <text x="90" y="110" font-size="13" font-weight="600" fill="#92400e" font-family="Outfit">V = ⅓πr²h</text>
-        <text x="23" y="120" font-size="10" fill="#d97706" font-weight="600" font-family="Outfit" transform="rotate(-90,30,118)">h (height)</text>
-      </svg>
-    </div>
-    <div class="field-row">
-      <div class="field"><label>Diameter <span class="unit">(ft)</span></label><input type="number" step="any" id="co-d" oninput="calcVol()"></div>
-      <div class="field"><label>Height <span class="unit">(ft)</span></label><input type="number" step="any" id="co-h" oninput="calcVol()"></div>
-    </div>
-  </div>
-
-  <!-- CONE-BOTTOM POND -->
-  <div id="shape-conepond" style="display:none">
-    <div class="tip-box purple"><span class="tip-icon">⭐</span><div><strong>Special: Cone-Bottom Pond (Pond 2 from class)</strong> — Floor gently slopes with a cone-shaped bottom. Measure the full diameter (including under walkway). Use the sump depth (h₁) minus the wall depth (h₂) to get the cone height (h₃).</div></div>
-    <div class="diagram">
-      <svg viewBox="0 0 380 260" xmlns="http://www.w3.org/2000/svg" style="max-width:360px">
-        <!-- Cylinder part -->
-        <ellipse cx="190" cy="40" rx="110" ry="22" fill="#c4b5fd" stroke="#7c3aed" stroke-width="1.5" opacity="0.5"/>
-        <rect x="80" y="40" width="220" height="90" fill="#ede9fe" stroke="none"/>
-        <line x1="80" y1="40" x2="80" y2="130" stroke="#7c3aed" stroke-width="1.5"/>
-        <line x1="300" y1="40" x2="300" y2="130" stroke="#7c3aed" stroke-width="1.5"/>
-        <ellipse cx="190" cy="130" rx="110" ry="22" fill="#ddd6fe" stroke="#7c3aed" stroke-width="1.5"/>
-        <!-- Cone part -->
-        <line x1="80" y1="130" x2="190" y2="230" stroke="#7c3aed" stroke-width="1.5"/>
-        <line x1="300" y1="130" x2="190" y2="230" stroke="#7c3aed" stroke-width="1.5"/>
-        <path d="M80,130 Q190,160 300,130 L190,230 Z" fill="#f5f3ff" stroke="none"/>
-        <!-- Labels -->
-        <text x="150" y="90" font-size="12" font-weight="600" fill="#5b21b6" font-family="Outfit">Cylinder</text>
-        <text x="155" y="190" font-size="12" font-weight="600" fill="#5b21b6" font-family="Outfit">Cone</text>
-        <!-- h2 -->
-        <line x1="55" y1="40" x2="55" y2="130" stroke="#0ea5e9" stroke-width="2"/>
-        <text x="30" y="90" font-size="11" font-weight="700" fill="#0ea5e9" font-family="Outfit">h₂</text>
-        <!-- h3 -->
-        <line x1="55" y1="130" x2="55" y2="230" stroke="#dc3545" stroke-width="2"/>
-        <text x="30" y="185" font-size="11" font-weight="700" fill="#dc3545" font-family="Outfit">h₃</text>
-        <!-- h1 -->
-        <line x1="340" y1="40" x2="340" y2="230" stroke="#16a34a" stroke-width="2"/>
-        <text x="350" y="140" font-size="11" font-weight="700" fill="#16a34a" font-family="Outfit">h₁</text>
-        <!-- formula -->
-        <text x="90" y="252" font-size="11" font-weight="600" fill="#475569" font-family="JetBrains Mono">h₃ = h₁ - h₂ (sump depth - wall depth)</text>
-      </svg>
-    </div>
-    <div class="field"><label>Full Diameter <span class="unit">(ft)</span></label><input type="number" step="any" id="cp-d" oninput="calcVol()"><div class="hint">Measure across the whole pond — including under walkway</div></div>
-    <div class="field-row">
-      <div class="field"><label>h₁ — Sump Depth (total) <span class="unit">(ft)</span></label><input type="number" step="any" id="cp-h1" oninput="calcVol()"><div class="hint">Deepest point at center</div></div>
-      <div class="field"><label>h₂ — Wall Depth <span class="unit">(ft)</span></label><input type="number" step="any" id="cp-h2" oninput="calcVol()"><div class="hint">Depth at the wall edge</div></div>
-    </div>
-  </div>
-
-  <!-- VOLUME RESULTS -->
-  <div class="results" id="vol-results">
-    <div class="result primary">
-      <div class="rlabel">Volume</div>
-      <div class="rval"><span id="vol-ft3">—</span><span class="runit">ft³</span></div>
-    </div>
-    <div class="results cols-2" style="margin-top:0">
-      <div class="result green">
-        <div class="rlabel">Volume</div>
-        <div class="rval"><span id="vol-gal">—</span><span class="runit">gallons</span></div>
-      </div>
-      <div class="result">
-        <div class="rlabel">Volume</div>
-        <div class="rval"><span id="vol-L">—</span><span class="runit">liters</span></div>
-      </div>
-    </div>
-  </div>
-
-  <button class="save-btn" onclick="logVol()">＋ Save Volume to Log</button>
-</div>
-
-<!-- ── SURFACE AREA ── -->
-<div class="card" id="sec-area">
-  <div class="card-title">📏 Surface Area Calculator</div>
-  <div class="card-sub">Calculate the area of the top or bottom of a tank, pond, or raceway</div>
-
-  <div class="pills" id="areaPills">
-    <button class="pill active" onclick="setArea('arect',this)">Rectangle</button>
-    <button class="pill" onclick="setArea('acirc',this)">Circle</button>
-  </div>
-
-  <div id="area-arect">
-    <div class="field-row">
-      <div class="field"><label>Length <span class="unit">(ft)</span></label><input type="number" step="any" id="a-l" oninput="calcArea()"></div>
-      <div class="field"><label>Width <span class="unit">(ft)</span></label><input type="number" step="any" id="a-w" oninput="calcArea()"></div>
-    </div>
-    <div class="tip-box blue"><span class="tip-icon">📐</span><div><strong>Formula:</strong> A = L × W</div></div>
-  </div>
-  <div id="area-acirc" style="display:none">
-    <div class="field"><label>Diameter <span class="unit">(ft)</span></label><input type="number" step="any" id="a-d" oninput="calcArea()"><div class="hint">Measure diameter → radius = diameter ÷ 2</div></div>
-    <div class="tip-box blue"><span class="tip-icon">📐</span><div><strong>Formula:</strong> A = π × r² &nbsp;(π ≈ 3.14159)</div></div>
-  </div>
-
-  <div class="results">
-    <div class="result primary">
-      <div class="rlabel">Surface Area</div>
-      <div class="rval"><span id="sa-ft2">—</span><span class="runit">ft²</span></div>
-    </div>
-  </div>
-</div>
-
-<!-- ── UNIT CONVERTER ── -->
+<!-- CREST LOOKUP -->
 <div class="card">
-  <div class="card-title">🔄 Quick Unit Converter</div>
-  <div class="card-sub">Convert between common hatchery units</div>
+  <div class="card-title">[LOOKUP] Crest Height → Flow Rate</div>
+  <div class="card-sub">// Manual lookup from hatchery reference chart</div>
   <div class="field-row">
-    <div class="field"><label>Cubic Feet (ft³)</label><input type="number" step="any" id="uc-ft3" oninput="convFt3()"></div>
-    <div class="field"><label>Gallons</label><input type="number" step="any" id="uc-gal" oninput="convGal()"></div>
+    <div class="field"><label>Sump Diameter</label>
+      <select id="crest-diam" onchange="lookupCrest()"><option value="">— Select —</option><option value="12">12"</option><option value="10">10"</option><option value="8">8"</option><option value="6">6"</option></select></div>
+    <div class="field"><label>Crest Height <span class="unit">(inches)</span></label>
+      <select id="crest-height" onchange="lookupCrest()"><option value="">— Select —</option>
+        <option value="0.5">½"</option><option value="0.75">¾"</option><option value="1">1"</option><option value="1.125">1⅛"</option><option value="1.25">1¼"</option><option value="1.375">1⅜"</option><option value="1.5">1½"</option><option value="1.625">1⅝"</option><option value="1.75">1¾"</option><option value="1.875">1⅞"</option><option value="2">2"</option><option value="2.125">2⅛"</option><option value="2.25">2¼"</option><option value="2.375">2⅜"</option><option value="2.5">2½"</option><option value="2.625">2⅝"</option><option value="2.75">2¾"</option><option value="2.875">2⅞"</option><option value="3">3"</option></select></div>
   </div>
-  <div class="field-row">
-    <div class="field"><label>Liters</label><input type="number" step="any" id="uc-L" oninput="convL()"></div>
-    <div class="field"><label>Cubic Meters (m³)</label><input type="number" step="any" id="uc-m3" oninput="convM3()"></div>
-  </div>
-  <div class="tip-box green"><span class="tip-icon">🔑</span><div><strong>Key conversions:</strong> 1 ft³ = 7.48052 gal = 28.3168 L &nbsp;|&nbsp; 1 gal = 3.78541 L &nbsp;|&nbsp; 1 m³ = 264.172 gal</div></div>
+  <div class="results" id="crest-res" style="display:none"><div class="result primary"><div class="rl">Flow Rate</div><div class="rv"><span id="crest-gpm">—</span><span class="ru">GPM</span></div></div></div>
+  <table class="crest-table"><thead><tr><th>Crest</th><th>12"</th><th>10"</th><th>8"</th><th>6"</th></tr></thead><tbody id="crestBody"></tbody></table>
+  <button class="save-btn" onclick="logCrest()">＋ Save to Log</button>
 </div>
 
+<!-- EXCHANGE TIME -->
+<div class="card">
+  <div class="card-title">[EXCHANGE] Exchange Time</div>
+  <div class="card-sub">// Exchange Time = Volume ÷ Flow Rate</div>
+  <div class="field-row">
+    <div class="field"><label>Volume <span class="unit">(gallons)</span></label><input type="number" step="any" id="ex-vol" oninput="calcEx()"></div>
+    <div class="field"><label>Flow <span class="unit">(GPM)</span></label><input type="number" step="any" id="ex-flow" oninput="calcEx()"></div>
+  </div>
+  <div class="results c2">
+    <div class="result primary"><div class="rl">Exchange Time</div><div class="rv"><span id="ex-min">—</span><span class="ru">min</span></div></div>
+    <div class="result green"><div class="rl">Exchanges/Hour</div><div class="rv"><span id="ex-ph">—</span><span class="ru">turns/hr</span></div></div>
+  </div>
+  <button class="save-btn" onclick="logEx()">＋ Save to Log</button>
+</div>
+
+<!-- VOLUME -->
+<div class="card">
+  <div class="card-title">[VOL] Volume Calculator</div>
+  <div class="card-sub">// Rectangle, Cylinder, Cone, or Cone-Bottom Pond</div>
+  <div class="pills" id="shP"><button class="pill active" onclick="setS('rect',this)">Rectangle</button><button class="pill" onclick="setS('cyl',this)">Cylinder</button><button class="pill" onclick="setS('cone',this)">Cone</button><button class="pill" onclick="setS('cpond',this)">Cone-Bottom Pond ⭐</button></div>
+  <div id="s-rect"><div class="field-row"><div class="field"><label>L <span class="unit">(ft)</span></label><input type="number" step="any" id="rl" oninput="calcV()"></div><div class="field"><label>W <span class="unit">(ft)</span></label><input type="number" step="any" id="rw" oninput="calcV()"></div></div><div class="field"><label>H <span class="unit">(ft)</span></label><input type="number" step="any" id="rh" oninput="calcV()"></div></div>
+  <div id="s-cyl" style="display:none"><div class="field-row"><div class="field"><label>Diameter <span class="unit">(ft)</span></label><input type="number" step="any" id="cd" oninput="calcV()"></div><div class="field"><label>Height <span class="unit">(ft)</span></label><input type="number" step="any" id="ch" oninput="calcV()"></div></div></div>
+  <div id="s-cone" style="display:none"><div class="field-row"><div class="field"><label>Diameter <span class="unit">(ft)</span></label><input type="number" step="any" id="cod" oninput="calcV()"></div><div class="field"><label>Height <span class="unit">(ft)</span></label><input type="number" step="any" id="coh" oninput="calcV()"></div></div></div>
+  <div id="s-cpond" style="display:none"><div class="tip purple"><span class="ti">[*]</span><div><strong>Cone-Bottom Pond:</strong> h₃ = h₁ (sump depth) − h₂ (wall depth)</div></div><div class="field"><label>Full Diameter <span class="unit">(ft)</span></label><input type="number" step="any" id="cpd" oninput="calcV()"></div><div class="field-row"><div class="field"><label>h₁ Sump Depth <span class="unit">(ft)</span></label><input type="number" step="any" id="cph1" oninput="calcV()"></div><div class="field"><label>h₂ Wall Depth <span class="unit">(ft)</span></label><input type="number" step="any" id="cph2" oninput="calcV()"></div></div></div>
+  <div class="results c2">
+    <div class="result primary"><div class="rl">Volume</div><div class="rv"><span id="vg">—</span><span class="ru">gal</span></div></div>
+    <div class="result"><div class="rl">Volume</div><div class="rv"><span id="vf">—</span><span class="ru">ft³</span></div></div>
+  </div>
+  <button class="save-btn" onclick="logV()">＋ Save to Log</button>
+</div>
+
+<!-- UNIT CONVERTER -->
+<div class="card">
+  <div class="card-title">[CONV] Unit Converter</div>
+  <div class="field-row"><div class="field"><label>ft³</label><input type="number" step="any" id="u1" oninput="uConv(1)"></div><div class="field"><label>Gallons</label><input type="number" step="any" id="u2" oninput="uConv(2)"></div></div>
+  <div class="field-row"><div class="field"><label>Liters</label><input type="number" step="any" id="u3" oninput="uConv(3)"></div><div class="field"><label>m³</label><input type="number" step="any" id="u4" oninput="uConv(4)"></div></div>
+  <div class="tip green"><span class="ti">=</span><div>1 ft³ = 7.48 gal = 28.32 L | 1 gal = 3.785 L | 1 m³ = 264.17 gal</div></div>
+</div>
 </div><!-- end calc page -->
 
 <!-- ================================================================ -->
-<!--                   THEORY & EXAMPLES PAGE                         -->
+<!--                   📚 THEORY PAGE                                 -->
 <!-- ================================================================ -->
 <div class="page" id="p-theory">
 <div class="theory">
-
 <div class="card">
-  <div class="card-title">📚 Learn the Theory</div>
-  <div class="card-sub">Understanding the science behind every hatchery flow calculation</div>
+  <div class="card-title">[THEORY] Technical Reference</div>
+  <div class="card-sub">// The science behind every hatchery flow calculation</div>
 </div>
 
 <div class="card">
-  <h2>Where Does All This Math Come From?</h2>
-  <p>Every flow rate, volume, and exchange calculation you use at the hatchery traces back to one fundamental principle in physics:</p>
-  <div class="tip-box purple"><span class="tip-icon">🎓</span><div><strong>The Continuity Equation</strong> — based on the <strong>Conservation of Mass</strong>. Water flowing into a system must equal water flowing out (it can't just appear or disappear). This was established by scientists <strong>Leonhard Euler</strong> and <strong>Daniel Bernoulli</strong> in the 1700s.</div></div>
-  <p>In simple terms: <strong>What goes in must come out.</strong> If you know the pipe size and the water speed, you can calculate exactly how much water is flowing. If you know the volume and the flow, you can calculate how long it takes to replace the water.</p>
+  <h2>Where Does This Math Come From?</h2>
+  <p>Every calculation traces back to the <strong>Continuity Equation</strong> from the <strong>Conservation of Mass</strong> — established by <strong>Leonhard Euler</strong> and <strong>Daniel Bernoulli</strong> in the 1700s.</p>
+  <div class="tip purple"><span class="ti">[i]</span><div>In plain English: <strong>what goes in must come out.</strong> If you know the pipe size and water speed, you can calculate exactly how much water flows. If you know the volume and flow, you can calculate how long it takes to replace the water.</div></div>
 </div>
 
 <div class="card">
-  <h2>General Measuring Guidelines</h2>
-  <p>From your class lesson — these habits will prevent the most common errors:</p>
-  <div class="tip-box green"><span class="tip-icon">✅</span><div>
-    <strong>Record units with ALL measurements</strong> — say "25 cm" not just "25"<br>
-    <strong>Measure diameter first</strong> for circles → divide by 2 for radius<br>
-    <strong>Convert units BEFORE plugging into formulas</strong><br>
-    <strong>Round at the final step, not each step</strong> — small errors compound quickly!<br>
-    <strong>Measure twice</strong> — check with a partner when possible
-  </div></div>
-  <div class="tip-box red"><span class="tip-icon">🚫</span><div>
-    <strong>Common Errors to Avoid:</strong><br>
-    • Start at the 0 mark, not the edge of the tool<br>
-    • Keep rulers and tapes straight — no bending or sagging<br>
-    • Read liquid volume at eye level from the bottom of the meniscus<br>
-    • Measure straight through the center for diameters<br>
-    • Be mindful of interior vs exterior dimensions
-  </div></div>
+  <h2>Measuring Guidelines (from Class)</h2>
+  <div class="tip green"><span class="ti">[+]</span><div><strong>Always record units</strong> — say "25 cm" not "25"<br><strong>Measure diameter first</strong> → divide by 2 for radius<br><strong>Convert units BEFORE formulas</strong><br><strong>Round at the FINAL step only</strong><br><strong>Measure twice</strong>, check with a partner</div></div>
+  <div class="tip red"><span class="ti">[!]</span><div><strong>Common Errors:</strong> Start at 0 not the tool edge • Keep tape straight • Read meniscus at eye level • Measure through center for diameters • Interior vs exterior dimensions</div></div>
 </div>
 
 <div class="card">
   <h2>The Key Formulas</h2>
-
-  <h3>1. Surface Area</h3>
-  <div class="example">
-    <h4>Rectangle</h4>
-    <span class="formula">A = L × W</span>
-    <p>L = length, W = width. Used for flat surfaces of tanks and raceways.</p>
-  </div>
-  <div class="example">
-    <h4>Circle</h4>
-    <span class="formula">A = π × r²</span>
-    <p>r = radius (half of diameter), π ≈ 3.14159. Used for round tanks and pipe openings.</p>
-  </div>
-
-  <h3>2. Volume</h3>
-  <div class="example">
-    <h4>Rectangle / Raceway / Trough</h4>
-    <span class="formula">V = L × W × H</span>
-    <p>L = length, W = width, H = height (depth). Think of it as stacking layers of area.</p>
-  </div>
-  <div class="example">
-    <h4>Cylinder (Round Tank, Pipe, Bucket)</h4>
-    <span class="formula">V = π × r² × h</span>
-    <p>r = radius, h = height. It's just the circle area multiplied by height.</p>
-  </div>
-  <div class="example">
-    <h4>Cone (Conical Tanks, Funnels)</h4>
-    <span class="formula">V = ⅓ × π × r² × h</span>
-    <p>Same as cylinder but divided by 3 — a cone fits exactly 3 times inside a cylinder.</p>
-  </div>
-  <div class="example" style="border-left-color:var(--purple)">
-    <h4 style="color:var(--purple)">⭐ Cone-Bottom Pond (Pond 2 from Class)</h4>
-    <p>The floor gently slopes to a cone-shaped bottom. You split it into a cylinder on top + cone on the bottom:</p>
-    <span class="formula">h₃ = h₁ − h₂  (sump depth − wall depth = cone height)</span>
-    <span class="formula">V = (π × r² × h₂) + (⅓ × π × r² × h₃)</span>
-    <p>Measure the <strong>full diameter</strong> including under any suspended walkway.</p>
-  </div>
-
-  <h3>3. Flow Rate & Exchange Time</h3>
-  <div class="example">
-    <h4>Exchange Time</h4>
-    <span class="formula">Exchange Time = Volume ÷ Flow Rate</span>
-    <p>If volume is in gallons and flow in GPM, the result is in minutes. This tells you how long it takes to completely replace the water in your system.</p>
-  </div>
-  <div class="example">
-    <h4>Measuring Flow with Crest Height</h4>
-    <p>In hatcheries, we measure the <strong>crest height</strong> — the height of water flowing over the top of a sump pipe. Using the sump diameter and crest height, we look up the flow rate (GPM) on a reference chart. This method comes from weir flow principles where discharge is proportional to the head of water raised to the 3/2 power.</p>
-  </div>
+  <div class="ex"><h4>Surface Area</h4><span class="fm">Rectangle: A = L × W</span><span class="fm">Circle: A = π × r² (r = diameter ÷ 2)</span></div>
+  <div class="ex"><h4>Volume</h4><span class="fm">Rectangle/Raceway: V = L × W × H</span><span class="fm">Cylinder: V = π × r² × h</span><span class="fm">Cone: V = ⅓ × π × r² × h</span><span class="fm">Cone-Bottom Pond: V = (πr²×h₂) + (⅓πr²×h₃) where h₃=h₁−h₂</span></div>
+  <div class="ex"><h4>Exchange Time</h4><span class="fm">Exchange Time = Volume ÷ Flow Rate</span><p>If volume in gallons and flow in GPM → result in minutes.</p></div>
+  <div class="ex"><h4>Crest Flow (Weir Equation)</h4><span class="fm">Q = Cw × L × H^(3/2)</span><p>Cw = weir coefficient, L = crest length (ft), H = head above crest (ft). Or use the hatchery lookup chart!</p></div>
+  <div class="ex"><h4>Camera Vision Method</h4><span class="fm">H_pixels = y_crest − y_water</span><span class="fm">H_inches = H_pixels ÷ pixels_per_inch</span><span class="fm">H_feet = H_inches ÷ 12</span><span class="fm">Q_cfs = Cw × L × H_feet^1.5</span><span class="fm">Q_gpm = Q_cfs × 448.831</span><p>The camera detects edges to find the crest line and water surface, measures the pixel distance, converts using calibration scale, then applies the weir equation.</p></div>
 </div>
 
 <div class="card">
   <h2>Worked Examples</h2>
+  <div class="ex"><h4>Example 1 — Raceway Volume</h4><p>100 ft × 5 ft × 2.5 ft raceway:</p><span class="fm">V = 100 × 5 × 2.5 = 1,250 ft³ × 7.48 = 9,350 gallons</span></div>
+  <div class="ex"><h4>Example 2 — Exchange Time</h4><p>9,350 gal raceway, 113 GPM flow (12" sump, 1" crest):</p><span class="fm">Time = 9,350 ÷ 113 = 82.7 min ≈ 1.4 hours</span></div>
+  <div class="ex"><h4>Example 3 — Round Tank</h4><p>12 ft diameter, 4 ft deep:</p><span class="fm">r = 6, V = π × 36 × 4 = 452.4 ft³ = 3,384 gallons</span></div>
+  <div class="ex" style="border-left-color:var(--purple)"><h4 style="color:var(--purple)">Example 4 — Cone-Bottom Pond</h4><p>20 ft diameter, h₁=6 ft, h₂=3 ft:</p><span class="fm">h₃ = 6−3 = 3 ft, r = 10 ft</span><span class="fm">Cyl: π×100×3 = 942.5 ft³</span><span class="fm">Cone: ⅓×π×100×3 = 314.2 ft³</span><span class="fm">Total = 1,256.6 ft³ = 9,400 gallons</span></div>
+  <div class="ex"><h4>Example 5 — Using the Crest Chart</h4><p>10" sump, crest readings: 1.5", 1.25", 1.5"</p><span class="fm">Average = 1.42" → chart lookup ≈ 153–176 GPM → ~165 GPM</span></div>
+</div>
 
-  <div class="example">
-    <h4>Example 1 — Raceway Volume</h4>
-    <p><strong>Problem:</strong> A raceway is 100 ft long, 5 ft wide, and 2.5 ft deep. How many gallons does it hold?</p>
-    <span class="formula">V = L × W × H = 100 × 5 × 2.5 = 1,250 ft³</span>
-    <span class="formula">Gallons = 1,250 × 7.48 = 9,350 gallons</span>
-    <p><strong>Answer:</strong> The raceway holds about <strong>9,350 gallons</strong>.</p>
+<div class="card">
+  <h2>Why Flow Matters for Fish</h2>
+  <div class="tip blue"><span class="ti">O₂</span><div><strong>Oxygen:</strong> Fresh water brings dissolved oxygen. Too slow = suffocation.</div></div>
+  <div class="tip orange"><span class="ti">NH₃</span><div><strong>Ammonia:</strong> Fish waste is toxic. Flow flushes it out.</div></div>
+  <div class="tip green"><span class="ti">°F</span><div><strong>Temperature:</strong> Consistent flow = stable temperature = less stress.</div></div>
+  <div class="tip purple"><span class="ti">[W]</span><div><strong>Waste:</strong> Uneaten feed and feces must be flushed. Adequate velocity keeps rearing environments clean.</div></div>
+  <p style="font-family:var(--condensed);font-size:14px;color:#ff8c00;font-weight:700;margin-top:12px;text-transform:uppercase;letter-spacing:0.5px">Salmonid hatcheries: 2-3 exchanges per hour (every 20-30 min)</p>
+</div>
+
+<!-- ═══════════════ CAMERA PIPELINE DEEP DIVE ═══════════════ -->
+<div class="card">
+  <h2>📷 How the Camera Vision System Works</h2>
+  <p>The Vision tab in this app uses <strong>computer vision</strong> — a branch of artificial intelligence where software "sees" through a camera and extracts measurements from the image. In hatcheries, the setup is perfect for this because the sump is fixed, the crest doesn't move, and the only thing changing is the water level.</p>
+  <p>Instead of manually reading a ruler against the sump every time, the camera does it <strong>automatically, continuously, and more consistently</strong> than a human eye.</p>
+
+  <div class="tip blue"><span class="ti">[→]</span><div><strong>The camera's only job:</strong> Measure <strong>H</strong> — the vertical distance between the crest (top of the sump pipe) and the water surface. Once you know H, the weir equation gives you flow: <strong>Q = Cw × L × H^(3/2)</strong></div></div>
+</div>
+
+<div class="card">
+  <h3>The 7-Step Camera Pipeline</h3>
+  <p>Here is exactly what happens, step by step, every time the camera runs:</p>
+
+  <div class="ex" style="border-left-color:#16a34a">
+    <h4 style="color:#16a34a">Step 1 — Start Camera</h4>
+    <p>The app requests access to your device camera (rear-facing preferred). The live video feed is drawn onto an HTML <strong>canvas</strong> element — this is like a digital drawing board that updates 30 times per second. The canvas is what lets us analyze each frame as raw pixel data.</p>
+    <div class="tip green"><span class="ti">[+]</span><div><strong>Works with:</strong> Any smartphone, tablet, laptop webcam, Raspberry Pi camera, or GoPro. No special equipment needed.</div></div>
   </div>
 
-  <div class="example">
-    <h4>Example 2 — Exchange Time</h4>
-    <p><strong>Problem:</strong> That same 9,350-gallon raceway has a flow of 113 GPM (from a 12" sump with 1" crest height). What's the exchange time?</p>
-    <span class="formula">Exchange Time = 9,350 ÷ 113 = 82.7 minutes ≈ 1.4 hours</span>
-    <p><strong>Answer:</strong> The water is fully replaced about every <strong>83 minutes</strong>. That's roughly <strong>0.7 exchanges per hour</strong>.</p>
+  <div class="ex" style="border-left-color:#f97316">
+    <h4 style="color:#f97316">Step 2 — Calibrate (Pixels → Real-World Inches)</h4>
+    <p>The camera sees everything in <strong>pixels</strong> — tiny dots that make up the image. But we need measurements in <strong>inches</strong>. Calibration creates the conversion factor.</p>
+    <p><strong>How it works:</strong></p>
+    <p>Two draggable orange lines appear on the video feed. You position them over a known distance — for example, 2 inches marked on a ruler taped near the sump. You type "2" inches and click "Set Scale."</p>
+    <span class="fm">pixels_per_inch = pixel_distance_between_lines ÷ known_distance_in_inches</span>
+    <p><strong>Example:</strong> If the two lines are 100 pixels apart and you told it they span 2 inches:</p>
+    <span class="fm">pixels_per_inch = 100 ÷ 2 = 50 px/inch</span>
+    <p>Now the app knows that every 50 pixels in the image equals 1 real-world inch. This calibration stays valid as long as the camera doesn't move.</p>
+    <div class="tip orange"><span class="ti">//</span><div><strong>TIP:</strong> Tape a ruler or a piece of masking tape with inch marks right next to the sump pipe. This gives you a permanent calibration reference.</div></div>
   </div>
 
-  <div class="example">
-    <h4>Example 3 — Round Tank Volume</h4>
-    <p><strong>Problem:</strong> A circular rearing tank is 12 ft in diameter and 4 ft deep. How many gallons?</p>
-    <span class="formula">r = 12 ÷ 2 = 6 ft</span>
-    <span class="formula">V = π × 6² × 4 = 3.14159 × 36 × 4 = 452.4 ft³</span>
-    <span class="formula">Gallons = 452.4 × 7.48 = 3,384 gallons</span>
-    <p><strong>Answer:</strong> About <strong>3,384 gallons</strong>.</p>
+  <div class="ex" style="border-left-color:#dc3545">
+    <h4 style="color:#dc3545">Step 3 — Auto-Detection (Finding Edges with the Sobel Operator)</h4>
+    <p>This is the computer vision magic. Every video frame, the app needs to find two things: the <strong>crest line</strong> (top of the pipe) and the <strong>water surface</strong>.</p>
+    <p><strong>How does a computer "see" an edge?</strong></p>
+    <p>An edge is where the image suddenly changes from light to dark (or dark to light). The app uses a technique called the <strong>Sobel operator</strong> — a mathematical filter that detects these brightness changes.</p>
+    <p><strong>The process:</strong></p>
+    <ol class="sl">
+      <li><strong>Convert to grayscale</strong> — the color image is converted to shades of gray (each pixel becomes a single brightness number from 0 = black to 255 = white)</li>
+      <li><strong>Apply the Sobel vertical gradient</strong> — for each pixel, the filter compares the brightness of pixels above and below it. A big difference = strong horizontal edge. The formula multiplies neighboring pixel brightness values by weights (-1, -2, -1 above; +1, +2, +1 below) to amplify edges</li>
+      <li><strong>Accumulate edge strength per row</strong> — the app adds up all the edge strengths across the center 60% of each horizontal row. This creates a "how strong is the edge at this height?" score for every row in the image</li>
+      <li><strong>Find the two strongest rows</strong> — scanning from top to bottom, the first strong edge is the <strong>crest</strong> (drawn in red). The next strong edge below it is the <strong>water surface</strong> (drawn in cyan)</li>
+    </ol>
+    <div class="tip blue"><span class="ti">[i]</span><div><strong>Why this works in hatcheries:</strong> The crest is a sharp, straight edge between the pipe rim and the air/water. The water surface creates another contrast boundary where reflections meet the pipe wall. Both produce strong horizontal edges that the Sobel operator easily detects.</div></div>
   </div>
 
-  <div class="example" style="border-left-color:var(--purple)">
-    <h4 style="color:var(--purple)">Example 4 — Cone-Bottom Pond (Pond 2)</h4>
-    <p><strong>Problem:</strong> Pond 2 is 20 ft diameter. The sump depth (h₁) is 6 ft and the wall depth (h₂) is 3 ft. What's the volume?</p>
-    <span class="formula">r = 20 ÷ 2 = 10 ft</span>
-    <span class="formula">h₃ = h₁ − h₂ = 6 − 3 = 3 ft (cone height)</span>
-    <span class="formula">Cylinder: π × 10² × 3 = 942.5 ft³</span>
-    <span class="formula">Cone: ⅓ × π × 10² × 3 = 314.2 ft³</span>
-    <span class="formula">Total = 942.5 + 314.2 = 1,256.6 ft³ = 9,400 gallons</span>
-    <p><strong>Answer:</strong> Pond 2 holds about <strong>9,400 gallons</strong>.</p>
+  <div class="ex" style="border-left-color:#f97316">
+    <h4 style="color:#f97316">Step 4 — H Measurement (Pixels → Inches)</h4>
+    <p>Now the app has two y-coordinates (vertical positions) in pixels:</p>
+    <span class="fm">y_crest = row position of the crest edge (e.g., 120 px from top)</span>
+    <span class="fm">y_water = row position of the water surface (e.g., 195 px from top)</span>
+    <p>The crest height in pixels is the difference:</p>
+    <span class="fm">H_pixels = y_water − y_crest = 195 − 120 = 75 pixels</span>
+    <p>Convert to real-world inches using the calibration:</p>
+    <span class="fm">H_inches = H_pixels ÷ pixels_per_inch = 75 ÷ 50 = 1.5 inches</span>
+    <p>This is displayed on the video as a live <strong>orange arrow</strong> with the measurement label, updating every frame.</p>
   </div>
 
-  <div class="example">
-    <h4>Example 5 — Using the Crest Chart</h4>
-    <p><strong>Problem:</strong> You measure a 10" sump with crest heights of 1.5", 1.25", and 1.5" at three spots. What's the flow?</p>
-    <span class="formula">Average crest = (1.5 + 1.25 + 1.5) ÷ 3 = 1.42"</span>
-    <p>Round to the nearest value on the chart: <strong>1.375"</strong> or <strong>1.5"</strong></p>
-    <span class="formula">At 1.5" on a 10" sump → 176 GPM</span>
-    <span class="formula">At 1.375" on a 10" sump → 153 GPM</span>
-    <p><strong>Answer:</strong> The flow is approximately <strong>153–176 GPM</strong>. You could interpolate to about <strong>165 GPM</strong>.</p>
+  <div class="ex" style="border-left-color:#7c3aed">
+    <h4 style="color:#7c3aed">Step 5 — 30-Frame Averaging (Eliminating Wave Noise)</h4>
+    <p>Water surfaces ripple and wave. A single frame might catch a ripple peak or trough, giving a wrong reading. The solution: <strong>average over 30 frames.</strong></p>
+    <span class="fm">H_buffer = [1.48, 1.52, 1.50, 1.49, 1.53, 1.51, ...] (last 30 readings)</span>
+    <span class="fm">H_averaged = sum(H_buffer) ÷ 30 = 1.505 inches</span>
+    <p>The buffer is a "sliding window" — as each new frame comes in, the oldest reading drops out and the newest is added. This smooths out wave noise while still tracking real changes in water level.</p>
+    <div class="tip purple"><span class="ti">[#]</span><div><strong>Why 30 frames?</strong> At 30 fps (frames per second), this averages over exactly 1 second of video — enough to smooth out typical water surface ripples without being so slow that it misses real level changes.</div></div>
+  </div>
+
+  <div class="ex" style="border-left-color:#0ea5e9">
+    <h4 style="color:#0ea5e9">Step 6 — Dual Flow Calculation</h4>
+    <p>With the averaged H value, the app calculates flow <strong>two independent ways</strong> simultaneously:</p>
+    <p><strong>Method A — Weir Equation:</strong></p>
+    <span class="fm">H_feet = H_inches ÷ 12 = 1.505 ÷ 12 = 0.1254 ft</span>
+    <span class="fm">Q_cfs = Cw × L × H_feet^1.5 = 3.33 × 3.14 × 0.1254^1.5 = 0.464 cfs</span>
+    <span class="fm">Q_gpm = 0.464 × 448.831 = 208 GPM</span>
+    <p><strong>Method B — Hatchery Chart Interpolation:</strong></p>
+    <p>The app looks up H_inches in the class reference chart (the same one you use manually). If the value falls between two chart rows, it <strong>linearly interpolates</strong> — for example, 1.505" falls between 1.5" (211 GPM) and 1.625" (240 GPM) for a 12" sump, so the interpolated value would be about 213 GPM.</p>
+    <div class="tip green"><span class="ti">[+]</span><div><strong>Both values displayed on the HUD:</strong> This lets you cross-check the equation against the chart. If they're close, you know the reading is reliable.</div></div>
+  </div>
+
+  <div class="ex" style="border-left-color:#1a6fb5">
+    <h4 style="color:#1a6fb5">Step 7 — Snap Reading (Capture & Record)</h4>
+    <p>When you click "[SNAP] Capture," the app:</p>
+    <ol class="sl">
+      <li><strong>Captures the current averaged H value</strong> from the 30-frame buffer</li>
+      <li><strong>Records both GPM calculations</strong> (equation and chart)</li>
+      <li><strong>Logs the number of frames</strong> that were averaged (for data quality)</li>
+      <li><strong>Timestamps the reading</strong></li>
+      <li><strong>Adds it to the history table</strong> on the Vision page</li>
+      <li><strong>Resets the buffer</strong> so the next reading starts fresh</li>
+    </ol>
+    <p>You can save any reading to the Data Log for export as CSV — useful for lab reports, shift logs, and long-term flow tracking.</p>
   </div>
 </div>
 
 <div class="card">
-  <h2>Why This Matters for Fish</h2>
-  <p>In a hatchery, water flow is literally <strong>life or death</strong> for the fish. Here's why each calculation matters:</p>
-  <div class="tip-box blue"><span class="tip-icon">🫧</span><div><strong>Oxygen:</strong> Fish need dissolved oxygen. Fresh flowing water brings oxygen in. If the exchange time is too long, oxygen drops and fish suffocate.</div></div>
-  <div class="tip-box orange"><span class="tip-icon">⚗️</span><div><strong>Ammonia:</strong> Fish produce ammonia as waste. Flowing water flushes it out. If flow is too slow, ammonia builds up and becomes toxic.</div></div>
-  <div class="tip-box green"><span class="tip-icon">🌡️</span><div><strong>Temperature:</strong> Incoming water helps regulate temperature. Consistent flow = consistent temperature = less stress on the fish.</div></div>
-  <div class="tip-box purple"><span class="tip-icon">🧹</span><div><strong>Waste Removal:</strong> Uneaten feed and feces need to be flushed out. Adequate flow keeps the rearing environment clean.</div></div>
-  <p>For <strong>salmonid hatcheries</strong> (trout, salmon), a water exchange rate of <strong>2–3 times per hour</strong> is common. That means the entire tank volume should be replaced every <strong>20–30 minutes</strong>.</p>
+  <h3>The Live HUD (Heads-Up Display)</h3>
+  <p>Below the video feed, three real-time values are displayed on a dark dashboard:</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:16px 0">
+    <div style="background:#0a0c10;padding:14px;text-align:center;border:2px solid #ff8c00">
+      <div style="font-family:var(--mono);font-size:9px;color:#3a4050;font-weight:600;text-transform:uppercase;letter-spacing:1px">Crest Height (H)</div>
+      <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:#ff8c00;margin-top:4px">1.50<span style="font-size:12px;color:#3a4050;margin-left:2px">in</span></div>
+      <div style="font-family:var(--mono);font-size:9px;color:#3a4050;margin-top:4px">Averaged over 30 frames</div>
+    </div>
+    <div style="background:#0a0c10;padding:14px;text-align:center;border:2px solid #00e5ff">
+      <div style="font-family:var(--mono);font-size:9px;color:#3a4050;font-weight:600;text-transform:uppercase;letter-spacing:1px">Flow (Equation)</div>
+      <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:#00e5ff;margin-top:4px">208<span style="font-size:12px;color:#3a4050;margin-left:2px">GPM</span></div>
+      <div style="font-family:var(--mono);font-size:9px;color:#3a4050;margin-top:4px">Q = Cw x L x H^1.5</div>
+    </div>
+    <div style="background:#0a0c10;padding:14px;text-align:center;border:2px solid #b388ff">
+      <div style="font-family:var(--mono);font-size:9px;color:#3a4050;font-weight:600;text-transform:uppercase;letter-spacing:1px">Flow (Chart)</div>
+      <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:#b388ff;margin-top:4px">211<span style="font-size:12px;color:#3a4050;margin-left:2px">GPM</span></div>
+      <div style="font-family:var(--mono);font-size:9px;color:#3a4050;margin-top:4px">Interpolated from class chart</div>
+    </div>
+  </div>
+
+  <p>The <strong>orange H value</strong> is the raw measurement — what the camera sees. The <strong>cyan equation value</strong> uses the weir formula with your entered Cw and L parameters. The <strong>purple chart value</strong> uses the same lookup table your class uses for manual readings.</p>
+  <p>When both GPM values are close to each other, it confirms the reading is reliable. If they diverge significantly, check your Cw coefficient and crest length entries.</p>
 </div>
 
-</div><!-- end theory -->
+<div class="card">
+  <h3>Why This Matters — Traditional vs. Vision-Based</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0">
+    <div style="background:#0d0f13;border:1px solid #2a2f3a;padding:16px">
+      <div style="font-family:var(--condensed);font-size:12px;font-weight:700;color:#7a8599;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">// Traditional Method</div>
+      <ol class="sl">
+        <li>Walk to sump</li>
+        <li>Hold ruler across crest</li>
+        <li>Read height by eye (parallax error)</li>
+        <li>Write number down</li>
+        <li>Walk to chart, look up GPM</li>
+        <li>Record in logbook</li>
+      </ol>
+      <div class="tip orange" style="margin-top:8px"><span class="ti">!</span><div>Takes 2-5 min per reading. Subject to human error, parallax, and inconsistent technique.</div></div>
+    </div>
+    <div style="background:#0d0f13;border:1px solid #ff8c00;padding:16px">
+      <div style="font-family:var(--condensed);font-size:12px;font-weight:700;color:#ff8c00;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">// Vision Method</div>
+      <ol class="sl">
+        <li>Camera reads automatically</li>
+        <li>Edge detection finds crest + water</li>
+        <li>Pixel math converts to inches</li>
+        <li>30-frame average smooths waves</li>
+        <li>Flow calculated instantly (both ways)</li>
+        <li>One click saves to digital log</li>
+      </ol>
+      <div class="tip green" style="margin-top:8px"><span class="ti">&gt;</span><div>Instant, continuous, consistent. No parallax. Auto-averages wave noise. Digital record with timestamp.</div></div>
+    </div>
+  </div>
+  <p>The vision system doesn't replace understanding <em>why</em> the measurements matter — it just does the measuring part faster and more consistently. You still need to know the theory to interpret the results and make management decisions.</p>
+</div>
+
+</div>
 </div><!-- end theory page -->
 
 <!-- ================================================================ -->
-<!--                       DATA LOG PAGE                              -->
+<!--                   📋 DATA LOG PAGE                               -->
 <!-- ================================================================ -->
 <div class="page" id="p-log">
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <div>
-        <div class="card-title">📋 Data Log</div>
-        <div class="card-sub" id="logCount" style="margin-bottom:0">No records saved</div>
-      </div>
-      <div style="display:flex;gap:6px">
-        <button onclick="exportCSV()" style="padding:6px 14px;border-radius:6px;border:1px solid var(--gray-300);background:var(--white);color:var(--gray-600);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font)">↓ Export CSV</button>
-        <button onclick="clearLog()" style="padding:6px 14px;border-radius:6px;border:1px solid var(--gray-300);background:var(--white);color:var(--red);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font)">✕ Clear</button>
-      </div>
-    </div>
-    <div id="logBox">
-      <div class="empty"><div style="font-size:40px;margin-bottom:10px;opacity:0.3">📋</div><div style="font-weight:600">No records yet</div><div style="font-size:12px;margin-top:4px">Use the "Save to Log" buttons on any calculator.</div></div>
-    </div>
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+    <div><div class="card-title">[LOG] Data Records</div><div class="card-sub" id="logCt" style="margin:0">// No records</div></div>
+    <div style="display:flex;gap:6px"><button onclick="exportCSV()" style="padding:5px 12px;border:1px solid #2a2f3a;background:#0d0f13;color:#5a6580;font-family:var(--condensed);font-size:11px;font-weight:600;cursor:pointer;text-transform:uppercase;letter-spacing:0.5px">// CSV</button><button onclick="clearLog()" style="padding:5px 12px;border:1px solid #2a2f3a;background:#0d0f13;color:#ff3b3b;font-family:var(--condensed);font-size:11px;font-weight:600;cursor:pointer;text-transform:uppercase;letter-spacing:0.5px">X Clear</button></div>
   </div>
+  <div id="logBox"><div class="empty"><div style="font-family:var(--mono);font-size:28px;margin-bottom:8px;opacity:0.2">[NULL]</div><div style="font-family:var(--condensed);font-weight:600;text-transform:uppercase;letter-spacing:1px">No records yet</div></div></div>
+</div>
 </div>
 
 <!-- ================================================================ -->
-<!--                      TERMS PAGE                                  -->
+<!--                   📜 TERMS PAGE                                  -->
 <!-- ================================================================ -->
 <div class="page" id="p-terms">
 <div class="card terms">
   <h2>Terms of Use</h2>
-  <p style="color:var(--gray-400);font-size:12px;margin-bottom:16px">Effective 2025 — Last Updated March 2026</p>
-
-  <h3>1. Purpose & Intended Use</h3>
-  <p>Flow Like a Pro is an <strong>educational tool</strong> for calculating flow rates, volumes, exchange times, and related hatchery measurements. It is intended for:</p>
-  <ul>
-    <li><strong>Students</strong> — in aquaculture, fisheries biology, environmental science, and related programs</li>
-    <li><strong>Educators</strong> — as a teaching aid and lab companion</li>
-    <li><strong>Industry professionals</strong> — hatchery workers, fish biologists, and aquaculture technicians for quick field reference</li>
-  </ul>
-
-  <h3>2. Disclaimer</h3>
-  <p>This tool is provided <strong>"AS IS"</strong> without warranties of any kind. While calculations use standard formulas, the developers make no guarantee results are error-free or suitable for critical operational decisions.</p>
-
-  <h3>3. Not Professional Engineering Advice</h3>
-  <p>This tool does <strong>not</strong> replace professional engineering. All results should be verified before use in system design or construction. Users are responsible for verifying inputs, applying appropriate safety factors, and consulting qualified professionals.</p>
-
-  <h3>4. Limitation of Liability</h3>
-  <p>The developers shall not be liable for any damages arising from the use of this tool, including but not limited to equipment failure, financial losses, environmental damage, or loss of aquatic organisms.</p>
-
-  <h3>5. Data & Privacy</h3>
-  <p>This tool operates <strong>entirely in your browser</strong>. No data is sent to any server. All logged records are stored in session memory and lost when you close the page.</p>
-
-  <h3>6. Academic Integrity</h3>
-  <p>Students should comply with their institution's academic integrity policies. This tool supplements learning — it does not replace understanding the formulas and principles.</p>
-
-  <h3>7. Crest Flow Chart Accuracy</h3>
-  <p>The crest height / GPM chart is a reference table for standard sump configurations. Actual flow may vary due to pipe condition, water temperature, and installation. Use site-specific calibration when possible.</p>
-
-  <h3>8. Intellectual Property</h3>
-  <p>The underlying equations are public-domain science. The reference chart is sourced from standard hatchery training materials. The app design and implementation are proprietary.</p>
-
-  <div style="margin-top:24px;padding:16px;background:var(--blue-light);border-radius:var(--radius-sm)">
-    <p style="font-weight:600;color:var(--blue-dark)">By using this tool, you acknowledge that you have read and agree to these Terms of Use.</p>
-  </div>
+  <p style="font-family:var(--mono);color:#3a4050;font-size:10px;margin-bottom:14px;letter-spacing:0.5px">EFFECTIVE: 2025 // UPDATED: MARCH 2026</p>
+  <h3>1. Purpose</h3><p>Educational tool for hatchery flow calculations. For students, educators, and industry professionals.</p>
+  <h3>2. Camera Usage</h3><p>The camera vision feature accesses your device camera <strong>locally only</strong>. No video or images are transmitted to any server. All processing happens in your browser. Camera access requires your explicit permission.</p>
+  <h3>3. Disclaimer</h3><p>Provided "AS IS." Camera-based measurements are estimates — accuracy depends on calibration, lighting, and camera angle. <strong>Always verify critical measurements manually.</strong></p>
+  <h3>4. Not Professional Engineering</h3><p>Does not replace professional engineering. Verify all results before operational use.</p>
+  <h3>5. Limitation of Liability</h3><p>Developers not liable for any damages including equipment failure, fish loss, or environmental damage arising from use of this tool.</p>
+  <h3>6. Privacy</h3><p>100% browser-based. No data collection, no server communication, no tracking. Camera feed never leaves your device.</p>
+  <h3>7. Academic Integrity</h3><p>Supplements learning — does not replace understanding the formulas.</p>
+  <h3>8. Accuracy</h3><p>The crest chart is from standard hatchery reference materials. The vision system accuracy depends on proper calibration. Use site-specific validation.</p>
+  <div style="margin-top:20px;padding:14px;background:rgba(255,140,0,0.06);border:1px solid #ff8c00"><p style="font-family:var(--condensed);font-weight:700;color:#ff8c00;text-transform:uppercase;letter-spacing:0.5px">By using this tool you agree to these Terms of Use.</p></div>
 </div>
 </div>
 
 </div><!-- end container -->
-
-<footer class="footer">
-  <div>Flow Like a Pro — Hatchery Measurements & Calculations</div>
-  <div style="margin-top:3px">Based on the Continuity Equation (Conservation of Mass) — For educational & industry use</div>
-</footer>
+<footer class="footer">Flow Rate Calculator 1.0 // Hatchery Measurements & Calculations // Continuity Equation // Educational & Industry Use</footer>
 
 <script>
-// ═════════════════════════════════
-//          CREST CHART DATA
-// ═════════════════════════════════
-const CREST_DATA = [
-  {crest:"½",    val:0.5,   d12:42,  d10:35,  d8:28,  d6:21},
-  {crest:"¾",    val:0.75,  d12:70,  d10:59,  d8:47,  d6:35},
-  {crest:"1",    val:1,     d12:113, d10:94,  d8:75,  d6:57},
-  {crest:"1⅛",   val:1.125, d12:141, d10:118, d8:94,  d6:70},
-  {crest:"1¼",   val:1.25,  d12:155, d10:129, d8:103, d6:78},
-  {crest:"1⅜",   val:1.375, d12:183, d10:153, d8:122, d6:92},
-  {crest:"1½",   val:1.5,   d12:211, d10:176, d8:141, d6:106},
-  {crest:"1⅝",   val:1.625, d12:240, d10:200, d8:160, d6:120},
-  {crest:"1¾",   val:1.75,  d12:268, d10:224, d8:179, d6:134},
-  {crest:"1⅞",   val:1.875, d12:296, d10:247, d8:197, d6:148},
-  {crest:"2",    val:2,     d12:324, d10:271, d8:216, d6:162},
-  {crest:"2⅛",   val:2.125, d12:352, d10:294, d8:235, d6:176},
-  {crest:"2¼",   val:2.25,  d12:381, d10:317, d8:254, d6:190},
-  {crest:"2⅜",   val:2.375, d12:423, d10:353, d8:282, d6:211},
-  {crest:"2½",   val:2.5,   d12:451, d10:376, d8:301, d6:225},
-  {crest:"2⅝",   val:2.625, d12:479, d10:400, d8:320, d6:240},
-  {crest:"2¾",   val:2.75,  d12:522, d10:435, d8:349, d6:261},
-  {crest:"2⅞",   val:2.875, d12:564, d10:470, d8:376, d6:282},
-  {crest:"3",    val:3,     d12:592, d10:494, d8:394, d6:296},
+// ═══════════════════════════════════════════════════
+//                  CREST CHART DATA
+// ═══════════════════════════════════════════════════
+const CD=[
+  {c:"½",v:.5,d12:42,d10:35,d8:28,d6:21},{c:"¾",v:.75,d12:70,d10:59,d8:47,d6:35},
+  {c:"1",v:1,d12:113,d10:94,d8:75,d6:57},{c:"1⅛",v:1.125,d12:141,d10:118,d8:94,d6:70},
+  {c:"1¼",v:1.25,d12:155,d10:129,d8:103,d6:78},{c:"1⅜",v:1.375,d12:183,d10:153,d8:122,d6:92},
+  {c:"1½",v:1.5,d12:211,d10:176,d8:141,d6:106},{c:"1⅝",v:1.625,d12:240,d10:200,d8:160,d6:120},
+  {c:"1¾",v:1.75,d12:268,d10:224,d8:179,d6:134},{c:"1⅞",v:1.875,d12:296,d10:247,d8:197,d6:148},
+  {c:"2",v:2,d12:324,d10:271,d8:216,d6:162},{c:"2⅛",v:2.125,d12:352,d10:294,d8:235,d6:176},
+  {c:"2¼",v:2.25,d12:381,d10:317,d8:254,d6:190},{c:"2⅜",v:2.375,d12:423,d10:353,d8:282,d6:211},
+  {c:"2½",v:2.5,d12:451,d10:376,d8:301,d6:225},{c:"2⅝",v:2.625,d12:479,d10:400,d8:320,d6:240},
+  {c:"2¾",v:2.75,d12:522,d10:435,d8:349,d6:261},{c:"2⅞",v:2.875,d12:564,d10:470,d8:376,d6:282},
+  {c:"3",v:3,d12:592,d10:494,d8:394,d6:296}
 ];
+const tb=document.getElementById('crestBody');
+CD.forEach(r=>{const tr=document.createElement('tr');tr.dataset.v=r.v;tr.innerHTML=`<td>${r.c}"</td><td>${r.d12}</td><td>${r.d10}</td><td>${r.d8}</td><td>${r.d6}</td>`;tb.appendChild(tr)});
 
-// Build table
-const tbody = document.getElementById('crestBody');
-CREST_DATA.forEach(r => {
-  const tr = document.createElement('tr');
-  tr.dataset.val = r.val;
-  tr.innerHTML = `<td>${r.crest}"</td><td>${r.d12}</td><td>${r.d10}</td><td>${r.d8}</td><td>${r.d6}</td>`;
-  tbody.appendChild(tr);
-});
+function lookupCrest(){
+  const d=document.getElementById('crest-diam').value,h=parseFloat(document.getElementById('crest-height').value);
+  tb.querySelectorAll('tr').forEach(t=>t.classList.remove('hl'));
+  if(!d||!h){document.getElementById('crest-res').style.display='none';return}
+  const row=CD.find(r=>r.v===h);if(!row){document.getElementById('crest-res').style.display='none';return}
+  document.getElementById('crest-gpm').textContent=row['d'+d];
+  document.getElementById('crest-res').style.display='grid';
+  const tr=tb.querySelector(`tr[data-v="${h}"]`);if(tr)tr.classList.add('hl');
+}
 
-function lookupCrest() {
-  const diam = document.getElementById('crest-diam').value;
-  const height = parseFloat(document.getElementById('crest-height').value);
-  // clear highlights
-  tbody.querySelectorAll('tr').forEach(tr => tr.classList.remove('highlight'));
-  if (!diam || !height) { document.getElementById('crest-result-area').style.display='none'; return; }
-  const row = CREST_DATA.find(r => r.val === height);
-  if (!row) { document.getElementById('crest-result-area').style.display='none'; return; }
+function chartLookup(hInches, diam) {
+  // Interpolate from chart
   const key = 'd' + diam;
-  const gpm = row[key];
-  document.getElementById('crest-gpm').textContent = gpm;
-  document.getElementById('crest-result-area').style.display = 'grid';
-  // highlight row
-  const tr = tbody.querySelector(`tr[data-val="${height}"]`);
-  if (tr) tr.classList.add('highlight');
-}
-
-// ═════════════════════════════════
-//       EXCHANGE TIME CALC
-// ═════════════════════════════════
-function calcExchange() {
-  const V = parseFloat(document.getElementById('ex-vol').value) || 0;
-  const Q = parseFloat(document.getElementById('ex-flow').value) || 0;
-  const min = Q > 0 ? V / Q : 0;
-  const hr = min / 60;
-  const perhr = min > 0 ? 60 / min : 0;
-  document.getElementById('ex-min').textContent = fmt(min, 1);
-  document.getElementById('ex-hr').textContent = fmt(hr, 2);
-  document.getElementById('ex-perhr').textContent = fmt(perhr, 2);
-}
-
-// ═════════════════════════════════
-//        VOLUME CALCULATOR
-// ═════════════════════════════════
-let curShape = 'rect';
-function setShape(s, el) {
-  curShape = s;
-  document.querySelectorAll('#shapePills .pill').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  ['rect','cyl','cone','conepond'].forEach(id => {
-    document.getElementById('shape-'+id).style.display = id === s ? 'block' : 'none';
-  });
-  calcVol();
-}
-
-function calcVol() {
-  let vol = 0;
-  if (curShape === 'rect') {
-    const l=pf('r-l'), w=pf('r-w'), h=pf('r-h');
-    vol = l * w * h;
-  } else if (curShape === 'cyl') {
-    const d=pf('c-d'), h=pf('c-h'), r=d/2;
-    vol = Math.PI * r * r * h;
-  } else if (curShape === 'cone') {
-    const d=pf('co-d'), h=pf('co-h'), r=d/2;
-    vol = (1/3) * Math.PI * r * r * h;
-  } else if (curShape === 'conepond') {
-    const d=pf('cp-d'), h1=pf('cp-h1'), h2=pf('cp-h2'), r=d/2;
-    const h3 = Math.max(0, h1 - h2);
-    const cylVol = Math.PI * r * r * h2;
-    const coneVol = (1/3) * Math.PI * r * r * h3;
-    vol = cylVol + coneVol;
+  let lower = null, upper = null;
+  for (const r of CD) {
+    if (r.v <= hInches) lower = r;
+    if (r.v >= hInches && !upper) upper = r;
   }
-  const gal = vol * 7.48052;
-  const lit = gal * 3.78541;
-  document.getElementById('vol-ft3').textContent = fmt(vol, 2);
-  document.getElementById('vol-gal').textContent = fmt(gal, 1);
-  document.getElementById('vol-L').textContent = fmt(lit, 1);
+  if (!lower && upper) return upper[key];
+  if (lower && !upper) return lower[key];
+  if (!lower && !upper) return null;
+  if (lower.v === upper.v) return lower[key];
+  const frac = (hInches - lower.v) / (upper.v - lower.v);
+  return Math.round(lower[key] + frac * (upper[key] - lower[key]));
 }
 
-// ═════════════════════════════════
-//       SURFACE AREA CALC
-// ═════════════════════════════════
-let curArea = 'arect';
-function setArea(a, el) {
-  curArea = a;
-  document.querySelectorAll('#areaPills .pill').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('area-arect').style.display = a === 'arect' ? 'block' : 'none';
-  document.getElementById('area-acirc').style.display = a === 'acirc' ? 'block' : 'none';
-  calcArea();
+// ═══════════════════════════════════════════════════
+//                 COMPUTER VISION
+// ═══════════════════════════════════════════════════
+let cvStream = null, cvRunning = false, cvAnimId = null;
+let calibrated = false, pxPerInch = 50; // default guess
+let calibMode = false, calibLine1Y = 120, calibLine2Y = 240;
+let dragging = null;
+let hBuffer = [], snapReadings = [];
+
+const video = document.getElementById('cvVideo');
+const canvas = document.getElementById('cvCanvas');
+const overlay = document.getElementById('cvOverlay');
+const ctx = canvas.getContext('2d', {willReadFrequently: true});
+const octx = overlay.getContext('2d');
+
+async function startCamera() {
+  try {
+    cvStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width: {ideal:640}, height: {ideal:480} }
+    });
+    video.srcObject = cvStream;
+    video.style.display = 'none';
+    document.getElementById('cvPlaceholder').style.display = 'none';
+    canvas.style.display = 'block';
+    overlay.style.display = 'block';
+    document.getElementById('btnStop').disabled = false;
+    document.getElementById('btnCalib').disabled = false;
+    document.getElementById('btnSnap').disabled = false;
+    document.getElementById('btnStart').disabled = true;
+    document.getElementById('cvHud').style.display = 'grid';
+    setStatus('[CAM] Active — calibrate first for accurate readings');
+    cvRunning = true;
+    video.onloadedmetadata = () => {
+      canvas.width = video.videoWidth || 640;
+      canvas.height = video.videoHeight || 480;
+      overlay.width = canvas.width;
+      overlay.height = canvas.height;
+      calibLine1Y = Math.round(canvas.height * 0.25);
+      calibLine2Y = Math.round(canvas.height * 0.65);
+      processFrame();
+    };
+  } catch(e) {
+    setStatus('[ERR] Camera access denied or not available: ' + e.message);
+  }
 }
 
-function calcArea() {
-  let area = 0;
-  if (curArea === 'arect') {
-    area = pf('a-l') * pf('a-w');
+function stopCamera() {
+  cvRunning = false;
+  if (cvAnimId) cancelAnimationFrame(cvAnimId);
+  if (cvStream) cvStream.getTracks().forEach(t => t.stop());
+  video.style.display = 'none';
+  canvas.style.display = 'none';
+  overlay.style.display = 'none';
+  document.getElementById('cvPlaceholder').style.display = 'flex';
+  document.getElementById('btnStop').disabled = true;
+  document.getElementById('btnCalib').disabled = true;
+  document.getElementById('btnSnap').disabled = true;
+  document.getElementById('btnStart').disabled = false;
+  setStatus('Camera stopped');
+}
+
+function resetCV() {
+  stopCamera();
+  calibrated = false;
+  hBuffer = [];
+  snapReadings = [];
+  document.getElementById('cvHistory').style.display = 'none';
+  document.getElementById('cvHud').style.display = 'none';
+  document.getElementById('calibFields').style.display = 'none';
+  setStatus('Ready — click Start Camera');
+}
+
+function setStatus(msg) { document.getElementById('cvStatus').textContent = msg; }
+
+// ─── Calibration ───
+function startCalibration() {
+  calibMode = true;
+  document.getElementById('calibOverlay').style.display = 'flex';
+  document.getElementById('calibFields').style.display = 'block';
+  setStatus('[CAL] Calibration mode — drag the orange lines, then click Set Scale');
+
+  // Make overlay interactive for dragging
+  overlay.style.pointerEvents = 'auto';
+  overlay.style.cursor = 'default';
+
+  overlay.onmousedown = overlay.ontouchstart = function(e) {
+    e.preventDefault();
+    const rect = overlay.getBoundingClientRect();
+    const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+    const scaleY = canvas.height / rect.height;
+    const canvasY = y * scaleY;
+    if (Math.abs(canvasY - calibLine1Y) < 20) dragging = 1;
+    else if (Math.abs(canvasY - calibLine2Y) < 20) dragging = 2;
+  };
+  overlay.onmousemove = overlay.ontouchmove = function(e) {
+    if (!dragging) return;
+    e.preventDefault();
+    const rect = overlay.getBoundingClientRect();
+    const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+    const scaleY = canvas.height / rect.height;
+    const canvasY = Math.max(10, Math.min(canvas.height - 10, y * scaleY));
+    if (dragging === 1) calibLine1Y = canvasY;
+    else calibLine2Y = canvasY;
+  };
+  overlay.onmouseup = overlay.ontouchend = function() { dragging = null; };
+}
+
+function setScale() {
+  const dist = parseFloat(document.getElementById('calibDist').value);
+  if (!dist || dist <= 0) { document.getElementById('calibStatus').textContent = '[WARN] Enter a valid distance'; return; }
+  const pxDist = Math.abs(calibLine2Y - calibLine1Y);
+  pxPerInch = pxDist / dist;
+  calibrated = true;
+  calibMode = false;
+  document.getElementById('calibOverlay').style.display = 'none';
+  overlay.style.pointerEvents = 'none';
+  overlay.onmousedown = overlay.onmousemove = overlay.onmouseup = null;
+  overlay.ontouchstart = overlay.ontouchmove = overlay.ontouchend = null;
+  document.getElementById('calibStatus').textContent = `✅ Scale set: ${pxPerInch.toFixed(1)} pixels/inch (${dist}" = ${pxDist.toFixed(0)}px)`;
+  setStatus(`✅ Calibrated: ${pxPerInch.toFixed(1)} px/inch — detection active`);
+}
+
+// ─── Frame processing ───
+function processFrame() {
+  if (!cvRunning) return;
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  // Get image data for analysis
+  const w = canvas.width, h = canvas.height;
+  const imgData = ctx.getImageData(0, 0, w, h);
+  const data = imgData.data;
+
+  // ─── Edge detection (simplified Sobel for horizontal edges) ───
+  const gray = new Float32Array(w * h);
+  for (let i = 0; i < w * h; i++) {
+    gray[i] = data[i*4] * 0.299 + data[i*4+1] * 0.587 + data[i*4+2] * 0.114;
+  }
+
+  // Vertical gradient (detects horizontal edges)
+  const gradY = new Float32Array(w * h);
+  for (let y = 1; y < h - 1; y++) {
+    for (let x = 1; x < w - 1; x++) {
+      const gy = -gray[(y-1)*w+x-1] - 2*gray[(y-1)*w+x] - gray[(y-1)*w+x+1]
+                 +gray[(y+1)*w+x-1] + 2*gray[(y+1)*w+x] + gray[(y+1)*w+x+1];
+      gradY[y*w+x] = Math.abs(gy);
+    }
+  }
+
+  // Find strongest horizontal edge rows (accumulate gradient per row)
+  const rowStrength = new Float32Array(h);
+  const centerX = Math.round(w * 0.2);
+  const centerW = Math.round(w * 0.6);
+  for (let y = 5; y < h - 5; y++) {
+    let sum = 0;
+    for (let x = centerX; x < centerX + centerW; x++) {
+      sum += gradY[y * w + x];
+    }
+    rowStrength[y] = sum / centerW;
+  }
+
+  // Find top two strongest edges (crest = upper strong edge, water = next)
+  const threshold = 15;
+  let crestY = -1, waterY = -1;
+
+  // Scan top-down for first strong edge (crest)
+  for (let y = 10; y < h * 0.6; y++) {
+    if (rowStrength[y] > threshold) {
+      // Find the peak in this region
+      let peakY = y, peakVal = rowStrength[y];
+      for (let dy = 1; dy < 15 && y + dy < h; dy++) {
+        if (rowStrength[y+dy] > peakVal) { peakVal = rowStrength[y+dy]; peakY = y + dy; }
+      }
+      crestY = peakY;
+      break;
+    }
+  }
+
+  // Scan below crest for water surface
+  if (crestY > 0) {
+    const searchStart = crestY + 15; // skip some pixels below crest
+    for (let y = searchStart; y < Math.min(h - 10, crestY + h * 0.5); y++) {
+      if (rowStrength[y] > threshold * 0.6) {
+        let peakY = y, peakVal = rowStrength[y];
+        for (let dy = 1; dy < 10 && y + dy < h; dy++) {
+          if (rowStrength[y+dy] > peakVal) { peakVal = rowStrength[y+dy]; peakY = y + dy; }
+        }
+        waterY = peakY;
+        break;
+      }
+    }
+  }
+
+  // ─── Draw overlay ───
+  octx.clearRect(0, 0, w, h);
+
+  if (calibMode) {
+    // Draw calibration lines
+    octx.strokeStyle = '#f97316';
+    octx.lineWidth = 2;
+    octx.setLineDash([8, 4]);
+    octx.beginPath(); octx.moveTo(0, calibLine1Y); octx.lineTo(w, calibLine1Y); octx.stroke();
+    octx.beginPath(); octx.moveTo(0, calibLine2Y); octx.lineTo(w, calibLine2Y); octx.stroke();
+    octx.setLineDash([]);
+
+    // Labels
+    octx.fillStyle = '#f97316';
+    octx.font = '13px Outfit';
+    octx.fillText('⬆ Line 1 (drag me)', 10, calibLine1Y - 6);
+    octx.fillText('⬇ Line 2 (drag me)', 10, calibLine2Y + 18);
+
+    // Distance label
+    const pxDist = Math.abs(calibLine2Y - calibLine1Y);
+    octx.fillStyle = '#fff';
+    octx.font = 'bold 14px JetBrains Mono';
+    octx.fillText(`${pxDist.toFixed(0)} px`, w/2 - 25, (calibLine1Y + calibLine2Y)/2 + 5);
   } else {
-    const r = pf('a-d') / 2;
-    area = Math.PI * r * r;
+    // Draw detected lines
+    if (crestY > 0) {
+      octx.strokeStyle = '#ef4444';
+      octx.lineWidth = 2;
+      octx.setLineDash([6, 3]);
+      octx.beginPath(); octx.moveTo(0, crestY); octx.lineTo(w, crestY); octx.stroke();
+      octx.setLineDash([]);
+      octx.fillStyle = '#ef4444';
+      octx.font = 'bold 12px Outfit';
+      octx.fillText('CREST', 8, crestY - 6);
+    }
+
+    if (waterY > 0) {
+      octx.strokeStyle = '#22d3ee';
+      octx.lineWidth = 2;
+      octx.setLineDash([6, 3]);
+      octx.beginPath(); octx.moveTo(0, waterY); octx.lineTo(w, waterY); octx.stroke();
+      octx.setLineDash([]);
+      octx.fillStyle = '#22d3ee';
+      octx.font = 'bold 12px Outfit';
+      octx.fillText('WATER', 8, waterY + 16);
+    }
+
+    // Draw H measurement
+    if (crestY > 0 && waterY > 0) {
+      const pxH = waterY - crestY;
+      const hInches = pxH / pxPerInch;
+
+      // H arrow
+      octx.strokeStyle = '#f97316';
+      octx.lineWidth = 2.5;
+      octx.setLineDash([]);
+      octx.beginPath(); octx.moveTo(w - 40, crestY + 4); octx.lineTo(w - 40, waterY - 4); octx.stroke();
+      // Arrowheads
+      octx.fillStyle = '#f97316';
+      octx.beginPath(); octx.moveTo(w-40, crestY+4); octx.lineTo(w-44, crestY+12); octx.lineTo(w-36, crestY+12); octx.fill();
+      octx.beginPath(); octx.moveTo(w-40, waterY-4); octx.lineTo(w-44, waterY-12); octx.lineTo(w-36, waterY-12); octx.fill();
+
+      // H label
+      octx.fillStyle = '#f97316';
+      octx.font = 'bold 16px JetBrains Mono';
+      octx.fillText(`H=${hInches.toFixed(2)}"`, w - 120, (crestY + waterY) / 2 + 5);
+
+      // Buffer for averaging
+      hBuffer.push(hInches);
+      if (hBuffer.length > 30) hBuffer.shift();
+      const hAvg = hBuffer.reduce((a,b)=>a+b,0) / hBuffer.length;
+
+      // Calculate flow
+      const diam = document.getElementById('cv-diam').value;
+      const Cw = parseFloat(document.getElementById('cv-cw').value) || 3.33;
+      const L = parseFloat(document.getElementById('cv-L').value) || 0;
+      const hFt = hAvg / 12;
+      let qGpm = 0;
+      if (L > 0 && hFt > 0) {
+        const qCfs = Cw * L * Math.pow(hFt, 1.5);
+        qGpm = qCfs * 448.831;
+      }
+      const chartGpm = chartLookup(hAvg, diam);
+
+      // Update HUD
+      document.getElementById('hudH').innerHTML = hAvg.toFixed(2) + '<span class="hud-unit">in</span>';
+      document.getElementById('hudQ').innerHTML = (qGpm > 0 ? Math.round(qGpm) : '—') + '<span class="hud-unit">GPM</span>';
+      document.getElementById('hudChart').innerHTML = (chartGpm !== null ? chartGpm : '—') + '<span class="hud-unit">GPM</span>';
+
+      // Calibration status indicator
+      if (!calibrated) {
+        octx.fillStyle = 'rgba(0,0,0,0.6)';
+        octx.fillRect(0, 0, w, 28);
+        octx.fillStyle = '#fbbf24';
+        octx.font = 'bold 12px Outfit';
+        octx.fillText('⚠ NOT CALIBRATED — click Calibrate for accurate readings', 10, 18);
+      } else {
+        octx.fillStyle = 'rgba(0,0,0,0.5)';
+        octx.fillRect(0, 0, w, 24);
+        octx.fillStyle = '#4ade80';
+        octx.font = '11px Outfit';
+        octx.fillText(`✓ Calibrated: ${pxPerInch.toFixed(1)} px/in | Frames avg: ${hBuffer.length}`, 8, 16);
+      }
+    }
   }
-  document.getElementById('sa-ft2').textContent = fmt(area, 2);
+
+  cvAnimId = requestAnimationFrame(processFrame);
 }
 
-// ═════════════════════════════════
-//        UNIT CONVERTER
-// ═════════════════════════════════
-function convFt3() { const v=pf('uc-ft3'); si('uc-gal',v*7.48052); si('uc-L',v*28.3168); si('uc-m3',v*0.0283168); }
-function convGal() { const v=pf('uc-gal'); si('uc-ft3',v/7.48052); si('uc-L',v*3.78541); si('uc-m3',v*0.00378541); }
-function convL()   { const v=pf('uc-L');   si('uc-ft3',v/28.3168); si('uc-gal',v/3.78541); si('uc-m3',v/1000); }
-function convM3()  { const v=pf('uc-m3');  si('uc-ft3',v*35.3147); si('uc-gal',v*264.172); si('uc-L',v*1000); }
+function snapReading() {
+  if (hBuffer.length === 0) { setStatus('[WARN] No detection data yet — point camera at sump crest'); return; }
+  const hAvg = hBuffer.reduce((a,b)=>a+b,0) / hBuffer.length;
+  const diam = document.getElementById('cv-diam').value;
+  const Cw = parseFloat(document.getElementById('cv-cw').value) || 3.33;
+  const L = parseFloat(document.getElementById('cv-L').value) || 0;
+  const hFt = hAvg / 12;
+  let qGpm = 0;
+  if (L > 0 && hFt > 0) qGpm = Cw * L * Math.pow(hFt, 1.5) * 448.831;
+  const chartGpm = chartLookup(hAvg, diam);
+
+  const reading = {
+    n: snapReadings.length + 1,
+    h: hAvg.toFixed(2),
+    qEq: qGpm > 0 ? Math.round(qGpm) : '—',
+    qChart: chartGpm !== null ? chartGpm : '—',
+    frames: hBuffer.length,
+    time: new Date().toLocaleTimeString()
+  };
+  snapReadings.push(reading);
+
+  // Update table
+  const hist = document.getElementById('cvHistory');
+  hist.style.display = 'block';
+  const row = document.createElement('tr');
+  row.innerHTML = `<td>${reading.n}</td><td>${reading.h}"</td><td>${reading.qEq}</td><td>${reading.qChart}</td><td>${reading.frames}</td><td>${reading.time}</td>`;
+  document.getElementById('snapBody').appendChild(row);
+
+  // Flash effect
+  setStatus(`📸 Reading #${reading.n}: H=${reading.h}" → ${reading.qChart} GPM (chart) / ${reading.qEq} GPM (eq)`);
+  hBuffer = []; // reset buffer for next reading
+}
+
+function logCV() {
+  if (snapReadings.length === 0) return;
+  const r = snapReadings[snapReadings.length - 1];
+  addLog({type:'[CAM] Vision Reading', head_inches:r.h+'"', GPM_equation:r.qEq, GPM_chart:r.qChart, frames_averaged:r.frames});
+}
+
+// ═══════════════════════════════════════════════════
+//              STANDARD CALCULATORS
+// ═══════════════════════════════════════════════════
+function calcEx(){
+  const V=pf('ex-vol'),Q=pf('ex-flow'),m=Q>0?V/Q:0;
+  $('ex-min',fmt(m,1));$('ex-ph',fmt(m>0?60/m:0,2));
+}
+
+let curS='rect';
+function setS(s,el){curS=s;document.querySelectorAll('#shP .pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');['rect','cyl','cone','cpond'].forEach(id=>{document.getElementById('s-'+id).style.display=id===s?'block':'none'});calcV()}
+function calcV(){
+  let v=0;
+  if(curS==='rect'){v=pf('rl')*pf('rw')*pf('rh')}
+  else if(curS==='cyl'){const r=pf('cd')/2;v=Math.PI*r*r*pf('ch')}
+  else if(curS==='cone'){const r=pf('cod')/2;v=Math.PI*r*r*pf('coh')/3}
+  else{const r=pf('cpd')/2,h1=pf('cph1'),h2=pf('cph2'),h3=Math.max(0,h1-h2);v=Math.PI*r*r*h2+Math.PI*r*r*h3/3}
+  const g=v*7.48052;$('vf',fmt(v,2));$('vg',fmt(g,1));
+}
+function uConv(n){
+  const v=pf('u'+n);
+  if(n===1){si('u2',v*7.48052);si('u3',v*28.3168);si('u4',v*0.0283168)}
+  if(n===2){si('u1',v/7.48052);si('u3',v*3.78541);si('u4',v*0.00378541)}
+  if(n===3){si('u1',v/28.3168);si('u2',v/3.78541);si('u4',v/1000)}
+  if(n===4){si('u1',v*35.3147);si('u2',v*264.172);si('u3',v*1000)}
+}
 function si(id,v){document.getElementById(id).value=v?v.toFixed(4):''}
 
-// ═════════════════════════════════
-//            DATA LOG
-// ═════════════════════════════════
-let logs = [];
-function addLog(entry) {
-  entry.timestamp = new Date().toLocaleString();
-  logs.unshift(entry);
-  renderLog();
-  document.querySelector('[data-p="log"]').click();
+// ═══════════════════════════════════════════════════
+//                   DATA LOG
+// ═══════════════════════════════════════════════════
+let logs=[];
+function addLog(e){e.timestamp=new Date().toLocaleString();logs.unshift(e);renderLog();document.querySelector('[data-p="log"]').click()}
+function renderLog(){
+  const b=document.getElementById('badge');b.textContent=logs.length;b.style.display=logs.length?'inline':'none';
+  document.getElementById('logCt').textContent=logs.length+' record'+(logs.length!==1?'s':'')+' saved';
+  const box=document.getElementById('logBox');
+  if(!logs.length){box.innerHTML='<div class="empty"><div style="font-family:var(--mono);font-size:28px;margin-bottom:8px;opacity:0.2">[NULL]</div><div style="font-family:var(--condensed);font-weight:600;text-transform:uppercase;letter-spacing:1px">No records</div></div>';return}
+  box.innerHTML=logs.map(l=>{const p=Object.entries(l).filter(([k])=>k!=='type'&&k!=='timestamp');return`<div class="log-entry"><div class="log-head"><span class="log-type">${l.type}</span><span class="log-time">${l.timestamp}</span></div><div class="log-chips">${p.map(([k,v])=>`<span class="log-chip"><span class="k">${k.replace(/_/g,' ')}:</span><span class="v">${v}</span></span>`).join('')}</div></div>`}).join('');
 }
-function renderLog() {
-  const b = document.getElementById('badge');
-  b.textContent = logs.length; b.style.display = logs.length ? 'inline' : 'none';
-  document.getElementById('logCount').textContent = logs.length + ' record' + (logs.length!==1?'s':'') + ' saved';
-  const box = document.getElementById('logBox');
-  if (!logs.length) { box.innerHTML = '<div class="empty"><div style="font-size:40px;margin-bottom:10px;opacity:0.3">📋</div><div style="font-weight:600">No records yet</div></div>'; return; }
-  box.innerHTML = logs.map(l => {
-    const pairs = Object.entries(l).filter(([k])=>k!=='type'&&k!=='timestamp');
-    return `<div class="log-entry"><div class="log-head"><span class="log-type">${l.type}</span><span class="log-time">${l.timestamp}</span></div><div class="log-chips">${pairs.map(([k,v])=>`<span class="log-chip"><span class="k">${k.replace(/_/g,' ')}:</span><span class="v">${v}</span></span>`).join('')}</div></div>`;
-  }).join('');
-}
-function clearLog(){if(logs.length&&confirm('Clear all records?')){logs=[];renderLog()}}
+function clearLog(){if(logs.length&&confirm('Clear?')){logs=[];renderLog()}}
 function exportCSV(){
-  if(!logs.length)return;
-  const keys=new Set();logs.forEach(e=>Object.keys(e).forEach(k=>keys.add(k)));
-  const k=Array.from(keys);let csv=k.join(',')+'\n';
-  logs.forEach(e=>{csv+=k.map(x=>'"'+(e[x]||'')+'"').join(',')+'\n'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-  a.download='hatchery-log-'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+  if(!logs.length)return;const ks=new Set();logs.forEach(e=>Object.keys(e).forEach(k=>ks.add(k)));
+  const k=Array.from(ks);let c=k.join(',')+'\n';logs.forEach(e=>{c+=k.map(x=>'"'+(e[x]||'')+'"').join(',')+'\n'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:'text/csv'}));a.download='flow-log-'+new Date().toISOString().slice(0,10)+'.csv';a.click();
 }
+function logCrest(){const d=document.getElementById('crest-diam').value,g=document.getElementById('crest-gpm').textContent;if(!d||g==='—')return;addLog({type:'Crest Lookup',sump:d+'"',crest:document.getElementById('crest-height').value+'"',GPM:g})}
+function logEx(){const m=document.getElementById('ex-min').textContent;if(m==='—')return;addLog({type:'Exchange Time',volume_gal:document.getElementById('ex-vol').value,flow_GPM:document.getElementById('ex-flow').value,time_min:m,turns_hr:document.getElementById('ex-ph').textContent})}
+function logV(){const v=document.getElementById('vg').textContent;if(v==='—')return;addLog({type:'Volume ('+curS+')',ft3:document.getElementById('vf').textContent,gallons:v})}
 
-function logCrest(){
-  const d=document.getElementById('crest-diam').value,g=document.getElementById('crest-gpm').textContent;
-  if(!d||g==='—')return;
-  addLog({type:'Crest→Flow',sump_diameter:d+'"',crest_height:document.getElementById('crest-height').value+'"',flow_GPM:g});
-}
-function logExchange(){
-  const m=document.getElementById('ex-min').textContent;if(m==='—')return;
-  addLog({type:'Exchange Time',volume_gal:document.getElementById('ex-vol').value,flow_GPM:document.getElementById('ex-flow').value,exchange_min:m,exchanges_per_hr:document.getElementById('ex-perhr').textContent});
-}
-function logVol(){
-  const v=document.getElementById('vol-gal').textContent;if(v==='—')return;
-  addLog({type:'Volume ('+curShape+')',volume_ft3:document.getElementById('vol-ft3').textContent,volume_gal:v,volume_L:document.getElementById('vol-L').textContent});
-}
-
-// ═════════════════════════════════
-//           NAVIGATION
-// ═════════════════════════════════
-document.querySelectorAll('.nav button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
+// ═══════════════════════════════════════════════════
+//                   NAVIGATION
+// ═══════════════════════════════════════════════════
+document.querySelectorAll('.nav button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
     document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active');p.style.display='none'});
-    const t=document.getElementById('p-'+btn.dataset.p);
-    t.style.display='block';
-    requestAnimationFrame(()=>t.classList.add('active'));
-    window.scrollTo(0,0);
+    const t=document.getElementById('p-'+btn.dataset.p);t.style.display='block';
+    requestAnimationFrame(()=>t.classList.add('active'));window.scrollTo(0,0);
   });
 });
 
-// ═════════════════════════════════
-//           UTILITIES
-// ═════════════════════════════════
 function tog(el){el.classList.toggle('open');el.nextElementSibling.classList.toggle('open')}
 function pf(id){return parseFloat(document.getElementById(id).value)||0}
-function fmt(n,d){if(!n||isNaN(n))return'—';const s=Number(n).toFixed(d||2);return s.replace(/(\.\d*?)0+$/,'$1').replace(/\.$/,'')||'0'}
+function fmt(n,d){if(!n||isNaN(n))return'—';return Number(n).toFixed(d||2).replace(/(\.\d*?)0+$/,'$1').replace(/\.$/,'')||'0'}
+function $(id,v){document.getElementById(id).textContent=v}
 </script>
 </body>
 </html>
