@@ -265,29 +265,28 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
 <!-- ================================================================ -->
 <div class="page active" id="p-cam">
 <div class="card">
-  <div class="card-title">[CAM] Camera Flow Detection</div>
-  <div class="card-sub">// Point camera at sump crest — auto-measure water head and calculate flow rate</div>
+  <div class="card-title">[CAM] Camera Flow Measurement</div>
+  <div class="card-sub">// Point camera at sump crest — position measurement lines with sliders — get instant flow rate</div>
 
   <button class="cbtn" onclick="tog(this)"><span>[?] HOW IT WORKS — PIPELINE OVERVIEW</span><span class="ar">▾</span></button>
   <div class="cbody">
-    <p><strong>This feature uses your camera + computer vision to auto-detect crest height (H) and calculate flow.</strong></p>
-    <p style="margin:8px 0;font-weight:600;color:var(--gray-800)">The 7-Step Camera Pipeline:</p>
+    <p><strong>This feature uses your camera as a live viewfinder. You manually position measurement lines on the crest and water surface using sliders, and the app calculates flow from the distance between them.</strong></p>
+    <p style="margin:8px 0;font-weight:600;color:var(--gray-800)">How it works:</p>
     <ol class="sl">
-      <li><strong>Start Camera</strong> — accesses your device camera (rear-facing preferred) and draws live video to an HTML canvas — a digital drawing board that updates ~30 times per second so we can analyze each frame as raw pixel data</li>
-      <li><strong>Calibrate</strong> — two orange lines appear on the video feed. You use the <strong>slider controls</strong> below the video to position them over a known distance (recommended: <strong>6 inches</strong> for best accuracy — only ~1% error vs ~6% with 1 inch). Enter the distance and click "Set Scale." This establishes the <strong>pixels-per-inch conversion</strong>. Tape a 6" ruler section on the sump pipe wall for a permanent reference</li>
-      <li><strong>Auto-Detection (Sobel Edge Detector)</strong> — every frame, the app converts the image to grayscale, then runs a <strong>Sobel operator</strong> that detects horizontal edges by comparing brightness above and below each pixel. It accumulates edge strength across the center 60% of each row, then finds the two strongest horizontal edges: the <strong>crest line</strong> (red — top of the pipe rim) and the <strong>water surface</strong> (cyan — where reflections meet the wall)</li>
-      <li><strong>H Measurement</strong> — the pixel distance between the crest and water surface is converted to inches using your calibration: <strong>H_inches = (y_water − y_crest) ÷ pixels_per_inch</strong>. This is displayed as a live orange arrow on the video with the measurement label</li>
-      <li><strong>30-Frame Averaging</strong> — the H buffer holds the last 30 readings and averages them to eliminate wave noise. At 30 fps, this smooths over exactly 1 second of video: <strong>H_avg = sum(last 30 readings) ÷ 30</strong></li>
-      <li><strong>Dual Flow Calculation</strong> — the averaged H feeds into BOTH the weir equation (<strong>Q = Cw × L × H^1.5</strong> → GPM) AND the hatchery chart interpolation. Both values display on the dark HUD below the video so you can cross-check</li>
-      <li><strong>Snap Reading</strong> — captures the current averaged measurement into the history table with reading number, H value, both GPM calculations, frame count, and timestamp. The buffer resets for a fresh next reading</li>
+      <li><strong>Start Camera</strong> — accesses your device camera (rear-facing preferred) and shows a live video feed so you can see the sump in real time</li>
+      <li><strong>Calibrate</strong> — use slider controls to position two orange lines over a known distance (recommended: <strong>6 inches</strong>). Enter the distance and click Set Scale to establish the pixels-per-inch conversion</li>
+      <li><strong>Position the Lines</strong> — use the <strong>CREST slider</strong> (red) to place a line on the top rim of the sump pipe, and the <strong>WATER slider</strong> (cyan) to place a line on the water surface. The lines move on the video in real time as you slide</li>
+      <li><strong>H Measurement</strong> — the pixel distance between your two lines is converted to inches using calibration and displayed as a live orange arrow with the measurement</li>
+      <li><strong>Flow Calculation</strong> — H feeds into both the weir equation (Q = Cw x L x H^1.5) and the hatchery chart lookup. Both GPM values show on the HUD so you can cross-check</li>
+      <li><strong>Snap Reading</strong> — captures the current measurement into the history table with timestamp. The buffer resets for a fresh next reading</li>
     </ol>
     <p style="margin-top:10px;font-weight:600;color:var(--gray-800)">The Live HUD shows three values:</p>
     <div style="margin:6px 0 6px 10px;font-size:12.5px;line-height:1.8">
-      <strong style="color:#ff8c00">// H (orange)</strong> — averaged crest height in inches (from 30-frame buffer)<br>
-      <strong style="color:#e5b800">// Flow Equation (gold)</strong> — GPM calculated from Q = Cw x L x H^1.5<br>
-      <strong style="color:#c97070">// Flow Chart (rose)</strong> — GPM interpolated from the class reference chart
+      <strong style="color:#ff8c00">// H (orange)</strong> — crest height in inches<br>
+      <strong style="color:#e5b800">// Flow Equation (gold)</strong> — GPM from Q = Cw x L x H^1.5<br>
+      <strong style="color:#c97070">// Flow Chart (rose)</strong> — GPM from the class reference chart
     </div>
-    <div class="tip green"><span class="ti">&gt;</span><div><strong>TIP:</strong> Works best with consistent lighting. Avoid direct glare on the water surface. A small piece of colored tape on the sump rim helps the detector find the crest. See the full [THEORY] page for a deep dive into how each step works!</div></div>
+    <div class="tip green"><span class="ti">&gt;</span><div><strong>TIP:</strong> Use a tripod for a stable image. A piece of colored tape on the sump rim gives you a clear visual target for placing the CREST line. See the [THEORY] page for a deep dive into the math!</div></div>
   </div>
 
   <!-- Camera viewport -->
@@ -315,7 +314,7 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
     </div>
   </div>
 
-  <!-- DOCKED BELOW CAMERA: detection mode toggle + line sliders -->
+  <!-- DOCKED BELOW CAMERA: mode toggle + line sliders -->
   <div id="detectDock" style="display:none;background:#0a0c10;border:1px solid #2a2f3a;border-top:none;padding:10px 14px;max-width:640px;margin:0 auto">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
       <span style="font-family:var(--mono);font-size:10px;color:#5a6580;flex-shrink:0">MODE:</span>
@@ -561,7 +560,7 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
   <div class="ex"><h4>Volume</h4><span class="fm">Rectangle/Raceway: V = L × W × H</span><span class="fm">Cylinder: V = π × r² × h</span><span class="fm">Cone: V = ⅓ × π × r² × h</span><span class="fm">Cone-Bottom Pond: V = (πr²×h₂) + (⅓πr²×h₃) where h₃=h₁−h₂</span></div>
   <div class="ex"><h4>Exchange Time</h4><span class="fm">Exchange Time = Volume ÷ Flow Rate</span><p>If volume in gallons and flow in GPM → result in minutes.</p></div>
   <div class="ex"><h4>Crest Flow (Weir Equation)</h4><span class="fm">Q = Cw × L × H^(3/2)</span><p>Cw = weir coefficient, L = crest length (ft), H = head above crest (ft). Or use the hatchery lookup chart!</p></div>
-  <div class="ex"><h4>Camera Vision Method</h4><span class="fm">H_pixels = y_crest − y_water</span><span class="fm">H_inches = H_pixels ÷ pixels_per_inch</span><span class="fm">H_feet = H_inches ÷ 12</span><span class="fm">Q_cfs = Cw × L × H_feet^1.5</span><span class="fm">Q_gpm = Q_cfs × 448.831</span><p>The camera detects edges to find the crest line and water surface, measures the pixel distance, converts using calibration scale, then applies the weir equation.</p></div>
+  <div class="ex"><h4>Camera Measurement Method</h4><span class="fm">H_pixels = y_water_line − y_crest_line  (from your slider positions)</span><span class="fm">H_inches = H_pixels ÷ pixels_per_inch  (from calibration)</span><span class="fm">H_feet = H_inches ÷ 12</span><span class="fm">Q_cfs = Cw × L × H_feet^1.5</span><span class="fm">Q_gpm = Q_cfs × 448.831</span><p>You position the crest and water lines on the live camera feed using sliders. The app measures the pixel distance between them, converts to inches using your calibration scale, then applies the weir equation to calculate flow.</p></div>
 </div>
 
 <div class="card">
@@ -584,97 +583,89 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
 
 <!-- ═══════════════ CAMERA PIPELINE DEEP DIVE ═══════════════ -->
 <div class="card">
-  <h2>[CAM] How the Camera Vision System Works</h2>
-  <p>The Vision tab in this app uses <strong>computer vision</strong> — a branch of artificial intelligence where software "sees" through a camera and extracts measurements from the image. In hatcheries, the setup is perfect for this because the sump is fixed, the crest doesn't move, and the only thing changing is the water level.</p>
-  <p>Instead of manually reading a ruler against the sump every time, the camera does it <strong>automatically, continuously, and more consistently</strong> than a human eye.</p>
+  <h2>[CAM] How the Camera Measurement System Works</h2>
+  <p>The Vision tab uses your device camera as a <strong>live viewfinder</strong>. You see the sump in real time on screen, then use slider controls to position two measurement lines — one on the crest (pipe rim) and one on the water surface. The app measures the pixel distance between your lines, converts it to real-world inches using your calibration, and calculates the flow rate.</p>
+  <p>Think of it like holding a ruler up to the sump, except the "ruler" is built into the camera feed and the math is done instantly.</p>
 
-  <div class="tip blue"><span class="ti">[→]</span><div><strong>The camera's only job:</strong> Measure <strong>H</strong> — the vertical distance between the crest (top of the sump pipe) and the water surface. Once you know H, the weir equation gives you flow: <strong>Q = Cw × L × H^(3/2)</strong></div></div>
+  <div class="tip blue"><span class="ti">[→]</span><div><strong>The goal:</strong> Measure <strong>H</strong> — the vertical distance between the crest (top of the sump pipe) and the water surface. Once you know H, the weir equation gives you flow: <strong>Q = Cw x L x H^(3/2)</strong></div></div>
 </div>
 
 <div class="card">
-  <h3>The 7-Step Camera Pipeline</h3>
-  <p>Here is exactly what happens, step by step, every time the camera runs:</p>
+  <h3>The Camera Pipeline — Step by Step</h3>
+  <p>Here is exactly what happens at each stage:</p>
 
   <div class="ex" style="border-left-color:#8ab648">
     <h4 style="color:#8ab648">Step 1 — Start Camera</h4>
-    <p>The app requests access to your device camera (rear-facing preferred). The live video feed is drawn onto an HTML <strong>canvas</strong> element — this is like a digital drawing board that updates 30 times per second. The canvas is what lets us analyze each frame as raw pixel data.</p>
-    <div class="tip green"><span class="ti">[+]</span><div><strong>Works with:</strong> Any smartphone, tablet, laptop webcam, Raspberry Pi camera, or GoPro. No special equipment needed.</div></div>
+    <p>The app requests access to your device camera (rear-facing preferred). The live video feed is drawn onto an HTML <strong>canvas</strong> element — a digital drawing surface that refreshes ~30 times per second, giving you a real-time view of the sump.</p>
+    <p>Mount the camera on a tripod at the same height as the crest, looking from the side, so you can see both the pipe rim and the water surface clearly.</p>
   </div>
 
   <div class="ex" style="border-left-color:#f97316">
-    <h4 style="color:#f97316">Step 2 — Calibrate (Pixels → Real-World Inches)</h4>
+    <h4 style="color:#f97316">Step 2 — Calibrate (Pixels to Real-World Inches)</h4>
     <p>The camera sees everything in <strong>pixels</strong> — tiny dots that make up the image. But we need measurements in <strong>inches</strong>. Calibration creates the conversion factor.</p>
     <p><strong>How it works:</strong></p>
-    <p>Two orange lines appear on the video feed. You use the <strong>slider controls</strong> below the video to position them over a known distance on screen, then enter the real-world distance and click "Set Scale."</p>
+    <p>Two orange lines appear on the video feed. You use the <strong>slider controls</strong> directly below the video to position them over a known distance on screen, then enter the real-world distance and click "Set Scale."</p>
     <span class="fm">pixels_per_inch = pixel_distance_between_lines / known_distance_in_inches</span>
     <p><strong>Example:</strong> If the two lines are 300 pixels apart and you told it they span 6 inches:</p>
     <span class="fm">pixels_per_inch = 300 / 6 = 50 px/inch</span>
     <p>Now the app knows that every 50 pixels in the image equals 1 real-world inch. This calibration stays valid as long as the camera doesn't move.</p>
     <p style="margin-top:10px"><strong>Why calibration distance matters for accuracy:</strong></p>
     <p>Every time you position a slider, you might be off by a few pixels. The larger your calibration distance, the less those few pixels matter as a percentage of the total measurement:</p>
-    <span class="fm">1" calibration → ~6% error → +/- 15-20 GPM flow error</span>
-    <span class="fm">2" calibration → ~3% error → +/- 8-10 GPM flow error</span>
-    <span class="fm">4" calibration → ~1.5% error → +/- 4 GPM flow error</span>
-    <span class="fm">6" calibration → ~1% error → +/- 2 GPM flow error  [RECOMMENDED]</span>
-    <p><strong>The app defaults to 6 inches</strong> because it's the sweet spot: your crest heights range 0.5"–3", so a 6" reference spans double the measurement range, giving very precise pixels-per-inch across the entire range you care about. And 6" easily fits in the camera frame next to any sump size.</p>
+    <span class="fm">1" calibration — ~6% error — +/- 15-20 GPM flow error</span>
+    <span class="fm">2" calibration — ~3% error — +/- 8-10 GPM flow error</span>
+    <span class="fm">4" calibration — ~1.5% error — +/- 4 GPM flow error</span>
+    <span class="fm">6" calibration — ~1% error — +/- 2 GPM flow error  [RECOMMENDED]</span>
+    <p><strong>The app defaults to 6 inches</strong> because your crest heights range 0.5"–3", so a 6" reference spans double the measurement range, giving very precise pixels-per-inch across the entire range you care about.</p>
     <div class="tip ok"><span class="ti">[+]</span><div><strong>SETUP TIP:</strong> Tape a 6" section of a ruler (or a strip of masking tape with marks at 0" and 6") vertically on the sump pipe wall, right next to where the water overflows. This gives you a permanent calibration reference that's always in frame.</div></div>
   </div>
 
-  <div class="ex" style="border-left-color:#dc3545">
-    <h4 style="color:#dc3545">Step 3 — Auto-Detection (Finding Edges with the Sobel Operator)</h4>
-    <p>This is the computer vision magic. Every video frame, the app needs to find two things: the <strong>crest line</strong> (top of the pipe) and the <strong>water surface</strong>.</p>
-    <p><strong>How does a computer "see" an edge?</strong></p>
-    <p>An edge is where the image suddenly changes from light to dark (or dark to light). The app uses a technique called the <strong>Sobel operator</strong> — a mathematical filter that detects these brightness changes.</p>
-    <p><strong>The process:</strong></p>
-    <ol class="sl">
-      <li><strong>Convert to grayscale</strong> — the color image is converted to shades of gray (each pixel becomes a single brightness number from 0 = black to 255 = white)</li>
-      <li><strong>Apply the Sobel vertical gradient</strong> — for each pixel, the filter compares the brightness of pixels above and below it. A big difference = strong horizontal edge. The formula multiplies neighboring pixel brightness values by weights (-1, -2, -1 above; +1, +2, +1 below) to amplify edges</li>
-      <li><strong>Accumulate edge strength per row</strong> — the app adds up all the edge strengths across the center 60% of each horizontal row. This creates a "how strong is the edge at this height?" score for every row in the image</li>
-      <li><strong>Find the two strongest rows</strong> — scanning from top to bottom, the first strong edge is the <strong>crest</strong> (drawn in red). The next strong edge below it is the <strong>water surface</strong> (drawn in cyan)</li>
-    </ol>
-    <div class="tip blue"><span class="ti">[i]</span><div><strong>Why this works in hatcheries:</strong> The crest is a sharp, straight edge between the pipe rim and the air/water. The water surface creates another contrast boundary where reflections meet the pipe wall. Both produce strong horizontal edges that the Sobel operator easily detects.</div></div>
+  <div class="ex" style="border-left-color:#ef4444">
+    <h4 style="color:#ef4444">Step 3 — Position the Measurement Lines</h4>
+    <p>This is the core measurement step. Two sliders appear directly below the camera feed:</p>
+    <p><strong>CREST slider (red)</strong> — slide until the red line on the video sits exactly on the top rim of the sump pipe. This is the crest — the fixed reference point that doesn't change.</p>
+    <p><strong>WATER slider (cyan)</strong> — slide until the cyan line sits exactly on the water surface inside the sump. This is what changes as the water level rises or falls.</p>
+    <p>The lines move on the video in real time as you adjust the sliders, so you can align them precisely while watching the camera feed. A tripod helps keep the image stable while you slide.</p>
+    <div class="tip orange"><span class="ti">//</span><div><strong>Two modes available:</strong><br><strong>MANUAL</strong> — you position both lines from scratch. Use this for your first reading.<br><strong>LOCK LINES</strong> — freezes the lines at their current position so you don't accidentally bump them. Use this when taking multiple snap readings at the same water level.</div></div>
   </div>
 
   <div class="ex" style="border-left-color:#f97316">
-    <h4 style="color:#f97316">Step 4 — H Measurement (Pixels → Inches)</h4>
-    <p>Now the app has two y-coordinates (vertical positions) in pixels:</p>
-    <span class="fm">y_crest = row position of the crest edge (e.g., 120 px from top)</span>
-    <span class="fm">y_water = row position of the water surface (e.g., 195 px from top)</span>
+    <h4 style="color:#f97316">Step 4 — H Measurement (Pixels to Inches)</h4>
+    <p>Once your lines are positioned, the app has two y-coordinates (vertical positions) in pixels:</p>
+    <span class="fm">y_crest = position of your red CREST line (e.g., 120 px from top)</span>
+    <span class="fm">y_water = position of your cyan WATER line (e.g., 195 px from top)</span>
     <p>The crest height in pixels is the difference:</p>
-    <span class="fm">H_pixels = y_water − y_crest = 195 − 120 = 75 pixels</span>
+    <span class="fm">H_pixels = y_water - y_crest = 195 - 120 = 75 pixels</span>
     <p>Convert to real-world inches using the calibration:</p>
-    <span class="fm">H_inches = H_pixels ÷ pixels_per_inch = 75 ÷ 50 = 1.5 inches</span>
-    <p>This is displayed on the video as a live <strong>orange arrow</strong> with the measurement label, updating every frame.</p>
+    <span class="fm">H_inches = H_pixels / pixels_per_inch = 75 / 50 = 1.5 inches</span>
+    <p>This is displayed on the video as a live <strong>orange arrow</strong> between the two lines, with the H measurement label updating in real time.</p>
   </div>
 
   <div class="ex" style="border-left-color:#c97070">
-    <h4 style="color:#c97070">Step 5 — 30-Frame Averaging (Eliminating Wave Noise)</h4>
-    <p>Water surfaces ripple and wave. A single frame might catch a ripple peak or trough, giving a wrong reading. The solution: <strong>average over 30 frames.</strong></p>
-    <span class="fm">H_buffer = [1.48, 1.52, 1.50, 1.49, 1.53, 1.51, ...] (last 30 readings)</span>
-    <span class="fm">H_averaged = sum(H_buffer) ÷ 30 = 1.505 inches</span>
-    <p>The buffer is a "sliding window" — as each new frame comes in, the oldest reading drops out and the newest is added. This smooths out wave noise while still tracking real changes in water level.</p>
-    <div class="tip purple"><span class="ti">[#]</span><div><strong>Why 30 frames?</strong> At 30 fps (frames per second), this averages over exactly 1 second of video — enough to smooth out typical water surface ripples without being so slow that it misses real level changes.</div></div>
+    <h4 style="color:#c97070">Step 5 — Frame Averaging (Stabilizing the Reading)</h4>
+    <p>Even though the lines are fixed (you placed them manually), the app still collects measurements over 30 frames to produce a stable, averaged value:</p>
+    <span class="fm">H_buffer = [1.50, 1.50, 1.50, ...] (last 30 frames)</span>
+    <span class="fm">H_averaged = sum(H_buffer) / 30 = 1.500 inches</span>
+    <p>With manually-placed lines this average converges almost instantly since every frame produces the same measurement. The buffer ensures the HUD displays a clean, stable number.</p>
   </div>
 
   <div class="ex" style="border-left-color:#e5b800">
     <h4 style="color:#e5b800">Step 6 — Dual Flow Calculation</h4>
     <p>With the averaged H value, the app calculates flow <strong>two independent ways</strong> simultaneously:</p>
     <p><strong>Method A — Weir Equation:</strong></p>
-    <span class="fm">H_feet = H_inches ÷ 12 = 1.505 ÷ 12 = 0.1254 ft</span>
-    <span class="fm">Q_cfs = Cw × L × H_feet^1.5 = 3.33 × 3.14 × 0.1254^1.5 = 0.464 cfs</span>
-    <span class="fm">Q_gpm = 0.464 × 448.831 = 208 GPM</span>
+    <span class="fm">H_feet = H_inches / 12 = 1.50 / 12 = 0.125 ft</span>
+    <span class="fm">Q_cfs = Cw x L x H_feet^1.5 = 3.33 x 3.14 x 0.125^1.5 = 0.462 cfs</span>
+    <span class="fm">Q_gpm = 0.462 x 448.831 = 207 GPM</span>
     <p><strong>Method B — Hatchery Chart Interpolation:</strong></p>
-    <p>The app looks up H_inches in the class reference chart (the same one you use manually). If the value falls between two chart rows, it <strong>linearly interpolates</strong> — for example, 1.505" falls between 1.5" (211 GPM) and 1.625" (240 GPM) for a 12" sump, so the interpolated value would be about 213 GPM.</p>
+    <p>The app looks up H_inches in the class reference chart (the same one you use manually). If the value falls between two chart rows, it <strong>linearly interpolates</strong> — for example, 1.50" on a 12" sump = 211 GPM directly from the chart.</p>
     <div class="tip green"><span class="ti">[+]</span><div><strong>Both values displayed on the HUD:</strong> This lets you cross-check the equation against the chart. If they're close, you know the reading is reliable.</div></div>
   </div>
 
-  <div class="ex" style="border-left-color:#1a6fb5">
-    <h4 style="color:#1a6fb5">Step 7 — Snap Reading (Capture & Record)</h4>
+  <div class="ex" style="border-left-color:#ff8c00">
+    <h4 style="color:#ff8c00">Step 7 — Snap Reading (Capture and Record)</h4>
     <p>When you click "[SNAP] Capture," the app:</p>
     <ol class="sl">
-      <li><strong>Captures the current averaged H value</strong> from the 30-frame buffer</li>
+      <li><strong>Captures the current H value</strong> from the averaged buffer</li>
       <li><strong>Records both GPM calculations</strong> (equation and chart)</li>
-      <li><strong>Logs the number of frames</strong> that were averaged (for data quality)</li>
       <li><strong>Timestamps the reading</strong></li>
       <li><strong>Adds it to the history table</strong> on the Vision page</li>
       <li><strong>Resets the buffer</strong> so the next reading starts fresh</li>
@@ -705,8 +696,8 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
     </div>
   </div>
 
-  <p>The <strong>orange H value</strong> is the raw measurement — what the camera sees. The <strong>cyan equation value</strong> uses the weir formula with your entered Cw and L parameters. The <strong>purple chart value</strong> uses the same lookup table your class uses for manual readings.</p>
-  <p>When both GPM values are close to each other, it confirms the reading is reliable. If they diverge significantly, check your Cw coefficient and crest length entries.</p>
+  <p>The <strong>orange H value</strong> is the measurement — the distance between your two slider-placed lines. The <strong>gold equation value</strong> uses the weir formula with your entered Cw and L parameters. The <strong>rose chart value</strong> uses the same lookup table your class uses for manual readings.</p>
+  <p>When both GPM values are close to each other, it confirms your line placement and parameters are accurate. If they diverge significantly, check your Cw coefficient and crest length entries.</p>
 </div>
 
 <div class="card">
@@ -725,19 +716,19 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
       <div class="tip orange" style="margin-top:8px"><span class="ti">!</span><div>Takes 2-5 min per reading. Subject to human error, parallax, and inconsistent technique.</div></div>
     </div>
     <div style="background:#0d0f13;border:1px solid #ff8c00;padding:16px">
-      <div style="font-family:var(--condensed);font-size:12px;font-weight:700;color:#ff8c00;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">// Vision Method</div>
+      <div style="font-family:var(--condensed);font-size:12px;font-weight:700;color:#ff8c00;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">// Camera + Slider Method</div>
       <ol class="sl">
-        <li>Camera reads automatically</li>
-        <li>Edge detection finds crest + water</li>
-        <li>Pixel math converts to inches</li>
-        <li>30-frame average smooths waves</li>
+        <li>Camera shows sump live</li>
+        <li>Slide CREST line onto pipe rim</li>
+        <li>Slide WATER line onto surface</li>
+        <li>App converts pixels to inches</li>
         <li>Flow calculated instantly (both ways)</li>
         <li>One click saves to digital log</li>
       </ol>
-      <div class="tip green" style="margin-top:8px"><span class="ti">&gt;</span><div>Instant, continuous, consistent. No parallax. Auto-averages wave noise. Digital record with timestamp.</div></div>
+      <div class="tip green" style="margin-top:8px"><span class="ti">&gt;</span><div>Precise, consistent, no parallax. You control the lines — no bouncing. Digital record with timestamp.</div></div>
     </div>
   </div>
-  <p>The vision system doesn't replace understanding <em>why</em> the measurements matter — it just does the measuring part faster and more consistently. You still need to know the theory to interpret the results and make management decisions.</p>
+  <p>The camera system doesn't replace understanding <em>why</em> the measurements matter — it just gives you a more precise, repeatable way to measure. You still need to know the theory to interpret the results and make management decisions.</p>
 </div>
 
 </div>
@@ -764,13 +755,13 @@ body{font-family:var(--font);background:var(--body-bg);color:var(--gray-800);min
   <h2>Terms of Use</h2>
   <p style="font-family:var(--mono);color:#3a4050;font-size:10px;margin-bottom:14px;letter-spacing:0.5px">EFFECTIVE: 2025 // UPDATED: MARCH 2026</p>
   <h3>1. Purpose</h3><p>Educational tool for hatchery flow calculations. For students, educators, and industry professionals.</p>
-  <h3>2. Camera Usage</h3><p>The camera vision feature accesses your device camera <strong>locally only</strong>. No video or images are transmitted to any server. All processing happens in your browser. Camera access requires your explicit permission.</p>
-  <h3>3. Disclaimer</h3><p>Provided "AS IS." Camera-based measurements are estimates — accuracy depends on calibration, lighting, and camera angle. <strong>Always verify critical measurements manually.</strong></p>
+  <h3>2. Camera Usage</h3><p>The camera measurement feature accesses your device camera <strong>locally only</strong>. No video or images are transmitted to any server. All processing happens in your browser. Camera access requires your explicit permission.</p>
+  <h3>3. Disclaimer</h3><p>Provided "AS IS." Camera-based measurements depend on proper calibration, steady mounting, and accurate line placement by the user. <strong>Always verify critical measurements manually.</strong></p>
   <h3>4. Not Professional Engineering</h3><p>Does not replace professional engineering. Verify all results before operational use.</p>
   <h3>5. Limitation of Liability</h3><p>Developers not liable for any damages including equipment failure, fish loss, or environmental damage arising from use of this tool.</p>
   <h3>6. Privacy</h3><p>100% browser-based. No data collection, no server communication, no tracking. Camera feed never leaves your device.</p>
   <h3>7. Academic Integrity</h3><p>Supplements learning — does not replace understanding the formulas.</p>
-  <h3>8. Accuracy</h3><p>The crest chart is from standard hatchery reference materials. The vision system accuracy depends on proper calibration. Use site-specific validation.</p>
+  <h3>8. Accuracy</h3><p>The crest chart is from standard hatchery reference materials. Camera measurement accuracy depends on proper calibration and careful line placement. Use site-specific validation.</p>
   <div style="margin-top:20px;padding:14px;background:rgba(255,140,0,0.06);border:1px solid #ff8c00"><p style="font-family:var(--condensed);font-weight:700;color:#ff8c00;text-transform:uppercase;letter-spacing:0.5px">By using this tool you agree to these Terms of Use.</p></div>
 </div>
 </div>
@@ -824,14 +815,14 @@ function chartLookup(hInches, diam) {
 }
 
 // ═══════════════════════════════════════════════════
-//                 COMPUTER VISION
+//                 CAMERA MEASUREMENT
 // ═══════════════════════════════════════════════════
 let cvStream = null, cvRunning = false, cvAnimId = null;
 let calibrated = false, pxPerInch = 50;
 let calibMode = false, calibLine1Y = 120, calibLine2Y = 240;
 let hBuffer = [], snapReadings = [];
 let frameCount = 0; // throttle counter
-let detectMode = 'manual'; // 'lock' or 'manual' (no auto)
+let detectMode = 'manual'; // 'lock' or 'manual'
 let manualCrestY = -1, manualWaterY = -1;
 
 const video = document.getElementById('cvVideo');
@@ -982,10 +973,10 @@ function setScale() {
   calibMode = false;
   document.getElementById('calibSliders').style.display = 'none';
   document.getElementById('calibFields').style.display = 'none';
-  setStatus('[OK] Calibrated: ' + pxPerInch.toFixed(1) + ' px/inch (' + dist + '" = ' + pxDist.toFixed(0) + 'px) — detection active');
+  setStatus('[OK] Calibrated: ' + pxPerInch.toFixed(1) + ' px/inch (' + dist + '" = ' + pxDist.toFixed(0) + 'px) — ready to measure');
 }
 
-// ─── Detection mode switching ───
+// ─── Line mode switching ───
 function setDetectMode(mode, el) {
   detectMode = mode;
   document.getElementById('pillLock').classList.toggle('active', mode === 'lock');
@@ -1019,7 +1010,7 @@ function updateManualLines() {
   hBuffer = [];
 }
 
-// ─── Frame processing (no auto-detect — always uses slider positions) ───
+// ─── Frame processing (slider-positioned lines) ───
 let lastCrestY = -1, lastWaterY = -1;
 
 function processFrame() {
@@ -1163,7 +1154,7 @@ function processFrame() {
 }
 
 function snapReading() {
-  if (hBuffer.length === 0) { setStatus('[WARN] No detection data yet — point camera at sump crest'); return; }
+  if (hBuffer.length === 0) { setStatus('[WARN] Position the CREST and WATER lines first'); return; }
   const hAvg = hBuffer.reduce((a,b)=>a+b,0) / hBuffer.length;
   const diam = document.getElementById('cv-diam').value;
   const Cw = parseFloat(document.getElementById('cv-cw').value) || 3.33;
